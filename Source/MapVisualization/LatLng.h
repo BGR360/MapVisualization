@@ -13,11 +13,12 @@ struct MAPVISUALIZATION_API FLatLng
 	GENERATED_USTRUCT_BODY()
 
 	FLatLng();
+	FLatLng(float Latitude, float Longitude);
 	~FLatLng();
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Latitude;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Longitude;
 };

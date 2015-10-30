@@ -4,6 +4,8 @@
 
 #include "Components/ActorComponent.h"
 
+#include "LatLng.h"
+
 #include "GeoComponent.generated.h"
 
 
@@ -15,4 +17,8 @@ class MAPVISUALIZATION_API UGeoComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UGeoComponent();
+
+	// The location of the GeoComponent on Earth (latitude and longitude coordinates)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FLatLng Location;
 };

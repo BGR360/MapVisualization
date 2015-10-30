@@ -4,8 +4,6 @@
 
 #include "Components/ActorComponent.h"
 
-#include "TestClass.h"
-
 #include "GeoComponent.generated.h"
 
 
@@ -17,7 +15,4 @@ class MAPVISUALIZATION_API UGeoComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UGeoComponent();
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FTestClass MyTestClass;
 };

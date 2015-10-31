@@ -33,6 +33,8 @@
 *.suo
 *.opensdf
 *.sdf
+*.xcodeproj/xcuserdata/*
+*.xcodeproj/*.xcworkspace/*
 
 # Precompiled Assets
 SourceArt/**/*.png

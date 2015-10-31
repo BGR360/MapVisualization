@@ -8,7 +8,14 @@
 
 #include "GeoComponent.generated.h"
 
-
+/**
+ * In order to display things that are tied to a particular position on Earth,
+ * we must have an avenue to convert between Latitude/Longitude and UE4 units.
+ * The pairing of UGeoComponent and UMapProjectionComponent achieves this.
+ *
+ * A GeoComponent should be added to every Actor that you want to represent
+ * by a Latitude-Longitude position.
+ */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MAPVISUALIZATION_API UGeoComponent : public UActorComponent
 {

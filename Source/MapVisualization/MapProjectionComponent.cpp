@@ -34,3 +34,35 @@ void UMapProjectionComponent::TickComponent( float DeltaTime, ELevelTick TickTyp
 	// ...
 }
 
+// Position Conversion Functions
+
+FLatLng UMapProjectionComponent::ProjectToEarth(FVector2D MapPos) const
+{
+    return FLatLng();
+}
+
+FVector2D UMapProjectionComponent::ProjectToMap(FLatLng EarthPos) const
+{
+    return FVector2D();
+}
+
+FVector2D UMapProjectionComponent::ProjectToMap(FVector WorldPos) const
+{
+    return FVector2D();
+}
+
+FVector UMapProjectionComponent::ProjectToWorld(FVector2D MapPos) const
+{
+    return FVector();
+}
+
+FLatLng UMapProjectionComponent::ProjectToEarth(FVector WorldPos) const
+{
+    return FLatLng();
+}
+
+FVector UMapProjectionComponent::ProjectToWorld(FLatLng EarthPos) const
+{
+    return FVector();
+}
+

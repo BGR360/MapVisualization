@@ -12,6 +12,6 @@ UGeoComponent::UGeoComponent()
 	bWantsBeginPlay = false;
 	PrimaryComponentTick.bCanEverTick = false;
 
-	// ...
+    Projection = nullptr;
 }
 

@@ -12,7 +12,12 @@ UMapProjectionComponent::UMapProjectionComponent()
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+    Bounds = FLatLngBounds();
+}
+
+UMapProjectionComponent::UMapProjectionComponent(FLatLngBounds Bounds) : UMapProjectionComponent()
+{
+    SetBounds(Bounds);
 }
 
 
@@ -33,6 +38,18 @@ void UMapProjectionComponent::TickComponent( float DeltaTime, ELevelTick TickTyp
 
 	// ...
 }
+
+// Get/Set Bounds
+FLatLngBounds UMapProjectionComponent::GetBounds() const
+{
+    return Bounds;
+}
+
+void UMapProjectionComponent::SetBounds(FLatLngBounds Bounds)
+{
+    this->Bounds = Bounds;
+}
+
 
 // Position Conversion Functions
 

@@ -4,6 +4,7 @@
 
 #include "Components/ActorComponent.h"
 #include "LatLng.h"
+#include "LatLngBounds.h"
 #include "Runtime/Core/Public/Math/Vector.h"
 
 #include "MapProjectionComponent.generated.h"
@@ -24,16 +25,25 @@ class MAPVISUALIZATION_API UMapProjectionComponent : public UActorComponent
 
 public:	
 	// Sets default values for this component's properties
+    // Can choose to initialize with a bounding box
 	UMapProjectionComponent();
+    
+    // Initializes the MapProjection with a bounding box
+    UMapProjectionComponent(FLatLngBounds Bounds);
 
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
-
+    
+    // Get/Set the Map's Bounds
+    FLatLngBounds GetBounds() const;
+    void SetBounds(FLatLngBounds Bounds);
+    
 		
 	// Position Conversion Functions
+    // TODO: Implement Mercator Projection
     
     FLatLng ProjectToEarth(FVector2D MapPos) const;
     FVector2D ProjectToMap(FLatLng EarthPos) const;
@@ -42,4 +52,9 @@ public:
     
     FLatLng ProjectToEarth(FVector WorldPos) const;
     FVector ProjectToWorld(FLatLng EarthPos) const;
+    
+private:
+    // The bounding box of the map onto/from which we shall project
+    // TODO: Figure out UPROPERTY status of Bounds
+    FLatLngBounds Bounds;
 };

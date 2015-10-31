@@ -38,19 +38,32 @@ public:
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
     
     // Get/Set the Map's Bounds
+    UFUNCTION(BlueprintPure, Category = Map)
     FLatLngBounds GetBounds() const;
+    
+    UFUNCTION(BlueprintCallable, Category = Map)
     void SetBounds(FLatLngBounds Bounds);
     
 		
 	// Position Conversion Functions
     // TODO: Implement Mercator Projection
     
+    UFUNCTION(BlueprintCallable, Category = Map)
     FLatLng ProjectToEarth(FVector2D MapPos) const;
+    
+    UFUNCTION(BlueprintCallable, Category = Map)
     FVector2D ProjectToMap(FLatLng EarthPos) const;
+    
+    UFUNCTION(BlueprintCallable, Category = Map)
     FVector2D ProjectToMap(FVector WorldPos) const;
+    
+    UFUNCTION(BlueprintCallable, Category = Map)
     FVector ProjectToWorld(FVector2D MapPos) const;
     
+    UFUNCTION(BlueprintCallable, Category = Map)
     FLatLng ProjectToEarth(FVector WorldPos) const;
+    
+    UFUNCTION(BlueprintCallable, Category = Map)
     FVector ProjectToWorld(FLatLng EarthPos) const;
     
 private:

@@ -33,6 +33,9 @@
 *.suo
 *.opensdf
 *.sdf
+
+# If you wish to un-ignore XCode project files, uncomment these 2 lines
+# XCode stores user-specific data inside of the .xcodeproj file/folder
 *.xcodeproj/xcuserdata/*
 *.xcodeproj/*.xcworkspace/*
 

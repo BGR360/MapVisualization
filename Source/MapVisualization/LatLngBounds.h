@@ -2,12 +2,25 @@
 
 #pragma once
 
+#include "LatLng.h"
+#include "LatLngBounds.generated.h"
+
 /**
- * 
+ * Represents a bounding box for a map, with a lower-left hand LatLng position
+ * and an upper-right hand LatLng position
  */
-class MAPVISUALIZATION_API FLatLngBounds
+USTRUCT()
+struct MAPVISUALIZATION_API FLatLngBounds
 {
-public:
+    GENERATED_USTRUCT_BODY()
+
 	FLatLngBounds();
+    FLatLngBounds(FLatLng LowerLeft, FLatLng UpperRight);
 	~FLatLngBounds();
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FLatLng LowerLeft;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FLatLng UpperRight;
 };

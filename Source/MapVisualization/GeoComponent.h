@@ -24,12 +24,19 @@ class MAPVISUALIZATION_API UGeoComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UGeoComponent();
-
-	// The location of the GeoComponent on Earth (latitude and longitude coordinates)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FLatLng Location;
+    
+    // Get/Set Location
+    UFUNCTION(BlueprintPure, Category = Map)
+    FLatLng GetLocation() const;
+    
+    UFUNCTION(BlueprintCallable, Category = Map)
+    void SetLocation(FLatLng Location);
     
 private:
+    // The location of the GeoComponent on Earth (latitude and longitude coordinates)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Map)
+    FLatLng Location;
+    
     // The reference to the MapProjection that will convert this to 3D position
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
     class UMapProjectionComponent* Projection;

@@ -15,3 +15,14 @@ UGeoComponent::UGeoComponent()
     Projection = nullptr;
 }
 
+// Get/Set Location
+
+FLatLng UGeoComponent::GetLocation() const
+{
+    return Location;
+}
+
+void UGeoComponent::SetLocation(FLatLng Location)
+{
+    this->Location = Location;
+}

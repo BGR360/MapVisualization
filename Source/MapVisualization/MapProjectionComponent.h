@@ -53,7 +53,7 @@ public:
     FVector2D ProjectToMap(FVector WorldPos) const;
     FVector ProjectToWorld(FVector2D MapPos) const;
     
-    FLatLng ProjectToEarth(FVector WorldPos) const;s
+    FLatLng ProjectToEarth(FVector WorldPos) const;
     FVector ProjectToWorld(FLatLng EarthPos) const;
     
 private:

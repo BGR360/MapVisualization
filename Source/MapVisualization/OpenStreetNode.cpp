@@ -2,14 +2,16 @@
 
 #include "MapVisualization.h"
 #include "OpenStreetNode.h"
+#include "GeoComponent.h"
 
 
 // Sets default values
 AOpenStreetNode::AOpenStreetNode()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+    GeoComponent = CreateDefaultSubobject<UGeoComponent>(TEXT("GeoComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -19,10 +21,8 @@ void AOpenStreetNode::BeginPlay()
 	
 }
 
-// Called every frame
-void AOpenStreetNode::Tick( float DeltaTime )
+// Get GeoComponent
+UGeoComponent* GetGeoComponent() const
 {
-	Super::Tick( DeltaTime );
-
+    return GeoComponent;
 }
-

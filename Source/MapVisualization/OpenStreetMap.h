@@ -5,6 +5,11 @@
 #include "GameFramework/Actor.h"
 #include "OpenStreetMap.generated.h"
 
+/**
+ * Place an OpenStreetMap Actor into the world to visualize a .osm XML file.
+ * Call LoadFromXml() to initialize the map from a file. This will read the file
+ * and generate all of the necessary OpenStreetNodes and OpenStreetWays.
+ */
 UCLASS()
 class MAPVISUALIZATION_API AOpenStreetMap : public AActor
 {
@@ -16,10 +21,7 @@ public:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-	// Called every frame
-	virtual void Tick( float DeltaSeconds ) override;
 
-	
+	// TODO: Stub out interface
 	
 };

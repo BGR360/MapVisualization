@@ -2,6 +2,8 @@
 
 #include "MapVisualization.h"
 #include "GeoComponent.h"
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
+#include "MapProjectionComponent.h"
 
 
 // Sets default values for this component's properties
@@ -25,4 +27,27 @@ FLatLng UGeoComponent::GetLocation() const
 void UGeoComponent::SetLocation(FLatLng Location)
 {
     this->Location = Location;
+    
+    // Automatically update the World position when LatLng is changed
+    ProjectLocationToWorld();
+}
+
+// Converts the Latitude-Longitude position to 3D position
+// Sets the 3D position of the AActor we belong to
+void UGeoComponent::ProjectLocationToWorld()
+{
+    // Check if we have a projection
+    if (Projection)
+    {
+        // Get our parent's SceneComponent
+        AActor* Parent = this->GetOwner();
+        USceneComponent* ParentSceneComp = nullptr;
+        
+        // Check to see if there is a valid Parent
+        if (Parent)
+        {
+            FVector NewPosition = Projection->ProjectToWorld(Location);
+            Parent->SetActorLocation(NewPosition);
+        }
+    }
 }

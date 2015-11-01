@@ -40,4 +40,7 @@ private:
     // The reference to the MapProjection that will convert this to 3D position
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
     class UMapProjectionComponent* Projection;
+    
+    // Converts the Latitude-Longitude position to 3D position
+    void ProjectLocationToWorld();
 };

@@ -48,22 +48,12 @@ public:
 	// Position Conversion Functions
     // TODO: Implement Mercator Projection
     
-    UFUNCTION(BlueprintCallable, Category = Map)
     FLatLng ProjectToEarth(FVector2D MapPos) const;
-    
-    UFUNCTION(BlueprintCallable, Category = Map)
     FVector2D ProjectToMap(FLatLng EarthPos) const;
-    
-    UFUNCTION(BlueprintCallable, Category = Map)
     FVector2D ProjectToMap(FVector WorldPos) const;
-    
-    UFUNCTION(BlueprintCallable, Category = Map)
     FVector ProjectToWorld(FVector2D MapPos) const;
     
-    UFUNCTION(BlueprintCallable, Category = Map)
-    FLatLng ProjectToEarth(FVector WorldPos) const;
-    
-    UFUNCTION(BlueprintCallable, Category = Map)
+    FLatLng ProjectToEarth(FVector WorldPos) const;s
     FVector ProjectToWorld(FLatLng EarthPos) const;
     
 private:

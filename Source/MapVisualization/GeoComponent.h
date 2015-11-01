@@ -34,11 +34,11 @@ public:
     
 private:
     // The location of the GeoComponent on Earth (latitude and longitude coordinates)
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Map)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     FLatLng Location;
     
     // The reference to the MapProjection that will convert this to 3D position
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     class UMapProjectionComponent* Projection;
     
     // Converts the Latitude-Longitude position to 3D position

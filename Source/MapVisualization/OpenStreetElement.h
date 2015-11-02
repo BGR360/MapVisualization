@@ -51,7 +51,7 @@ public:
 	 */
 	const FString* GetTagValue(const FString& Key) const;
 
-private:
+protected:
 	// The list of Tags that describe this Element
 	TArray<FOpenStreetTag> Tags;
 };

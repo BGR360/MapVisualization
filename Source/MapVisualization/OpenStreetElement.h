@@ -37,11 +37,19 @@ public:
 	bool HasTag(const FString& Key) const;
 
 	/**
+	 * Returns whether or not this Element has a Tag with the given Key.
+	 * @param Key The Key string that we want to search for.
+	 * @param IndexOfTag Output parameter that gets the index of the found Tag (or -1 if not found)
+	 * @return True if the Tag exists, false if not.
+	 */
+	bool HasTag(const FString& Key, int32& IndexOfTag) const;
+
+	/**
 	 * Returns the value associated with the given key.
 	 * @param Key The key string that we want the value for.
 	 * @return The key's value if a Tag exists with that particular key, otherwise nullptr.
 	 */
-	FString* const GetTagValue(const FString& Key) const;
+	const FString* GetTagValue(const FString& Key) const;
 
 private:
 	// The list of Tags that describe this Element

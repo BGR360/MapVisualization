@@ -28,22 +28,52 @@ TArray<FOpenStreetTag>* AOpenStreetElement::GetTags()
 // Add Tag
 void AOpenStreetElement::AddTag(FOpenStreetTag Tag)
 {
-
+	Tags.Add(Tag);
 }
 
 void AOpenStreetElement::AddTag(const FString& Key, const FString& Value)
 {
-
+	Tags.Add(FOpenStreetTag(Key, Value));
 }
 
 // Has Tag
 bool AOpenStreetElement::HasTag(const FString& Key) const
 {
+	for (int32 i = 0; i < Tags.Num(); i++)
+	{
+		if (Tags[i].Key == Key)
+			return true;
+	}
+	return false;
+}
+
+// Has Tag - Outputs IndexOf
+bool AOpenStreetElement::HasTag(const FString& Key, int32& IndexOfTag) const
+{
+	for (int32 i = 0; i < Tags.Num(); i++)
+	{
+		if (Tags[i].Key == Key)
+		{
+			IndexOfTag = i;
+			return true;
+		}
+	}
+	IndexOfTag = -1;
 	return false;
 }
 
 // Get Tag Value
-FString* const AOpenStreetElement::GetTagValue(const FString& Key) const
+const FString* AOpenStreetElement::GetTagValue(const FString& Key) const
 {
-	return nullptr;
+	// Check if a Tag with Key exists
+	int32 IndexOfTag;
+	if (HasTag(Key, IndexOfTag))
+	{
+		const FString* Value = &(Tags[IndexOfTag].Value);
+		return Value;
+	}
+	else
+	{
+		return nullptr;
+	}
 }

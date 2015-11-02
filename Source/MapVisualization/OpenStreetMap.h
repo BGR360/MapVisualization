@@ -9,6 +9,9 @@
  * Place an OpenStreetMap Actor into the world to visualize a .osm XML file.
  * Call LoadFromXml() to initialize the map from a file. This will read the file
  * and generate all of the necessary OpenStreetNodes and OpenStreetWays.
+ *
+ * AOpenStreetMap does NOT actually store a TArray of AOpenStreetNode; all of
+ * the nodes will be Attached to the RootComponent of the AOpenStreetMap
  */
 UCLASS()
 class MAPVISUALIZATION_API AOpenStreetMap : public AActor

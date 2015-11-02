@@ -3,8 +3,13 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Runtime/Core/Public/Containers/Array.h"
 #include "OpenStreetWay.generated.h"
 
+/**
+ * Represents a Way in an OpenStreetMap. A way is simply a list of Nodes and
+ * could represent a road, a polygon, or a boundary.
+ */
 UCLASS()
 class MAPVISUALIZATION_API AOpenStreetWay : public AActor
 {
@@ -16,6 +21,18 @@ public:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+    
+    // Add Node
+    void AddNode(class AOpenStreetNode* Node);
+    
+    // Remove Node
+    // @return The number of nodes removed
+    int32 RemoveNode(AOpenStreetNode* Node);
+    
+    // Get Nodes
+    TArray<AOpenStreetNode*>* GetNodes();
 	
-	// TODO: Stub out interface
+private:
+    // The list of Nodes that are a part of this way
+    TArray<AOpenStreetNode*> Nodes;
 };

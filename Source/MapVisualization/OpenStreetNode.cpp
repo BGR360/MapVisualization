@@ -22,7 +22,7 @@ void AOpenStreetNode::BeginPlay()
 }
 
 // Get GeoComponent
-UGeoComponent* GetGeoComponent() const
+UGeoComponent* AOpenStreetNode::GetGeoComponent() const
 {
     return GeoComponent;
 }

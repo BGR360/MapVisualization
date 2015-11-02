@@ -2,6 +2,7 @@
 
 #include "MapVisualization.h"
 #include "OpenStreetWay.h"
+#include "OpenStreetNode.h"
 
 
 // Sets default values
@@ -17,4 +18,22 @@ void AOpenStreetWay::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+// Add Node
+void AOpenStreetWay::AddNode(class AOpenStreetNode* Node)
+{
+    Nodes.Push(Node);
+}
+
+// Remove Node
+int32 AOpenStreetWay::RemoveNode(AOpenStreetNode* Node)
+{
+    return Nodes.Remove(Node);
+}
+
+// Get Nodes
+TArray<AOpenStreetNode*>* AOpenStreetWay::GetNodes()
+{
+    return &Nodes;
 }

@@ -8,7 +8,7 @@
 AOpenStreetElement::AOpenStreetElement()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
@@ -19,10 +19,31 @@ void AOpenStreetElement::BeginPlay()
 	
 }
 
-// Called every frame
-void AOpenStreetElement::Tick( float DeltaTime )
+// Get Tags
+TArray<FOpenStreetTag>* AOpenStreetElement::GetTags()
 {
-	Super::Tick( DeltaTime );
+	return nullptr;
+}
+
+// Add Tag
+void AOpenStreetElement::AddTag(FOpenStreetTag Tag)
+{
 
 }
 
+void AOpenStreetElement::AddTag(const FString& Key, const FString& Value)
+{
+
+}
+
+// Has Tag
+bool AOpenStreetElement::HasTag(const FString& Key) const
+{
+	return false;
+}
+
+// Get Tag Value
+FString* const AOpenStreetElement::GetTagValue(const FString& Key) const
+{
+	return nullptr;
+}

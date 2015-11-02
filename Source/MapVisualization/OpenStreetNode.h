@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "GameFramework/Actor.h"
+#include "OpenStreetElement.h"
 #include "OpenStreetNode.generated.h"
 
 /**
@@ -10,7 +10,7 @@
  * it could be part of a road, the corner of square, or a stop sign. 
  */
 UCLASS()
-class MAPVISUALIZATION_API AOpenStreetNode : public AActor
+class MAPVISUALIZATION_API AOpenStreetNode : public AOpenStreetElement
 {
 	GENERATED_BODY()
 	

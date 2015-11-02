@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "GameFramework/Actor.h"
+#include "OpenStreetElement.h"
 #include "Runtime/Core/Public/Containers/Array.h"
 #include "OpenStreetWay.generated.h"
 
@@ -11,7 +11,7 @@
  * could represent a road, a polygon, or a boundary.
  */
 UCLASS()
-class MAPVISUALIZATION_API AOpenStreetWay : public AActor
+class MAPVISUALIZATION_API AOpenStreetWay : public AOpenStreetElement
 {
 	GENERATED_BODY()
 	

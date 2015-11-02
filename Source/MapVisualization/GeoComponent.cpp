@@ -46,7 +46,7 @@ void UGeoComponent::ProjectLocationToWorld()
         // Check to see if there is a valid Parent
         if (Parent)
         {
-            FVector NewPosition = Projection->ProjectToWorld(Location);
+            FVector NewPosition = Projection->EarthToWorld(Location);
             Parent->SetActorLocation(NewPosition);
         }
     }

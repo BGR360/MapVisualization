@@ -48,13 +48,13 @@ public:
 	// Position Conversion Functions
     // TODO: Implement Mercator Projection
     
-    FLatLng ProjectToEarth(FVector2D MapPos) const;
-    FVector2D ProjectToMap(FLatLng EarthPos) const;
-    FVector2D ProjectToMap(FVector WorldPos) const;
-    FVector ProjectToWorld(FVector2D MapPos) const;
+	FLatLng MapToEarth(FVector MapPos) const;
+    FVector EarthToMap(FLatLng EarthPos) const;
+	FVector WorldToMap(FVector WorldPos) const;
+	FVector MapToWorld(FVector MapPos) const;
     
-    FLatLng ProjectToEarth(FVector WorldPos) const;
-    FVector ProjectToWorld(FLatLng EarthPos) const;
+    FLatLng WorldToEarth(FVector WorldPos) const;
+    FVector EarthToWorld(FLatLng EarthPos) const;
     
 private:
     // The bounding box of the map onto/from which we shall project

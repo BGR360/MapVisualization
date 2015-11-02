@@ -53,32 +53,32 @@ void UMapProjectionComponent::SetBounds(FLatLngBounds Bounds)
 
 // Position Conversion Functions
 
-FLatLng UMapProjectionComponent::ProjectToEarth(FVector2D MapPos) const
+FLatLng UMapProjectionComponent::MapToEarth(FVector MapPos) const
 {
     return FLatLng();
 }
 
-FVector2D UMapProjectionComponent::ProjectToMap(FLatLng EarthPos) const
+FVector UMapProjectionComponent::EarthToMap(FLatLng EarthPos) const
 {
-    return FVector2D();
+	return FVector();
 }
 
-FVector2D UMapProjectionComponent::ProjectToMap(FVector WorldPos) const
+FVector UMapProjectionComponent::WorldToMap(FVector WorldPos) const
 {
-    return FVector2D();
+	return FVector();
 }
 
-FVector UMapProjectionComponent::ProjectToWorld(FVector2D MapPos) const
+FVector UMapProjectionComponent::MapToWorld(FVector MapPos) const
 {
     return FVector();
 }
 
-FLatLng UMapProjectionComponent::ProjectToEarth(FVector WorldPos) const
+FLatLng UMapProjectionComponent::WorldToEarth(FVector WorldPos) const
 {
     return FLatLng();
 }
 
-FVector UMapProjectionComponent::ProjectToWorld(FLatLng EarthPos) const
+FVector UMapProjectionComponent::EarthToWorld(FLatLng EarthPos) const
 {
     return FVector();
 }

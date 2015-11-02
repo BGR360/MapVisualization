@@ -23,9 +23,11 @@ public:
 	virtual void BeginPlay() override;
     
     // Add Node
+	// Automatically updates the Way's appearance in the world.
     void AddNode(class AOpenStreetNode* Node);
     
     // Remove Node
+	// Automatically updates the Way's appearance in the world.
     // @return The number of nodes removed
     int32 RemoveNode(AOpenStreetNode* Node);
     

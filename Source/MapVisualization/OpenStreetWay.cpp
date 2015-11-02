@@ -21,15 +21,24 @@ void AOpenStreetWay::BeginPlay()
 }
 
 // Add Node
+// Automatically updates the Way's appearance in the world.
 void AOpenStreetWay::AddNode(class AOpenStreetNode* Node)
 {
     Nodes.Push(Node);
+
+	// TODO update appearance
 }
 
 // Remove Node
+// Automatically updates the Way's appearance in the world.
+// @return The number of nodes removed
 int32 AOpenStreetWay::RemoveNode(AOpenStreetNode* Node)
 {
-    return Nodes.Remove(Node);
+	int32 numRemoved = Nodes.Remove(Node);
+
+	// TODO update appearance
+
+    return numRemoved;
 }
 
 // Get Nodes

@@ -55,31 +55,31 @@ void UMapProjectionComponent::SetBounds(FLatLngBounds Bounds)
 
 FLatLng UMapProjectionComponent::MapToEarth(FVector MapPos) const
 {
-    return FLatLng();
+    return FLatLng(MapPos.X, MapPos.Z);
 }
 
 FVector UMapProjectionComponent::EarthToMap(FLatLng EarthPos) const
 {
-	return FVector();
+	return FVector(EarthPos.Latitude, 0.0f, EarthPos.Longitude);
 }
 
 FVector UMapProjectionComponent::WorldToMap(FVector WorldPos) const
 {
-	return FVector();
+	return WorldPos;
 }
 
 FVector UMapProjectionComponent::MapToWorld(FVector MapPos) const
 {
-    return FVector();
+	return MapPos;
 }
 
 FLatLng UMapProjectionComponent::WorldToEarth(FVector WorldPos) const
 {
-    return FLatLng();
+	return MapToEarth(WorldToMap(WorldPos));
 }
 
 FVector UMapProjectionComponent::EarthToWorld(FLatLng EarthPos) const
 {
-    return FVector();
+    return MapToWorld(EarthToMap(EarthPos));
 }
 

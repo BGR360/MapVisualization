@@ -25,6 +25,11 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// TODO: Stub out interface
-	
+	// Get MapProjection
+	class UMapProjectionComponent* GetProjection();
+
+private:
+	// The MapProjection used to convert GeoComponents' LatLng positions to 3D World coordinates
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+	UMapProjectionComponent* Projection;
 };

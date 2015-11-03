@@ -2,6 +2,11 @@
 
 #include "MapVisualization.h"
 #include "OpenStreetMapXmlReader.h"
+#include "MapProjectionComponent.h"
+#include "OpenStreetMap.h"
+#include "OpenStreetNode.h"
+#include "OpenStreetWay.h"
+#include "OpenStreetTag.h"
 
 #define LOCTEXT_NAMESPACE "Xml"
 
@@ -13,7 +18,10 @@ bReadingFile(false),
 bReadingNode(false),
 bReadingWay(false),
 bReadingRelation(false),
-bReadingMember(false)
+bReadingMember(false),
+CurrentNode(nullptr),
+CurrentWay(nullptr),
+CurrentTag(nullptr)
 {
 }
 
@@ -47,7 +55,7 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
 		int32 OutErrorLineNumber;
 		FFastXml::ParseXmlFile(this, *FilePath, nullptr, GWarn, true, true, OutErrorMessage, OutErrorLineNumber);
 
-		// Check for errors
+		// Check for errors opening the file
 		if (!OutErrorMessage.IsEmpty())
 		{
 			FText DialogTitle = LOCTEXT("ErrorDialogTitle", "Error");
@@ -66,9 +74,9 @@ bool OpenStreetMapXmlReader::IsReading() const
 // Inherited from IFastXmlCallback
 //------------------------------------
 
+// We don't need to do anything with the <osm> tag
 bool OpenStreetMapXmlReader::ProcessXmlDeclaration(const TCHAR* ElementData, int32 XmlFileLineNumber)
 {
-	FString ElementDataString(ElementData);
 	return true;
 }
 
@@ -97,6 +105,8 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
 	if (ElementNameString == "bounds")
 	{
 		bReadingBounds = true;
+		// Reset CurrentBounds just in case
+		CurrentBounds = FLatLngBounds();
 	}
 	else if (ElementNameString == "node" || ElementNameString == "nd")
 	{
@@ -124,16 +134,43 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
 
 bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const TCHAR* AttributeValue)
 {
+	FString AttributeNameString(AttributeName);
+
+	// If inside <bounds> tag
+	if (bReadingBounds)
+	{
+		if (AttributeNameString == "minlat")
+		{
+			CurrentBounds.LowerLeft.Latitude = FCString::Atof(AttributeValue);
+		}
+		else if (AttributeNameString == "minlon")
+		{
+			CurrentBounds.LowerLeft.Longitude = FCString::Atof(AttributeValue);
+		}
+		else if (AttributeNameString == "maxlat")
+		{
+			CurrentBounds.UpperRight.Latitude = FCString::Atof(AttributeValue);
+		}
+		else if (AttributeNameString == "maxlon")
+		{
+			CurrentBounds.UpperRight.Longitude= FCString::Atof(AttributeValue);
+		}
+	}
+
 	return true;
 }
 
 bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
 {
 	FString ElementNameString(Element);
+	UE_LOG(Xml, Log, TEXT("End element <%s>"), Element);
 
 	if (ElementNameString == "bounds")
 	{
 		bReadingBounds = false;
+		// Set the bounds on the OpenStreetMap
+		MapActor->GetProjection()->SetBounds(CurrentBounds);
+		CurrentBounds = FLatLngBounds();
 	}
 	else if (ElementNameString == "node" || ElementNameString == "nd")
 	{

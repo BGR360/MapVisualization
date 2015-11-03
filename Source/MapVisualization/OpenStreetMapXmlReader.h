@@ -3,6 +3,8 @@
 #pragma once
 
 #include "Runtime/XmlParser/Public/FastXml.h"
+#include "Runtime/Core/Public/Containers/Map.h"
+#include "LatLngBounds.h"
 
 /**
  * Reads an OSM XML file and populates an AOpenStreetMap actor with the proper
@@ -48,4 +50,15 @@ private:
 	bool bReadingWay;
 	bool bReadingRelation;
 	bool bReadingMember;
+
+	// Keep a pointer to the current object being created while reading an element
+	// When the element ends, the object has all required fields filled in
+	// So reset the pointer
+	class AOpenStreetNode* CurrentNode;
+	class AOpenStreetWay* CurrentWay;
+	struct FOpenStreetTag* CurrentTag;
+	FLatLngBounds CurrentBounds;
+
+	// We need to keep a TMap of <Id, Node*> so that we can add Nodes to Ways
+	TMap<int32, AOpenStreetNode*> NodeMap;
 };

@@ -35,6 +35,6 @@ private:
     UGeoComponent* GeoComponent;
 
 	// Every Node has an id
-	UPROPERTY(VisibleAnuywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
 	int32 Id;
 };

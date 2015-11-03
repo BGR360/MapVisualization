@@ -3,6 +3,8 @@
 #include "MapVisualization.h"
 #include "OpenStreetMapXmlReader.h"
 
+#define LOCTEXT_NAMESPACE "Xml"
+
 OpenStreetMapXmlReader::OpenStreetMapXmlReader() :
 MapActor(nullptr),
 bReadingBounds(false),
@@ -44,6 +46,13 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
 		FText OutErrorMessage;
 		int32 OutErrorLineNumber;
 		FFastXml::ParseXmlFile(this, *FilePath, nullptr, GWarn, true, true, OutErrorMessage, OutErrorLineNumber);
+
+		// Check for errors
+		if (!OutErrorMessage.IsEmpty())
+		{
+			FText DialogTitle = LOCTEXT("ErrorDialogTitle", "Error");
+			FMessageDialog::Open(EAppMsgType::Ok, OutErrorMessage, &DialogTitle);
+		}
 	}
 }
 
@@ -159,3 +168,5 @@ bool OpenStreetMapXmlReader::ProcessComment(const TCHAR* Comment)
 {
 	return true;
 }
+
+#undef LOCTEXT_NAMESPACE

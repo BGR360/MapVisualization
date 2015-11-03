@@ -21,5 +21,5 @@ void AOpenStreetMap::BeginPlay()
 	// Read the XML file.
 	OpenStreetMapXmlReader Reader;
 	Reader.SetMapActor(this);
-	Reader.ReadFromFile("map.osm");
+	Reader.ReadFromFile("C:\\Users\\bgreeves\\Documents\\Unreal Projects\\MapVisualization\\map.osm");
 }

@@ -58,6 +58,6 @@ public:
     
 private:
     // The bounding box of the map onto/from which we shall project
-    // TODO: Figure out UPROPERTY status of Bounds
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     FLatLngBounds Bounds;
 };

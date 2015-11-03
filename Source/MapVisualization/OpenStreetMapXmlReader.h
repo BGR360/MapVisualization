@@ -42,6 +42,8 @@ private:
 
 	// Variables relating to the current state of the reader
 	bool bReadingFile;
+	bool bReadingBounds;
+	bool bReadingTag;
 	bool bReadingNode;
 	bool bReadingWay;
 	bool bReadingRelation;

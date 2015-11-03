@@ -2,6 +2,7 @@
 
 #include "MapVisualization.h"
 #include "OpenStreetMap.h"
+#include "OpenStreetMapXmlReader.h"
 
 
 // Sets default values
@@ -17,4 +18,8 @@ void AOpenStreetMap::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Read the XML file.
+	OpenStreetMapXmlReader Reader;
+	Reader.SetMapActor(this);
+	Reader.ReadFromFile("map.osm");
 }

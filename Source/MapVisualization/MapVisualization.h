@@ -4,3 +4,5 @@
 
 #include "Engine.h"
 
+// Xml Logging
+DECLARE_LOG_CATEGORY_EXTERN(Xml, Log, All);

@@ -3,3 +3,5 @@
 #include "MapVisualization.h"
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, MapVisualization, "MapVisualization" );
+
+DEFINE_LOG_CATEGORY(Xml);

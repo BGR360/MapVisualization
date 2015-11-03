@@ -82,6 +82,8 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
 	// OSM doesn't store any data inside of elements, only inside of attributes, so we don't care about ElementData
 
 	FString ElementNameString(ElementName);
+	UE_LOG(Xml, Log, TEXT("Line %d: Begin element <%s>"),
+		XmlFileLineNumber, ElementName);
 
 	if (ElementNameString == "bounds")
 	{

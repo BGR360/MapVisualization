@@ -11,6 +11,7 @@ AOpenStreetNode::AOpenStreetNode()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	Id = 0;
     GeoComponent = CreateDefaultSubobject<UGeoComponent>(TEXT("GeoComponent"));
 }
 
@@ -25,4 +26,10 @@ void AOpenStreetNode::BeginPlay()
 UGeoComponent* AOpenStreetNode::GetGeoComponent() const
 {
     return GeoComponent;
+}
+
+// Get Id
+int32 AOpenStreetNode::GetId() const
+{
+	return Id;
 }

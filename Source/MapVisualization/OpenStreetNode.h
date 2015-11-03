@@ -20,15 +20,21 @@ public:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-    // TODO: Stub out interface
     
     // Get GeoComponent
     UFUNCTION(BlueprintPure, Category = Map)
     class UGeoComponent* GetGeoComponent() const;
+
+	// Get Id
+	UFUNCTION(BlueprintPure, Category = Map)
+	int32 GetId() const;
     
 private:
     // A Node has a Latitude-Longitude location, so we give it a GeoComponent
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-    class UGeoComponent* GeoComponent;
+    UGeoComponent* GeoComponent;
+
+	// Every Node has an id
+	UPROPERTY(VisibleAnuywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+	int32 Id;
 };

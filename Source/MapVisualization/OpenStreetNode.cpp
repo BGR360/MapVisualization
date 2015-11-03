@@ -33,3 +33,8 @@ int32 AOpenStreetNode::GetId() const
 {
 	return Id;
 }
+
+void AOpenStreetNode::SetId(int32 Id)
+{
+	this->Id = Id;
+}

@@ -28,6 +28,10 @@ public:
 	// Get Id
 	UFUNCTION(BlueprintPure, Category = Map)
 	int32 GetId() const;
+
+	// Set Id
+	UFUNCTION(BlueprintCallable, Category = Map)
+	void SetId(int32 Id);
     
 private:
     // A Node has a Latitude-Longitude location, so we give it a GeoComponent

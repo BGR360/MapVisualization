@@ -5,6 +5,7 @@
 #include "MapProjectionComponent.h"
 #include "OpenStreetMap.h"
 #include "OpenStreetNode.h"
+#include "GeoComponent.h"
 #include "OpenStreetWay.h"
 #include "OpenStreetTag.h"
 
@@ -108,8 +109,27 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
 		// Reset CurrentBounds just in case
 		CurrentBounds = FLatLngBounds();
 	}
-	else if (ElementNameString == "node" || ElementNameString == "nd")
+	else if (ElementNameString == "node")
 	{
+		bReadingNode = true;
+
+		// Spawn new AOpenStreetNode and attach it to the AOpenStreetMap's RootComponent
+
+		UWorld* World = MapActor->GetWorld();
+		if (World)
+		{
+			FActorSpawnParameters Params;
+			CurrentNode = World->SpawnActor<AOpenStreetNode>();
+			if (CurrentNode)
+			{
+				// Attach to actor
+				CurrentNode->AttachRootComponentToActor(MapActor);
+			}
+		}
+	}
+	else if (ElementNameString == "nd")
+	{
+		// Still reading a node, but it's a reference to a node inside of a way. Do not spawn new node.
 		bReadingNode = true;
 	}
 	else if (ElementNameString == "tag")
@@ -136,7 +156,7 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
 {
 	FString AttributeNameString(AttributeName);
 
-	// If inside <bounds> tag
+	// If inside <bounds> element
 	if (bReadingBounds)
 	{
 		if (AttributeNameString == "minlat")
@@ -154,6 +174,50 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
 		else if (AttributeNameString == "maxlon")
 		{
 			CurrentBounds.UpperRight.Longitude= FCString::Atof(AttributeValue);
+		}
+	}
+
+	// If inside <node> element
+	else if (bReadingNode)
+	{
+		// If inside <tag> element
+		if (bReadingTag)
+		{
+
+		}
+
+		// Else reading <node> or <nd> attributes
+		else
+		{
+			// If reading <nd> attributes
+			if (bReadingWay)
+			{
+
+			}
+
+			// Else reading <node> attributes
+			else if (CurrentNode != nullptr)
+			{
+				if (AttributeNameString == "id")
+				{
+					int32 Id = FCString::Atoi(AttributeValue);
+					CurrentNode->SetId(Id);
+					// Now that we have the Id, add the Node to the NodeMap
+					NodeMap.Add(Id, CurrentNode);
+				}
+				else if (AttributeNameString == "lat")
+				{
+					float Latitude = FCString::Atof(AttributeValue);
+					CurrentNode->GetGeoComponent()->GetLocation().Latitude = Latitude;
+				}
+				else if (AttributeNameString == "lon")
+				{
+					float Longitude = FCString::Atof(AttributeValue);
+					CurrentNode->GetGeoComponent()->GetLocation().Longitude = Longitude;
+				}
+
+				// TODO Set the Projection of the Node's GeoComponent
+			}
 		}
 	}
 
@@ -175,6 +239,7 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
 	else if (ElementNameString == "node" || ElementNameString == "nd")
 	{
 		bReadingNode = false;
+		CurrentNode = nullptr;
 	}
 	else if (ElementNameString == "tag")
 	{

@@ -27,7 +27,7 @@ public:
     
     // Get/Set Location
     UFUNCTION(BlueprintPure, Category = Map)
-    FLatLng GetLocation() const;
+    FLatLng& GetLocation();
     
     UFUNCTION(BlueprintCallable, Category = Map)
     void SetLocation(FLatLng Location);

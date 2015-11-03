@@ -19,7 +19,7 @@ UGeoComponent::UGeoComponent()
 
 // Get/Set Location
 
-FLatLng UGeoComponent::GetLocation() const
+FLatLng& UGeoComponent::GetLocation()
 {
     return Location;
 }

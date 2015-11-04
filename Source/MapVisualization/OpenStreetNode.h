@@ -25,12 +25,12 @@ public:
     UFUNCTION(BlueprintPure, Category = Map)
     class UGeoComponent* GetGeoComponent() const;
 
+    // TODO Figure out what to do about int64 not being supported by Blueprints
+
     // Get Id
-    UFUNCTION(BlueprintPure, Category = Map)
     int64 GetId() const;
 
     // Set Id
-    UFUNCTION(BlueprintCallable, Category = Map)
     void SetId(int64 Id);
 
 private:
@@ -39,6 +39,6 @@ private:
     UGeoComponent* GeoComponent;
 
     // Every Node has an id
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+    UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
     int64 Id;
 };

@@ -20,9 +20,9 @@ void AOpenStreetElement::BeginPlay()
 }
 
 // Get Tags
-TArray<FOpenStreetTag>* AOpenStreetElement::GetTags()
+TArray<FOpenStreetTag>& AOpenStreetElement::GetTags()
 {
-    return nullptr;
+    return Tags;
 }
 
 // Add Tag
@@ -48,8 +48,9 @@ bool AOpenStreetElement::HasTag(const FString& Key) const
 }
 
 // Has Tag - Outputs IndexOf
-bool AOpenStreetElement::HasTag(const FString& Key, int32& IndexOfTag) const
+int32 AOpenStreetElement::IndexOfTag(const FString& Key) const
 {
+    int32 IndexOfTag = -1;
     for (int32 i = 0; i < Tags.Num(); i++)
     {
         if (Tags[i].Key == Key)
@@ -58,22 +59,20 @@ bool AOpenStreetElement::HasTag(const FString& Key, int32& IndexOfTag) const
             return true;
         }
     }
-    IndexOfTag = -1;
-    return false;
+    return IndexOfTag;
 }
 
 // Get Tag Value
-const FString* AOpenStreetElement::GetTagValue(const FString& Key) const
+FString AOpenStreetElement::GetTagValue(const FString& Key) const
 {
     // Check if a Tag with Key exists
-    int32 IndexOfTag;
-    if (HasTag(Key, IndexOfTag))
+    int32 IndexOfTag = this->IndexOfTag(Key);
+    if (IndexOfTag != -1)
     {
-        const FString* Value = &(Tags[IndexOfTag].Value);
-        return Value;
+        return Tags[IndexOfTag].Value;
     }
     else
     {
-        return nullptr;
+        return TEXT("");
     }
 }

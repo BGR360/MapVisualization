@@ -4,6 +4,7 @@
 #include "OpenStreetMap.h"
 #include "OpenStreetMapXmlReader.h"
 #include "MapProjectionComponent.h"
+#include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
 
 // Sets default values
@@ -21,10 +22,28 @@ void AOpenStreetMap::BeginPlay()
     Super::BeginPlay();
 
     // Read the XML file.
-    // TODO Use better file path semantics
     OpenStreetMapXmlReader Reader;
     Reader.SetMapActor(this);
-    Reader.ReadFromFile("C:\\Users\\bgreeves\\Documents\\Unreal Projects\\MapVisualization\\map.osm");
+
+    // Prompt user for a file location using a native "Open File" dialog
+    TArray<FString> OutFilenames;
+    int32 OutFilterIndex;
+    void* WindowHandle = GEngine->GameViewport->GetWindow()->GetNativeWindow()->GetOSWindowHandle();
+    FDesktopPlatformModule::Get()->OpenFileDialog(
+        WindowHandle,
+        TEXT("Choose an OSM XML File"),
+        FPaths::GameDir(),
+        TEXT(""),
+        TEXT("XML Files|*.xml;*.osm"),
+        EFileDialogFlags::None,
+        OutFilenames,
+        OutFilterIndex);
+
+    if (OutFilenames.Num() > 0)
+    {
+        FString& FilePath = OutFilenames[0];
+        Reader.ReadFromFile(FilePath);
+    }
 }
 
 UMapProjectionComponent* AOpenStreetMap::GetProjection()

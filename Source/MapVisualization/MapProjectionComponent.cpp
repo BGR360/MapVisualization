@@ -7,10 +7,10 @@
 // Sets default values for this component's properties
 UMapProjectionComponent::UMapProjectionComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	bWantsBeginPlay = true;
-	PrimaryComponentTick.bCanEverTick = true;
+    // Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+    // off to improve performance if you don't need them.
+    bWantsBeginPlay = true;
+    PrimaryComponentTick.bCanEverTick = true;
 
     Bounds = FLatLngBounds();
 }
@@ -24,19 +24,19 @@ UMapProjectionComponent::UMapProjectionComponent(FLatLngBounds Bounds) : UMapPro
 // Called when the game starts
 void UMapProjectionComponent::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
 
-	// ...
-	
+    // ...
+
 }
 
 
 // Called every frame
-void UMapProjectionComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
+void UMapProjectionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
+    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+    // ...
 }
 
 // Get/Set Bounds
@@ -60,22 +60,22 @@ FLatLng UMapProjectionComponent::MapToEarth(FVector MapPos) const
 
 FVector UMapProjectionComponent::EarthToMap(FLatLng EarthPos) const
 {
-	return FVector(EarthPos.Latitude, 0.0f, EarthPos.Longitude);
+    return FVector(EarthPos.Latitude, 0.0f, EarthPos.Longitude);
 }
 
 FVector UMapProjectionComponent::WorldToMap(FVector WorldPos) const
 {
-	return WorldPos;
+    return WorldPos;
 }
 
 FVector UMapProjectionComponent::MapToWorld(FVector MapPos) const
 {
-	return MapPos;
+    return MapPos;
 }
 
 FLatLng UMapProjectionComponent::WorldToEarth(FVector WorldPos) const
 {
-	return MapToEarth(WorldToMap(WorldPos));
+    return MapToEarth(WorldToMap(WorldPos));
 }
 
 FVector UMapProjectionComponent::EarthToWorld(FLatLng EarthPos) const

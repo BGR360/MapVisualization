@@ -17,41 +17,45 @@
 UCLASS()
 class MAPVISUALIZATION_API AOpenStreetElement : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AOpenStreetElement();
+    GENERATED_BODY()
 
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+public:
+    // Sets default values for this actor's properties
+    AOpenStreetElement();
 
-	// Get Tags
-	TArray<FOpenStreetTag>* GetTags();
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
-	// Add Tag
-	void AddTag(FOpenStreetTag Tag);
-	void AddTag(const FString& Key, const FString& Value);
+    // Get Tags
+    UFUNCTION(BlueprintPure, Category = Map)
+    TArray<FOpenStreetTag>* GetTags();
 
-	// Has Tag
-	bool HasTag(const FString& Key) const;
+    // Add Tag
+    void AddTag(FOpenStreetTag Tag);
+    void AddTag(const FString& Key, const FString& Value);
 
-	/**
-	 * Returns whether or not this Element has a Tag with the given Key.
-	 * @param Key The Key string that we want to search for.
-	 * @param IndexOfTag Output parameter that gets the index of the found Tag (or -1 if not found)
-	 * @return True if the Tag exists, false if not.
-	 */
-	bool HasTag(const FString& Key, int32& IndexOfTag) const;
+    // Has Tag
+    UFUNCTION(BlueprintPure, Category = Map)
+    bool HasTag(const FString& Key) const;
 
-	/**
-	 * Returns the value associated with the given key.
-	 * @param Key The key string that we want the value for.
-	 * @return The key's value if a Tag exists with that particular key, otherwise nullptr.
-	 */
-	const FString* GetTagValue(const FString& Key) const;
+    /**
+     * Returns whether or not this Element has a Tag with the given Key.
+     * @param Key The Key string that we want to search for.
+     * @param IndexOfTag Output parameter that gets the index of the found Tag (or -1 if not found)
+     * @return True if the Tag exists, false if not.
+     */
+    UFUNCTION(BlueprintPure, Category = Map)
+    bool HasTag(const FString& Key, int32& IndexOfTag) const;
+
+    /**
+     * Returns the value associated with the given key.
+     * @param Key The key string that we want the value for.
+     * @return The key's value if a Tag exists with that particular key, otherwise nullptr.
+     */
+    UFUNCTION(BlueprintCallable, Category = Map)
+    const FString* GetTagValue(const FString& Key) const;
 
 protected:
-	// The list of Tags that describe this Element
-	TArray<FOpenStreetTag> Tags;
+    // The list of Tags that describe this Element
+    TArray<FOpenStreetTag> Tags;
 };

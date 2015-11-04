@@ -8,7 +8,7 @@ FLatLngBounds::FLatLngBounds()
 }
 
 FLatLngBounds::FLatLngBounds(FLatLng LowerLeft, FLatLng UpperRight)
-: LowerLeft(LowerLeft), UpperRight(UpperRight)
+    : LowerLeft(LowerLeft), UpperRight(UpperRight)
 {
 }
 

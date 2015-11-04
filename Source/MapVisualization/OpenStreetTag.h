@@ -12,15 +12,15 @@
 USTRUCT()
 struct MAPVISUALIZATION_API FOpenStreetTag
 {
-	GENERATED_USTRUCT_BODY()
+    GENERATED_USTRUCT_BODY()
 
-	FOpenStreetTag();
-	FOpenStreetTag(const FString& Key, const FString& Value);
-	~FOpenStreetTag();
+    FOpenStreetTag();
+    FOpenStreetTag(const FString& Key, const FString& Value);
+    ~FOpenStreetTag();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Map)
-	FString Key;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Map)
+    FString Key;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Map)
-	FString Value;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Map)
+    FString Value;
 };

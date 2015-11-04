@@ -16,20 +16,21 @@
 UCLASS()
 class MAPVISUALIZATION_API AOpenStreetMap : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AOpenStreetMap();
+    GENERATED_BODY()
 
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+public:
+    // Sets default values for this actor's properties
+    AOpenStreetMap();
 
-	// Get MapProjection
-	class UMapProjectionComponent* GetProjection();
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
+
+    // Get MapProjection
+    UFUNCTION(BlueprintPure, Category = Map)
+    class UMapProjectionComponent* GetProjection();
 
 private:
-	// The MapProjection used to convert GeoComponents' LatLng positions to 3D World coordinates
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-	UMapProjectionComponent* Projection;
+    // The MapProjection used to convert GeoComponents' LatLng positions to 3D World coordinates
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+    UMapProjectionComponent* Projection;
 };

@@ -18,46 +18,46 @@
  * In order to perform such conversions, a UMapProjectionComponent has a
  * FLatLngBounds object to localize its map projection.
  */
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class MAPVISUALIZATION_API UMapProjectionComponent : public UActorComponent
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
+public:
+    // Sets default values for this component's properties
     // Can choose to initialize with a bounding box
-	UMapProjectionComponent();
-    
+    UMapProjectionComponent();
+
     // Initializes the MapProjection with a bounding box
     UMapProjectionComponent(FLatLngBounds Bounds);
 
-	// Called when the game starts
-	virtual void BeginPlay() override;
-	
-	// Called every frame
-	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
-    
+    // Called when the game starts
+    virtual void BeginPlay() override;
+
+    // Called every frame
+    virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
     // Get/Set the Map's Bounds
     UFUNCTION(BlueprintPure, Category = Map)
     FLatLngBounds GetBounds() const;
-    
+
     UFUNCTION(BlueprintCallable, Category = Map)
     void SetBounds(FLatLngBounds Bounds);
-    
-		
-	// Position Conversion Functions
+
+
+    // Position Conversion Functions
     // TODO: Implement Mercator Projection
-    
-	FLatLng MapToEarth(FVector MapPos) const;
+
+    FLatLng MapToEarth(FVector MapPos) const;
     FVector EarthToMap(FLatLng EarthPos) const;
-	FVector WorldToMap(FVector WorldPos) const;
-	FVector MapToWorld(FVector MapPos) const;
-    
+    FVector WorldToMap(FVector WorldPos) const;
+    FVector MapToWorld(FVector MapPos) const;
+
     FLatLng WorldToEarth(FVector WorldPos) const;
     FVector EarthToWorld(FLatLng EarthPos) const;
-    
+
 private:
     // The bounding box of the map onto/from which we shall project
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     FLatLngBounds Bounds;
 };

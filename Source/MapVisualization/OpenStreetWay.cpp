@@ -8,16 +8,16 @@
 // Sets default values
 AOpenStreetWay::AOpenStreetWay()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+    PrimaryActorTick.bCanEverTick = false;
 
 }
 
 // Called when the game starts or when spawned
 void AOpenStreetWay::BeginPlay()
 {
-	Super::BeginPlay();
-	
+    Super::BeginPlay();
+
 }
 
 // Add Node
@@ -26,7 +26,7 @@ void AOpenStreetWay::AddNode(class AOpenStreetNode* Node)
 {
     Nodes.Push(Node);
 
-	// TODO update appearance
+    // TODO update appearance
 }
 
 // Remove Node
@@ -34,9 +34,9 @@ void AOpenStreetWay::AddNode(class AOpenStreetNode* Node)
 // @return The number of nodes removed
 int32 AOpenStreetWay::RemoveNode(AOpenStreetNode* Node)
 {
-	int32 numRemoved = Nodes.Remove(Node);
+    int32 numRemoved = Nodes.Remove(Node);
 
-	// TODO update appearance
+    // TODO update appearance
 
     return numRemoved;
 }

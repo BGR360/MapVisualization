@@ -9,10 +9,10 @@
 // Sets default values for this component's properties
 UGeoComponent::UGeoComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	bWantsBeginPlay = false;
-	PrimaryComponentTick.bCanEverTick = false;
+    // Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+    // off to improve performance if you don't need them.
+    bWantsBeginPlay = false;
+    PrimaryComponentTick.bCanEverTick = false;
 
     Projection = nullptr;
 }
@@ -27,7 +27,7 @@ FLatLng& UGeoComponent::GetLocation()
 void UGeoComponent::SetLocation(FLatLng Location)
 {
     this->Location = Location;
-    
+
     // Automatically update the World position when LatLng is changed
     ProjectLocationToWorld();
 }
@@ -42,7 +42,7 @@ void UGeoComponent::ProjectLocationToWorld()
         // Get our parent's SceneComponent
         AActor* Parent = this->GetOwner();
         USceneComponent* ParentSceneComp = nullptr;
-        
+
         // Check to see if there is a valid Parent
         if (Parent)
         {

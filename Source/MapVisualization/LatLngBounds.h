@@ -14,13 +14,13 @@ struct MAPVISUALIZATION_API FLatLngBounds
 {
     GENERATED_USTRUCT_BODY()
 
-	FLatLngBounds();
+    FLatLngBounds();
     FLatLngBounds(FLatLng LowerLeft, FLatLng UpperRight);
-	~FLatLngBounds();
-    
+    ~FLatLngBounds();
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FLatLng LowerLeft;
-    
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FLatLng UpperRight;
 };

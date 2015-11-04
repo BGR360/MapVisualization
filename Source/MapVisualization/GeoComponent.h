@@ -16,31 +16,31 @@
  * A GeoComponent should be added to every Actor that you want to represent
  * by a Latitude-Longitude position.
  */
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class MAPVISUALIZATION_API UGeoComponent : public UActorComponent
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
-	UGeoComponent();
-    
+public:
+    // Sets default values for this component's properties
+    UGeoComponent();
+
     // Get/Set Location
     UFUNCTION(BlueprintPure, Category = Map)
     FLatLng& GetLocation();
-    
+
     UFUNCTION(BlueprintCallable, Category = Map)
     void SetLocation(FLatLng Location);
-    
+
 private:
     // The location of the GeoComponent on Earth (latitude and longitude coordinates)
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     FLatLng Location;
-    
+
     // The reference to the MapProjection that will convert this to 3D position
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     class UMapProjectionComponent* Projection;
-    
+
     // Converts the Latitude-Longitude position to 3D position
     void ProjectLocationToWorld();
 };

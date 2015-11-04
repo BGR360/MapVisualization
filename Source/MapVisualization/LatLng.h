@@ -10,15 +10,15 @@
 USTRUCT()
 struct MAPVISUALIZATION_API FLatLng
 {
-	GENERATED_USTRUCT_BODY()
+    GENERATED_USTRUCT_BODY()
 
-	FLatLng();
-	FLatLng(float Latitude, float Longitude);
-	~FLatLng();
+    FLatLng();
+    FLatLng(float Latitude, float Longitude);
+    ~FLatLng();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Latitude;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float Latitude;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Longitude;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float Longitude;
 };

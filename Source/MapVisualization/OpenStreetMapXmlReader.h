@@ -13,52 +13,52 @@
 class MAPVISUALIZATION_API OpenStreetMapXmlReader : public IFastXmlCallback
 {
 public:
-	OpenStreetMapXmlReader();
-	~OpenStreetMapXmlReader();
+    OpenStreetMapXmlReader();
+    ~OpenStreetMapXmlReader();
 
-	// Get/Set Map
-	void SetMapActor(class AOpenStreetMap* Map);
-	const AOpenStreetMap* GetMapActor() const;
+    // Get/Set Map
+    void SetMapActor(class AOpenStreetMap* Map);
+    const AOpenStreetMap* GetMapActor() const;
 
-	// Read from file
-	// Does nothing if MapActor is null
-	void ReadFromFile(const FString& FilePath);
+    // Read from file
+    // Does nothing if MapActor is null
+    void ReadFromFile(const FString& FilePath);
 
-	// Checks if in the process of reading
-	bool IsReading() const;
+    // Checks if in the process of reading
+    bool IsReading() const;
 
 
-	//------------------------------------
-	// Inherited from IFastXmlCallback
-	//------------------------------------
+    //------------------------------------
+    // Inherited from IFastXmlCallback
+    //------------------------------------
 
-	virtual bool ProcessXmlDeclaration(const TCHAR* ElementData, int32 XmlFileLineNumber);
-	virtual bool ProcessElement(const TCHAR* ElementName, const TCHAR* ElementData, int32 XmlFileLineNumber);
-	virtual bool ProcessAttribute(const TCHAR* AttributeName, const TCHAR* AttributeValue);
-	virtual bool ProcessClose(const TCHAR* Element);
-	virtual bool ProcessComment(const TCHAR* Comment);
+    virtual bool ProcessXmlDeclaration(const TCHAR* ElementData, int32 XmlFileLineNumber);
+    virtual bool ProcessElement(const TCHAR* ElementName, const TCHAR* ElementData, int32 XmlFileLineNumber);
+    virtual bool ProcessAttribute(const TCHAR* AttributeName, const TCHAR* AttributeValue);
+    virtual bool ProcessClose(const TCHAR* Element);
+    virtual bool ProcessComment(const TCHAR* Comment);
 
 private:
-	// The OpenStreetMap that this reader is going to populate
-	AOpenStreetMap* MapActor;
+    // The OpenStreetMap that this reader is going to populate
+    AOpenStreetMap* MapActor;
 
-	// Variables relating to the current state of the reader
-	bool bReadingFile;
-	bool bReadingBounds;
-	bool bReadingTag;
-	bool bReadingNode;
-	bool bReadingWay;
-	bool bReadingRelation;
-	bool bReadingMember;
+    // Variables relating to the current state of the reader
+    bool bReadingFile;
+    bool bReadingBounds;
+    bool bReadingTag;
+    bool bReadingNode;
+    bool bReadingWay;
+    bool bReadingRelation;
+    bool bReadingMember;
 
-	// Keep a pointer to the current object being created while reading an element
-	// When the element ends, the object has all required fields filled in
-	// So reset the pointer
-	class AOpenStreetNode* CurrentNode;
-	class AOpenStreetWay* CurrentWay;
-	struct FOpenStreetTag* CurrentTag;
-	FLatLngBounds CurrentBounds;
+    // Keep a pointer to the current object being created while reading an element
+    // When the element ends, the object has all required fields filled in
+    // So reset the pointer
+    class AOpenStreetNode* CurrentNode;
+    class AOpenStreetWay* CurrentWay;
+    struct FOpenStreetTag* CurrentTag;
+    FLatLngBounds CurrentBounds;
 
-	// We need to keep a TMap of <Id, Node*> so that we can add Nodes to Ways
-	TMap<int32, AOpenStreetNode*> NodeMap;
+    // We need to keep a TMap of <Id, Node*> so that we can add Nodes to Ways
+    TMap<int32, AOpenStreetNode*> NodeMap;
 };

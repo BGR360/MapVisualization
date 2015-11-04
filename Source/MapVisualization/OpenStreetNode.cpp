@@ -29,12 +29,12 @@ UGeoComponent* AOpenStreetNode::GetGeoComponent() const
 }
 
 // Get Id
-int32 AOpenStreetNode::GetId() const
+int64 AOpenStreetNode::GetId() const
 {
     return Id;
 }
 
-void AOpenStreetNode::SetId(int32 Id)
+void AOpenStreetNode::SetId(int64 Id)
 {
     this->Id = Id;
 }

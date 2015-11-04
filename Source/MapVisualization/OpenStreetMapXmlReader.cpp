@@ -8,6 +8,7 @@
 #include "GeoComponent.h"
 #include "OpenStreetWay.h"
 #include "OpenStreetTag.h"
+#include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
 #define LOCTEXT_NAMESPACE "Xml"
 
@@ -54,7 +55,8 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
         // Pass the file to FFastXml
         FText OutErrorMessage;
         int32 OutErrorLineNumber;
-        FFastXml::ParseXmlFile(this, *FilePath, nullptr, GWarn, true, true, OutErrorMessage, OutErrorLineNumber);
+        FFeedbackContext* FeedbackContext = FDesktopPlatformModule::Get()->GetNativeFeedbackContext();
+        FFastXml::ParseXmlFile(this, *FilePath, nullptr, FeedbackContext, true, true, OutErrorMessage, OutErrorLineNumber);
 
         // Check for errors opening the file
         if (!OutErrorMessage.IsEmpty())

@@ -101,17 +101,23 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
 {
     // OSM doesn't store any data inside of elements, only inside of attributes, so we don't care about ElementData
 
+    // Convert TCHAR* to FString
     FString ElementNameString(ElementName);
     UE_LOG(Xml, Log, TEXT("Line %d: Begin element <%s>"),
         XmlFileLineNumber, ElementName);
 
-    if (ElementNameString == "bounds")
+    // Check which element is beginning
+    
+    // <bounds> element
+    if (ElementNameString == TEXT("bounds"))
     {
         bReadingBounds = true;
         // Reset CurrentBounds just in case
         CurrentBounds = FLatLngBounds();
     }
-    else if (ElementNameString == "node")
+    
+    // <node> element
+    else if (ElementNameString == TEXT("node"))
     {
         bReadingNode = true;
 
@@ -129,24 +135,38 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
             }
         }
     }
-    else if (ElementNameString == "nd")
+    
+    // <way>
+    //   <nd> element
+    // </way>
+    else if (ElementNameString == TEXT("nd"))
     {
         // Still reading a node, but it's a reference to a node inside of a way. Do not spawn new node.
         bReadingNode = true;
     }
-    else if (ElementNameString == "tag")
+    
+    // <tag> element
+    else if (ElementNameString == TEXT("tag"))
     {
         bReadingTag = true;
     }
-    else if (ElementNameString == "way")
+    
+    // <way> element
+    else if (ElementNameString == TEXT("way"))
     {
         bReadingWay = true;
     }
-    else if (ElementNameString == "relation")
+    
+    // <relation> element
+    else if (ElementNameString == TEXT("relation"))
     {
         bReadingRelation = true;
     }
-    else if (ElementNameString == "member")
+    
+    // <relation>
+    //   <member> element
+    // </relation>
+    else if (ElementNameString == TEXT("member"))
     {
         bReadingMember = true;
     }
@@ -161,19 +181,20 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
     // If inside <bounds> element
     if (bReadingBounds)
     {
-        if (AttributeNameString == "minlat")
+        // Read the max and min LatLng values
+        if (AttributeNameString == TEXT("minlat"))
         {
             CurrentBounds.LowerLeft.Latitude = FCString::Atof(AttributeValue);
         }
-        else if (AttributeNameString == "minlon")
+        else if (AttributeNameString == TEXT("minlon"))
         {
             CurrentBounds.LowerLeft.Longitude = FCString::Atof(AttributeValue);
         }
-        else if (AttributeNameString == "maxlat")
+        else if (AttributeNameString == TEXT("maxlat"))
         {
             CurrentBounds.UpperRight.Latitude = FCString::Atof(AttributeValue);
         }
-        else if (AttributeNameString == "maxlon")
+        else if (AttributeNameString == TEXT("maxlon"))
         {
             CurrentBounds.UpperRight.Longitude = FCString::Atof(AttributeValue);
         }
@@ -185,7 +206,15 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
         // If inside <tag> element
         if (bReadingTag)
         {
-
+            // Check if "key" or "value"
+            if (AttributeNameString == TEXT("key"))
+            {
+                CurrentTag.Key = AttributeData;
+            }
+            else if (AttributeNameString == TEXT("value"))
+            {
+                CurrentTag.Value = AttributeData;
+            }
         }
 
         // Else reading <node> or <nd> attributes
@@ -194,32 +223,61 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
             // If reading <nd> attributes
             if (bReadingWay)
             {
-
+                // Check for "ref" attribute
+                if (AttributeNameString == TEXT("ref"))
+                {
+                    // Add node to CurrentWay
+                    int64 Id = FCString::Atoi64(AttributeData);
+                    AOpenStreetNode* AddNode(NodeMap[Id])
+                }
             }
 
             // Else reading <node> attributes
             else if (CurrentNode != nullptr)
             {
-                if (AttributeNameString == "id")
+                if (AttributeNameString == TEXT("id"))
                 {
-                    int32 Id = FCString::Atoi(AttributeValue);
+                    // Set the Id of the Node
+                    int64 Id = FCString::Atoi64(AttributeValue);
                     CurrentNode->SetId(Id);
                     // Now that we have the Id, add the Node to the NodeMap
                     NodeMap.Add(Id, CurrentNode);
                 }
-                else if (AttributeNameString == "lat")
+                else if (AttributeNameString == TEXT("lat"))
                 {
                     float Latitude = FCString::Atof(AttributeValue);
                     CurrentNode->GetGeoComponent()->GetLocation().Latitude = Latitude;
                 }
-                else if (AttributeNameString == "lon")
+                else if (AttributeNameString == TEXT("lon"))
                 {
                     float Longitude = FCString::Atof(AttributeValue);
                     CurrentNode->GetGeoComponent()->GetLocation().Longitude = Longitude;
                 }
-
-                // TODO Set the Projection of the Node's GeoComponent
             }
+        }
+    }
+    
+    // If inside <way> element
+    else if (bReadingWay)
+    {
+        // If inside <tag> element
+        if (bReadingTag)
+        {
+            // Check if "key" or "value"
+            if (AttributeNameString == TEXT("key"))
+            {
+                CurrentTag.Key = AttributeData;
+            }
+            else if (AttributeNameString == TEXT("value"))
+            {
+                CurrentTag.Value = AttributeData;
+            }
+        }
+        
+        // Else reading the <way> attributes
+        else if (CurrentWay != nullptr)
+        {
+            // TODO Set the Id of the Way
         }
     }
 
@@ -231,35 +289,50 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
     FString ElementNameString(Element);
     UE_LOG(Xml, Log, TEXT("End element <%s>"), Element);
 
-    if (ElementNameString == "bounds")
+    // Check which element is ending
+    
+    if (ElementNameString == TEXT("bounds"))
     {
         bReadingBounds = false;
         // Set the bounds on the OpenStreetMap
         MapActor->GetProjection()->SetBounds(CurrentBounds);
         CurrentBounds = FLatLngBounds();
     }
-    else if (ElementNameString == "node" || ElementNameString == "nd")
+    else if (ElementNameString == TEXT("node") || ElementNameString == TEXT("nd"))
     {
         bReadingNode = false;
         CurrentNode = nullptr;
     }
-    else if (ElementNameString == "tag")
+    else if (ElementNameString == TEXT("tag"))
     {
         bReadingTag = false;
+        
+        // Check which type of element we're supposed to add the Tag to
+        if (bReadingWay && CurrentWay != nullptr)
+        {
+            CurrentWay->AddTag(CurrentTag);
+        }
+        else if (bReadingNode && CurrentNode != nullptr)
+        {
+            CurrentNode->AddTag(CurrentTag);
+        }
+        
+        CurrentTag = FOpenStreetTag();
     }
-    else if (ElementNameString == "way")
+    else if (ElementNameString == TEXT("way"))
     {
         bReadingWay = false;
+        CurrentWay = nullptr;
     }
-    else if (ElementNameString == "relation")
+    else if (ElementNameString == TEXT("relation"))
     {
         bReadingRelation = false;
     }
-    else if (ElementNameString == "member")
+    else if (ElementNameString == TEXT("member"))
     {
         bReadingMember = false;
     }
-    else if (ElementNameString == "osm")
+    else if (ElementNameString == TEXT("osm"))
     {
         bReadingFile = false;
     }

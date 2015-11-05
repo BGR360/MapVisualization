@@ -60,5 +60,5 @@ private:
     FLatLngBounds CurrentBounds;
 
     // We need to keep a TMap of <Id, Node*> so that we can add Nodes to Ways
-    TMap<int32, AOpenStreetNode*> NodeMap;
+    TMap<int64, AOpenStreetNode*> NodeMap;
 };

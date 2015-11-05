@@ -37,4 +37,6 @@ public:
 private:
     // The list of Nodes that are a part of this way
     TArray<AOpenStreetNode*> Nodes;
+    
+    // TODO Add Id to AOpenStreetWay
 };

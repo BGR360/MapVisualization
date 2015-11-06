@@ -5,6 +5,7 @@
 #include "Runtime/XmlParser/Public/FastXml.h"
 #include "Runtime/Core/Public/Containers/Map.h"
 #include "LatLngBounds.h"
+#include "OpenStreetTag.h"
 
 /**
  * Reads an OSM XML file and populates an AOpenStreetMap actor with the proper
@@ -56,7 +57,7 @@ private:
     // So reset the pointer
     class AOpenStreetNode* CurrentNode;
     class AOpenStreetWay* CurrentWay;
-    struct FOpenStreetTag* CurrentTag;
+    FOpenStreetTag CurrentTag;
     FLatLngBounds CurrentBounds;
 
     // We need to keep a TMap of <Id, Node*> so that we can add Nodes to Ways

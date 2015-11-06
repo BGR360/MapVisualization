@@ -7,7 +7,6 @@
 #include "OpenStreetNode.h"
 #include "GeoComponent.h"
 #include "OpenStreetWay.h"
-#include "OpenStreetTag.h"
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
 #define LOCTEXT_NAMESPACE "Xml"
@@ -23,7 +22,7 @@ bReadingRelation(false),
 bReadingMember(false),
 CurrentNode(nullptr),
 CurrentWay(nullptr),
-CurrentTag(nullptr)
+CurrentTag()
 {
 }
 
@@ -155,6 +154,20 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     else if (ElementNameString == TEXT("way"))
     {
         bReadingWay = true;
+        
+        // Spawn new AOpenStreetNode and attach it to the AOpenStreetMap's RootComponent
+        
+        UWorld* World = MapActor->GetWorld();
+        if (World)
+        {
+            FActorSpawnParameters Params;
+            CurrentWay = World->SpawnActor<AOpenStreetWay>();
+            if (CurrentWay)
+            {
+                // Attach to actor
+                CurrentWay->AttachRootComponentToActor(MapActor);
+            }
+        }
     }
     
     // <relation> element
@@ -209,11 +222,11 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
             // Check if "key" or "value"
             if (AttributeNameString == TEXT("key"))
             {
-                CurrentTag.Key = AttributeData;
+                CurrentTag.Key = AttributeValue;
             }
             else if (AttributeNameString == TEXT("value"))
             {
-                CurrentTag.Value = AttributeData;
+                CurrentTag.Value = AttributeValue;
             }
         }
 
@@ -227,8 +240,12 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
                 if (AttributeNameString == TEXT("ref"))
                 {
                     // Add node to CurrentWay
-                    int64 Id = FCString::Atoi64(AttributeData);
-                    AOpenStreetNode* AddNode(NodeMap[Id])
+                    int64 Id = FCString::Atoi64(AttributeValue);
+                    AOpenStreetNode* Node = NodeMap[Id];
+                    if (Node)
+                    {
+                        CurrentWay->AddNode(Node);
+                    }
                 }
             }
 
@@ -266,11 +283,11 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
             // Check if "key" or "value"
             if (AttributeNameString == TEXT("key"))
             {
-                CurrentTag.Key = AttributeData;
+                CurrentTag.Key = AttributeValue;
             }
             else if (AttributeNameString == TEXT("value"))
             {
-                CurrentTag.Value = AttributeData;
+                CurrentTag.Value = AttributeValue;
             }
         }
         

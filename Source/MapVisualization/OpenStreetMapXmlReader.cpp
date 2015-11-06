@@ -96,16 +96,6 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
                 }
             }
         }
-
-        /*DrawDebugSphere(
-              World,
-              FVector(0.0f, 0.0f, 100.0f),
-              ::DEBUG_SPHERE_RADIUS,
-              ::DEBUG_SPHERE_NUM_LINES,
-              FColor(255, 0, 255),
-              true,
-              -1.0f,
-              ::DEBUG_SPHERE_DEPTH_PRIORITY);*/
     }
 }
 
@@ -362,8 +352,7 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
     {
         bReadingNode = false;
 
-        
-
+   
         CurrentNode = nullptr;
     }
     else if (ElementNameString == TEXT("tag"))

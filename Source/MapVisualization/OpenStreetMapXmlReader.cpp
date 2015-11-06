@@ -10,7 +10,7 @@
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
 #define LOCTEXT_NAMESPACE "Xml"
-static const float DEBUG_POINT_SIZE = 10.f;
+static const float DEBUG_POINT_SIZE = 3.5f;
 static const float DEBUG_SPHERE_RADIUS = 10.f;
 static const int DEBUG_SPHERE_NUM_LINES = 4;
 static const int DEBUG_SPHERE_DEPTH_PRIORITY = 255;
@@ -82,6 +82,7 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
                 {
                     FLatLng LatLng = Node->GetGeoComponent()->GetLocation();
                     FVector Location = MapActor->GetProjection()->EarthToWorld(LatLng);
+                    Location *= 7.f;
                     Location.Z = ::DEBUG_POINT_HEIGHT;
 
                     DrawDebugPoint(

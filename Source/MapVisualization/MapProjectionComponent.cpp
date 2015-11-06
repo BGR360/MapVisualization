@@ -78,8 +78,8 @@ FVector UMapProjectionComponent::WorldToMap(FVector WorldPos) const
 
 FVector UMapProjectionComponent::MapToWorld(FVector MapPos) const
 {
-    float Width = 100.f;
-    float Length = 100.f;
+    float Width = 1000.f;
+    float Length = 1000.f;
 
     FVector WorldPos;
     WorldPos.X = (Width / 2.0f) * MapPos.X;

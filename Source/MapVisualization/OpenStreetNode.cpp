@@ -13,6 +13,8 @@ AOpenStreetNode::AOpenStreetNode()
 
     Id = 0;
     GeoComponent = CreateDefaultSubobject<UGeoComponent>(TEXT("GeoComponent"));
+    BillboardComponent = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("Texture"));
+    RootComponent = BillboardComponent;
 }
 
 // Called when the game starts or when spawned

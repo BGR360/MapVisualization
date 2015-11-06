@@ -41,4 +41,8 @@ private:
     // Every Node has an id
     UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
     int64 Id;
+
+    // Give the Node a billboard sprite so that it's visible in the World
+    UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
+    class UMaterialBillboardComponent* BillboardComponent;
 };

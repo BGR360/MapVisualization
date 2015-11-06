@@ -10,6 +10,12 @@
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
 #define LOCTEXT_NAMESPACE "Xml"
+static const float DEBUG_POINT_SIZE = 10.f;
+static const float DEBUG_SPHERE_RADIUS = 10.f;
+static const int DEBUG_SPHERE_NUM_LINES = 4;
+static const int DEBUG_SPHERE_DEPTH_PRIORITY = 255;
+static const float DEBUG_POINT_HEIGHT = 30.f;
+static const float DEBUG_POINT_SCALE_FACTOR = 20.f;
 
 OpenStreetMapXmlReader::OpenStreetMapXmlReader() :
 MapActor(nullptr),
@@ -63,6 +69,42 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
             FText DialogTitle = LOCTEXT("ErrorDialogTitle", "Error");
             FMessageDialog::Open(EAppMsgType::Ok, OutErrorMessage, &DialogTitle);
         }
+
+        // Draw a debug point at each Node
+        UWorld* World = MapActor->GetWorld();
+        if (World)
+        {
+            for (auto& Element : NodeMap)
+            {
+                AOpenStreetNode* Node = Element.Value;
+
+                if (Node)
+                {
+                    FLatLng LatLng = Node->GetGeoComponent()->GetLocation();
+                    // TODO do the janky projection
+                    FVector Location = MapActor->GetProjection()->EarthToWorld(LatLng);
+
+                    DrawDebugPoint(
+                        World,
+                        Location,
+                        ::DEBUG_POINT_SIZE,
+                        FColor(255, 0, 255),
+                        true,
+                        -1.0f,
+                        ::DEBUG_SPHERE_DEPTH_PRIORITY);
+                }
+            }
+        }
+
+        /*DrawDebugSphere(
+              World,
+              FVector(0.0f, 0.0f, 100.0f),
+              ::DEBUG_SPHERE_RADIUS,
+              ::DEBUG_SPHERE_NUM_LINES,
+              FColor(255, 0, 255),
+              true,
+              -1.0f,
+              ::DEBUG_SPHERE_DEPTH_PRIORITY);*/
     }
 }
 
@@ -318,6 +360,9 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
     else if (ElementNameString == TEXT("node") || ElementNameString == TEXT("nd"))
     {
         bReadingNode = false;
+
+        
+
         CurrentNode = nullptr;
     }
     else if (ElementNameString == TEXT("tag"))

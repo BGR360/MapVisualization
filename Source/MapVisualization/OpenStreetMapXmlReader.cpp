@@ -12,10 +12,12 @@
 #define LOCTEXT_NAMESPACE "Xml"
 static const float DEBUG_POINT_SIZE = 3.5f;
 static const float DEBUG_SPHERE_RADIUS = 10.f;
+static const float DEBUG_LINE_THICKNESS = 1.5f;
 static const int DEBUG_SPHERE_NUM_LINES = 4;
 static const int DEBUG_SPHERE_DEPTH_PRIORITY = 255;
 static const float DEBUG_POINT_HEIGHT = 30.f;
-static const float DEBUG_POINT_SCALE_FACTOR = 20.f;
+static const float DEBUG_LINE_HEIGHT = DEBUG_POINT_HEIGHT;
+static const float DEBUG_POINT_LINES_SCALE_FACTOR = 7.f;
 
 OpenStreetMapXmlReader::OpenStreetMapXmlReader() :
 MapActor(nullptr),
@@ -82,7 +84,7 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
                 {
                     FLatLng LatLng = Node->GetGeoComponent()->GetLocation();
                     FVector Location = MapActor->GetProjection()->EarthToWorld(LatLng);
-                    Location *= 7.f;
+                    Location *= ::DEBUG_POINT_LINES_SCALE_FACTOR;
                     Location.Z = ::DEBUG_POINT_HEIGHT;
 
                     DrawDebugPoint(
@@ -374,6 +376,37 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
     else if (ElementNameString == TEXT("way"))
     {
         bReadingWay = false;
+
+        // The Way is finished, draw lines connecting its nodes
+        if (CurrentWay)
+        {
+            TArray<AOpenStreetNode*>& Nodes = *(CurrentWay->GetNodes());
+            for (int32 i = 1; i < Nodes.Num(); ++i)
+            {
+                FLatLng StartLatLng = Nodes[i]->GetGeoComponent()->GetLocation();
+                FLatLng EndLatLng = Nodes[i - 1]->GetGeoComponent()->GetLocation();
+
+                FVector Start = MapActor->GetProjection()->EarthToWorld(StartLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
+                FVector End = MapActor->GetProjection()->EarthToWorld(EndLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
+                Start.Z = ::DEBUG_LINE_HEIGHT;
+                End.Z = ::DEBUG_LINE_HEIGHT;
+
+                UWorld* World = MapActor->GetWorld();
+                if (World)
+                {
+                    DrawDebugLine(
+                        World,
+                        Start,
+                        End,
+                        FColor(255, 0, 255),
+                        true,
+                        -1.0f,
+                        ::DEBUG_SPHERE_DEPTH_PRIORITY,
+                        ::DEBUG_LINE_THICKNESS);
+                }
+            }
+        }
+        
         CurrentWay = nullptr;
     }
     else if (ElementNameString == TEXT("relation"))

@@ -81,8 +81,8 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
                 if (Node)
                 {
                     FLatLng LatLng = Node->GetGeoComponent()->GetLocation();
-                    // TODO do the janky projection
                     FVector Location = MapActor->GetProjection()->EarthToWorld(LatLng);
+                    Location.Z = ::DEBUG_POINT_HEIGHT;
 
                     DrawDebugPoint(
                         World,

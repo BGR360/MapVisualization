@@ -60,7 +60,15 @@ FLatLng UMapProjectionComponent::MapToEarth(FVector MapPos) const
 
 FVector UMapProjectionComponent::EarthToMap(FLatLng EarthPos) const
 {
-    return FVector(EarthPos.Latitude, 0.0f, EarthPos.Longitude);
+    FVector MapPos;
+    FLatLng RelativeLatLng;
+    RelativeLatLng.Latitude = EarthPos.Latitude - Bounds.LowerLeft.Latitude;
+    RelativeLatLng.Longitude = EarthPos.Longitude - Bounds.LowerLeft.Longitude;
+    
+    MapPos.X = RelativeLatLng.Latitude / (Bounds.UpperRight.Latitude - Bounds.LowerLeft.Latitude);
+    MapPos.Y = RelativeLatLng.Longitude / (Bounds.UpperRight.Longitude - Bounds.LowerLeft.Longitude);
+
+    return MapPos;
 }
 
 FVector UMapProjectionComponent::WorldToMap(FVector WorldPos) const
@@ -70,7 +78,14 @@ FVector UMapProjectionComponent::WorldToMap(FVector WorldPos) const
 
 FVector UMapProjectionComponent::MapToWorld(FVector MapPos) const
 {
-    return MapPos;
+    float Width = 100.f;
+    float Length = 100.f;
+
+    FVector WorldPos;
+    WorldPos.X = (Width / 2.0f) * MapPos.X;
+    WorldPos.Y = (Length / 2.0f) * MapPos.Y;
+
+    return WorldPos;
 }
 
 FLatLng UMapProjectionComponent::WorldToEarth(FVector WorldPos) const

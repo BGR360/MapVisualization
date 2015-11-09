@@ -6,35 +6,18 @@
 
 
 // Sets default values
-FOpenStreetNode::FOpenStreetNode()
+FOpenStreetNode::FOpenStreetNode() : Id(0), Location()
 {
-    Id = 0;
+}
+
+FOpenStreetNode(int64 Id) : Id(Id), Location()
+{
+}
+
+FOpenStreetNode(int64 Id, FLatLng Location) : Id(Id), Location(Location)
+{
 }
 
 FOpenStreetNode::~FOpenStreetNode()
 {
-}
-
-// Called when the game starts or when spawned
-void FOpenStreetNode::BeginPlay()
-{
-    Super::BeginPlay();
-
-}
-
-// Get GeoComponent
-UGeoComponent* FOpenStreetNode::GetGeoComponent() const
-{
-    return GeoComponent;
-}
-
-// Get Id
-int64 FOpenStreetNode::GetId() const
-{
-    return Id;
-}
-
-void FOpenStreetNode::SetId(int64 Id)
-{
-    this->Id = Id;
 }

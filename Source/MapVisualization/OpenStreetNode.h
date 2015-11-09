@@ -17,6 +17,8 @@ class MAPVISUALIZATION_API FOpenStreetNode : public FOpenStreetElement
 
 public:
     FOpenStreetNode();
+    FOpenStreetNode(int64 Id);
+    FOpenStreetNode(int64 Id, FLatLng Location);
     ~FOpenStreetNode();
     
     // Every Node has an id

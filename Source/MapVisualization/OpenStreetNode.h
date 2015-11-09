@@ -21,10 +21,6 @@ public:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
-    // Get GeoComponent
-    UFUNCTION(BlueprintPure, Category = Map)
-    class UGeoComponent* GetGeoComponent() const;
-
     // TODO Figure out what to do about int64 not being supported by Blueprints
 
     // Get Id
@@ -35,8 +31,6 @@ public:
 
 private:
     // A Node has a Latitude-Longitude location, so we give it a GeoComponent
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
-    UGeoComponent* GeoComponent;
 
     // Every Node has an id
     UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))

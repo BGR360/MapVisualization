@@ -56,7 +56,7 @@ private:
     // When the element ends, the object has all required fields filled in
     // So reset the pointer
     class FOpenStreetNode* CurrentNode;
-    class AOpenStreetWay* CurrentWay;
+    class FOpenStreetWay* CurrentWay;
     FOpenStreetTag CurrentTag;
     FLatLngBounds CurrentBounds;
 

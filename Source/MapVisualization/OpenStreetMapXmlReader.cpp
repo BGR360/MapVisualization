@@ -196,7 +196,7 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
         if (World)
         {
             FActorSpawnParameters Params;
-            CurrentWay = World->SpawnActor<AOpenStreetWay>();
+            CurrentWay = World->SpawnActor<FOpenStreetWay>();
             if (CurrentWay)
             {
                 // Attach to actor

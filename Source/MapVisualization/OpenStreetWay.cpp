@@ -6,11 +6,15 @@
 
 
 // Sets default values
-FOpenStreetWay::FOpenStreetWay()
+FOpenStreetWay::FOpenStreetWay() : Id(0), Nodes()
 {
 }
 
-~FOpenStreetWay()
+FOpenStreetWay::FOpenStreetWay(int64 Id) : Id(Id), Nodes()
+{
+}
+
+FOpenStreetWay::~FOpenStreetWay()
 {
 }
 

@@ -18,12 +18,15 @@ class MAPVISUALIZATION_API FOpenStreetWay : public FOpenStreetElement
 public:
     // Sets default values for this actor's properties
     FOpenStreetWay();
+    FOpenStreetWay(int64 Id);
     ~FOpenStreetWay();
     
     // Every Way has an id (not unique from every Node's id)
+    UPROPERTY(VisibleAnywhere, Category = Map)
     int64 Id;
     
     // The list of Nodes that are a part of this way
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
     TArray<FOpenStreetNode*> Nodes;
 
     // Add Node

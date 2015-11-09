@@ -22,7 +22,7 @@ void AOpenStreetWay::BeginPlay()
 
 // Add Node
 // Automatically updates the Way's appearance in the world.
-void AOpenStreetWay::AddNode(class AOpenStreetNode* Node)
+void AOpenStreetWay::AddNode(class FOpenStreetNode* Node)
 {
     Nodes.Push(Node);
 
@@ -32,7 +32,7 @@ void AOpenStreetWay::AddNode(class AOpenStreetNode* Node)
 // Remove Node
 // Automatically updates the Way's appearance in the world.
 // @return The number of nodes removed
-int32 AOpenStreetWay::RemoveNode(AOpenStreetNode* Node)
+int32 AOpenStreetWay::RemoveNode(FOpenStreetNode* Node)
 {
     int32 numRemoved = Nodes.Remove(Node);
 
@@ -42,7 +42,7 @@ int32 AOpenStreetWay::RemoveNode(AOpenStreetNode* Node)
 }
 
 // Get Nodes
-TArray<AOpenStreetNode*>* AOpenStreetWay::GetNodes()
+TArray<FOpenStreetNode*>* AOpenStreetWay::GetNodes()
 {
     return &Nodes;
 }

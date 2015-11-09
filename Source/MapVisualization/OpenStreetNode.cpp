@@ -6,37 +6,35 @@
 
 
 // Sets default values
-AOpenStreetNode::AOpenStreetNode()
+FOpenStreetNode::FOpenStreetNode()
 {
-    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-    PrimaryActorTick.bCanEverTick = false;
-
     Id = 0;
-    GeoComponent = CreateDefaultSubobject<UGeoComponent>(TEXT("GeoComponent"));
-    BillboardComponent = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("Texture"));
-    RootComponent = BillboardComponent;
+}
+
+FOpenStreetNode::~FOpenStreetNode()
+{
 }
 
 // Called when the game starts or when spawned
-void AOpenStreetNode::BeginPlay()
+void FOpenStreetNode::BeginPlay()
 {
     Super::BeginPlay();
 
 }
 
 // Get GeoComponent
-UGeoComponent* AOpenStreetNode::GetGeoComponent() const
+UGeoComponent* FOpenStreetNode::GetGeoComponent() const
 {
     return GeoComponent;
 }
 
 // Get Id
-int64 AOpenStreetNode::GetId() const
+int64 FOpenStreetNode::GetId() const
 {
     return Id;
 }
 
-void AOpenStreetNode::SetId(int64 Id)
+void FOpenStreetNode::SetId(int64 Id)
 {
     this->Id = Id;
 }

@@ -55,11 +55,11 @@ private:
     // Keep a pointer to the current object being created while reading an element
     // When the element ends, the object has all required fields filled in
     // So reset the pointer
-    class AOpenStreetNode* CurrentNode;
+    class FOpenStreetNode* CurrentNode;
     class AOpenStreetWay* CurrentWay;
     FOpenStreetTag CurrentTag;
     FLatLngBounds CurrentBounds;
 
     // We need to keep a TMap of <Id, Node*> so that we can add Nodes to Ways
-    TMap<int64, AOpenStreetNode*> NodeMap;
+    TMap<int64, FOpenStreetNode*> NodeMap;
 };

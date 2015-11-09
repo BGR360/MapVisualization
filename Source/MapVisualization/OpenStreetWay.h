@@ -24,19 +24,19 @@ public:
 
     // Add Node
     // Automatically updates the Way's appearance in the world.
-    void AddNode(class AOpenStreetNode* Node);
+    void AddNode(class FOpenStreetNode* Node);
 
     // Remove Node
     // Automatically updates the Way's appearance in the world.
     // @return The number of nodes removed
-    int32 RemoveNode(AOpenStreetNode* Node);
+    int32 RemoveNode(FOpenStreetNode* Node);
 
     // Get Nodes
-    TArray<AOpenStreetNode*>* GetNodes();
+    TArray<FOpenStreetNode*>* GetNodes();
 
 private:
     // The list of Nodes that are a part of this way
-    TArray<AOpenStreetNode*> Nodes;
+    TArray<FOpenStreetNode*> Nodes;
     
     // TODO Add Id to AOpenStreetWay
 };

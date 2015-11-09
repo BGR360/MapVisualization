@@ -3,40 +3,27 @@
 #pragma once
 
 #include "OpenStreetElement.h"
+#include "LatLng.h"
 #include "OpenStreetNode.generated.h"
 
 /**
  * Represents a Node in an OpenStreetMap. A Node is simply a point on a map,
  * it could be part of a road, the corner of square, or a stop sign.
  */
-UCLASS()
-class MAPVISUALIZATION_API AOpenStreetNode : public FOpenStreetElement
+USTRUCT()
+class MAPVISUALIZATION_API FOpenStreetNode : public FOpenStreetElement
 {
-    GENERATED_BODY()
+    GENERATED_USTRUCT_BODY()
 
 public:
-    // Sets default values for this actor's properties
-    AOpenStreetNode();
-
-    // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
-
-    // TODO Figure out what to do about int64 not being supported by Blueprints
-
-    // Get Id
-    int64 GetId() const;
-
-    // Set Id
-    void SetId(int64 Id);
-
-private:
-    // A Node has a Latitude-Longitude location, so we give it a GeoComponent
-
+    FOpenStreetNode();
+    ~FOpenStreetNode();
+    
     // Every Node has an id
     UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
     int64 Id;
 
-    // Give the Node a billboard sprite so that it's visible in the World
-    UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
-    class UMaterialBillboardComponent* BillboardComponent;
+    // A Node has a Latitude-Longitude location
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+    FLatLng Location;
 };

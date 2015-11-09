@@ -10,7 +10,7 @@
  * Call LoadFromXml() to initialize the map from a file. This will read the file
  * and generate all of the necessary OpenStreetNodes and OpenStreetWays.
  *
- * AOpenStreetMap does NOT actually store a TArray of AOpenStreetNode; all of
+ * AOpenStreetMap does NOT actually store a TArray of FOpenStreetNode; all of
  * the nodes will be Attached to the RootComponent of the AOpenStreetMap
  */
 UCLASS()

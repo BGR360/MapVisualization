@@ -78,7 +78,7 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
         {
             for (auto& Element : NodeMap)
             {
-                AOpenStreetNode* Node = Element.Value;
+                FOpenStreetNode* Node = Element.Value;
 
                 if (Node)
                 {
@@ -155,13 +155,13 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     {
         bReadingNode = true;
 
-        // Spawn new AOpenStreetNode and attach it to the AOpenStreetMap's RootComponent
+        // Spawn new FOpenStreetNode and attach it to the AOpenStreetMap's RootComponent
 
         UWorld* World = MapActor->GetWorld();
         if (World)
         {
             FActorSpawnParameters Params;
-            CurrentNode = World->SpawnActor<AOpenStreetNode>();
+            CurrentNode = World->SpawnActor<FOpenStreetNode>();
             if (CurrentNode)
             {
                 // Attach to actor
@@ -190,7 +190,7 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     {
         bReadingWay = true;
         
-        // Spawn new AOpenStreetNode and attach it to the AOpenStreetMap's RootComponent
+        // Spawn new FOpenStreetNode and attach it to the AOpenStreetMap's RootComponent
         
         UWorld* World = MapActor->GetWorld();
         if (World)
@@ -276,7 +276,7 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
                 {
                     // Add node to CurrentWay
                     int64 Id = FCString::Atoi64(AttributeValue);
-                    AOpenStreetNode* Node = NodeMap[Id];
+                    FOpenStreetNode* Node = NodeMap[Id];
                     if (Node)
                     {
                         CurrentWay->AddNode(Node);
@@ -380,7 +380,7 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
         // The Way is finished, draw lines connecting its nodes
         if (CurrentWay)
         {
-            TArray<AOpenStreetNode*>& Nodes = *(CurrentWay->GetNodes());
+            TArray<FOpenStreetNode*>& Nodes = *(CurrentWay->GetNodes());
             for (int32 i = 1; i < Nodes.Num(); ++i)
             {
                 FLatLng StartLatLng = Nodes[i]->GetGeoComponent()->GetLocation();

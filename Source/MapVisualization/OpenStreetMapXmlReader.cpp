@@ -4,7 +4,6 @@
 #include "OpenStreetMapXmlReader.h"
 #include "MapProjectionComponent.h"
 #include "OpenStreetMap.h"
-#include "OpenStreetNode.h"
 #include "GeoComponent.h"
 #include "OpenStreetWay.h"
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
@@ -28,8 +27,8 @@ bReadingNode(false),
 bReadingWay(false),
 bReadingRelation(false),
 bReadingMember(false),
-CurrentNode(nullptr),
-CurrentWay(nullptr),
+CurrentNode(),
+CurrentWay(),
 CurrentTag()
 {
 }
@@ -73,6 +72,7 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
         }
 
         // Draw a debug point at each Node
+        // TODO Move to OpenStreetMap
         UWorld* World = MapActor->GetWorld();
         if (World)
         {
@@ -140,13 +140,15 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     UE_LOG(Xml, Log, TEXT("Line %d: Begin element <%s>"),
         XmlFileLineNumber, ElementName);
 
+    
     // Check which element is beginning
     
     // <bounds> element
     if (ElementNameString == TEXT("bounds"))
     {
         bReadingBounds = true;
-        // Reset CurrentBounds just in case
+        
+        // Construct a new FLatLngBounds
         CurrentBounds = FLatLngBounds();
     }
     
@@ -155,19 +157,8 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     {
         bReadingNode = true;
 
-        // Spawn new FOpenStreetNode and attach it to the AOpenStreetMap's RootComponent
-
-        UWorld* World = MapActor->GetWorld();
-        if (World)
-        {
-            FActorSpawnParameters Params;
-            CurrentNode = World->SpawnActor<FOpenStreetNode>();
-            if (CurrentNode)
-            {
-                // Attach to actor
-                CurrentNode->AttachRootComponentToActor(MapActor);
-            }
-        }
+        // Construct a new FOpenStreetNode
+        CurrentNode = FOpenStreetNode();
     }
     
     // <way>
@@ -175,7 +166,7 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     // </way>
     else if (ElementNameString == TEXT("nd"))
     {
-        // Still reading a node, but it's a reference to a node inside of a way. Do not spawn new node.
+        // Still reading a node, but it's a reference to a node inside of a way. Do not construct new node.
         bReadingNode = true;
     }
     
@@ -183,6 +174,9 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     else if (ElementNameString == TEXT("tag"))
     {
         bReadingTag = true;
+        
+        // Construct a new FOpenStreetTag
+        CurrentTag = FOpenSTreetTag();
     }
     
     // <way> element
@@ -190,19 +184,8 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     {
         bReadingWay = true;
         
-        // Spawn new FOpenStreetNode and attach it to the AOpenStreetMap's RootComponent
-        
-        UWorld* World = MapActor->GetWorld();
-        if (World)
-        {
-            FActorSpawnParameters Params;
-            CurrentWay = World->SpawnActor<FOpenStreetWay>();
-            if (CurrentWay)
-            {
-                // Attach to actor
-                CurrentWay->AttachRootComponentToActor(MapActor);
-            }
-        }
+        // Construct a new FOpenStreetWay
+        CurrentWay = FOpenSTreetWay();
     }
     
     // <relation> element
@@ -276,34 +259,32 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
                 {
                     // Add node to CurrentWay
                     int64 Id = FCString::Atoi64(AttributeValue);
-                    FOpenStreetNode* Node = NodeMap[Id];
+                    FOpenStreetNode* Node = MapActor->FindNodeById(Id);
                     if (Node)
                     {
-                        CurrentWay->AddNode(Node);
+                        CurrentWay.AddNode(Node);
                     }
                 }
             }
 
             // Else reading <node> attributes
-            else if (CurrentNode != nullptr)
+            else
             {
                 if (AttributeNameString == TEXT("id"))
                 {
                     // Set the Id of the Node
                     int64 Id = FCString::Atoi64(AttributeValue);
-                    CurrentNode->SetId(Id);
-                    // Now that we have the Id, add the Node to the NodeMap
-                    NodeMap.Add(Id, CurrentNode);
+                    CurrentNode.Id = Id;
                 }
                 else if (AttributeNameString == TEXT("lat"))
                 {
                     float Latitude = FCString::Atof(AttributeValue);
-                    CurrentNode->GetGeoComponent()->GetLocation().Latitude = Latitude;
+                    CurrentNode.Location.Latitude = Latitude;
                 }
                 else if (AttributeNameString == TEXT("lon"))
                 {
                     float Longitude = FCString::Atof(AttributeValue);
-                    CurrentNode->GetGeoComponent()->GetLocation().Longitude = Longitude;
+                    CurrentNode.Location.Longitude = Longitude;
                 }
             }
         }
@@ -327,9 +308,15 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
         }
         
         // Else reading the <way> attributes
-        else if (CurrentWay != nullptr)
+        else
         {
-            // TODO Set the Id of the Way
+            // Set the Id of the Way
+            if (AttributeNameString == TEXT("id"))
+            {
+                // Set the Id of the Node
+                int64 Id = FCString::Atoi64(AttributeValue);
+                CurrentWay.Id = Id;
+            }
         }
     }
 
@@ -346,16 +333,20 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
     if (ElementNameString == TEXT("bounds"))
     {
         bReadingBounds = false;
+        
         // Set the bounds on the OpenStreetMap
         MapActor->GetProjection()->SetBounds(CurrentBounds);
-        CurrentBounds = FLatLngBounds();
     }
-    else if (ElementNameString == TEXT("node") || ElementNameString == TEXT("nd"))
+    else if (ElementNameString == TEXT("node"))
     {
         bReadingNode = false;
-
-   
-        CurrentNode = nullptr;
+        
+        // Add the Node to the map
+        MapActor->AddNode(CurrentNode);
+    }
+    else if (ElementNameString == TEXT("nd"))
+    {
+        bReadingNode = false;
     }
     else if (ElementNameString == TEXT("tag"))
     {
@@ -364,20 +355,22 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
         // Check which type of element we're supposed to add the Tag to
         if (bReadingWay && CurrentWay != nullptr)
         {
-            CurrentWay->AddTag(CurrentTag);
+            CurrentWay.AddTag(CurrentTag);
         }
         else if (bReadingNode && CurrentNode != nullptr)
         {
-            CurrentNode->AddTag(CurrentTag);
+            CurrentNode.AddTag(CurrentTag);
         }
-        
-        CurrentTag = FOpenStreetTag();
     }
     else if (ElementNameString == TEXT("way"))
     {
         bReadingWay = false;
+        
+        // Add the Way to the Map
+        MapActor->AddWay(CurrentWay);
 
         // The Way is finished, draw lines connecting its nodes
+        // TODO Move to OpenStreetMap
         if (CurrentWay)
         {
             TArray<FOpenStreetNode*>& Nodes = *(CurrentWay->GetNodes());
@@ -406,8 +399,6 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
                 }
             }
         }
-        
-        CurrentWay = nullptr;
     }
     else if (ElementNameString == TEXT("relation"))
     {

@@ -10,7 +10,7 @@
  * it could be part of a road, the corner of square, or a stop sign.
  */
 UCLASS()
-class MAPVISUALIZATION_API AOpenStreetNode : public AOpenStreetElement
+class MAPVISUALIZATION_API AOpenStreetNode : public FOpenStreetElement
 {
     GENERATED_BODY()
 

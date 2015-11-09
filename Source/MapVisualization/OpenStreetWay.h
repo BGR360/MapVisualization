@@ -11,7 +11,7 @@
  * could represent a road, a polygon, or a boundary.
  */
 UCLASS()
-class MAPVISUALIZATION_API AOpenStreetWay : public AOpenStreetElement
+class MAPVISUALIZATION_API AOpenStreetWay : public FOpenStreetElement
 {
     GENERATED_BODY()
 

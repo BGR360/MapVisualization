@@ -5,7 +5,7 @@
 
 
 // Sets default values
-AOpenStreetElement::AOpenStreetElement()
+FOpenStreetElement::FOpenStreetElement()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
@@ -13,31 +13,31 @@ AOpenStreetElement::AOpenStreetElement()
 }
 
 // Called when the game starts or when spawned
-void AOpenStreetElement::BeginPlay()
+void FOpenStreetElement::BeginPlay()
 {
     Super::BeginPlay();
 
 }
 
 // Get Tags
-TArray<FOpenStreetTag>& AOpenStreetElement::GetTags()
+TArray<FOpenStreetTag>& FOpenStreetElement::GetTags()
 {
     return Tags;
 }
 
 // Add Tag
-void AOpenStreetElement::AddTag(FOpenStreetTag Tag)
+void FOpenStreetElement::AddTag(FOpenStreetTag Tag)
 {
     Tags.Add(Tag);
 }
 
-void AOpenStreetElement::AddTag(const FString& Key, const FString& Value)
+void FOpenStreetElement::AddTag(const FString& Key, const FString& Value)
 {
     Tags.Add(FOpenStreetTag(Key, Value));
 }
 
 // Has Tag
-bool AOpenStreetElement::HasTag(const FString& Key) const
+bool FOpenStreetElement::HasTag(const FString& Key) const
 {
     for (int32 i = 0; i < Tags.Num(); i++)
     {
@@ -48,7 +48,7 @@ bool AOpenStreetElement::HasTag(const FString& Key) const
 }
 
 // Has Tag - Outputs IndexOf
-int32 AOpenStreetElement::IndexOfTag(const FString& Key) const
+int32 FOpenStreetElement::IndexOfTag(const FString& Key) const
 {
     int32 IndexOfTag = -1;
     for (int32 i = 0; i < Tags.Num(); i++)
@@ -63,7 +63,7 @@ int32 AOpenStreetElement::IndexOfTag(const FString& Key) const
 }
 
 // Get Tag Value
-FString AOpenStreetElement::GetTagValue(const FString& Key) const
+FString FOpenStreetElement::GetTagValue(const FString& Key) const
 {
     // Check if a Tag with Key exists
     int32 IndexOfTag = this->IndexOfTag(Key);

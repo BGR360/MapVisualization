@@ -9,29 +9,25 @@
 
 /**
  * Represents any Element in an OpenStreetMap. An Element is any object found in an OSM XML file.
- * Thus, AOpenStreetElement is the base for AOpenStreetNode and AOpenStreetWay.
+ * Thus, AOpenStreetElement is the base for FOpenStreetNode and FOpenStreetWay.
  *
- * The thing that every type of Element has in common is a set of Tags. So AOpenStreetElement stores
+ * The thing that every type of Element has in common is a set of Tags. So FOpenStreetElement stores
  * a list of FOpenStreetTag.
  */
-UCLASS()
-class MAPVISUALIZATION_API AOpenStreetElement : public AActor
+USTRUCT()
+class MAPVISUALIZATION_API FOpenStreetElement
 {
-    GENERATED_BODY()
+    GENERATED_USTRUCT_BODY()
 
 public:
-    // Sets default values for this actor's properties
-    AOpenStreetElement();
-
-    // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
-
-    // Get Tags
-    UFUNCTION(BlueprintPure, Category = Map)
-    TArray<FOpenStreetTag>& GetTags();
+    FOpenStreetElement();
+    ~FOpenStreetElement();
+    
+    // The list of Tags that describe this Element
+    TArray<FOpenStreetTag> Tags;
 
     // Add Tag
-    void AddTag(FOpenStreetTag Tag);
+    UFUNCTION(BlueprintCallable, Category = Map)
     void AddTag(const FString& Key, const FString& Value);
 
     // Has Tag
@@ -54,8 +50,4 @@ public:
      */
     UFUNCTION(BlueprintCallable, Category = Map)
     FString GetTagValue(const FString& Key) const;
-
-protected:
-    // The list of Tags that describe this Element
-    TArray<FOpenStreetTag> Tags;
 };

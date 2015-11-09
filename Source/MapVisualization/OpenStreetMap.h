@@ -3,7 +3,10 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Runtime/Core/Public/Containers/Map.h"
 #include "OpenStreetMap.generated.h"
+
+class UMapProjectionComponent, FOpenStreetNode, FOpenStreetWay;
 
 /**
  * Place an OpenStreetMap Actor into the world to visualize a .osm XML file.
@@ -27,10 +30,49 @@ public:
 
     // Get MapProjection
     UFUNCTION(BlueprintPure, Category = Map)
-    class UMapProjectionComponent* GetProjection();
+    UMapProjectionComponent* GetProjection();
+    
+    // Add Node
+    // Returns a pointer to the new Node in the list
+    FOpenStreetNode* AddNode(FOpenStreetNode Node);
+    FOpenStreetNode* EmplaceNode(int64 Id = 0, FLatLng Location = FLatLng());
+    
+    // Add Way
+    // Returns a pointer to the new Way in the list
+    FOpenStreetWay* AddWay(FOpenStreetWay Way);
+    FOpenStreetWay* EmplaceWay(int64 Id = 0);
+    
+    // Get Nodes/Ways
+    TMap<int64, FOpenStreetNode>* GetNodes();
+    TMap<int64, FOpenStreetWay>* GetWays();
+    
+    // Find Nodes
+    // Returns nullptr if no Node with given Id exists in the Map
+    FOpenStreetNode* FindNodeById(int64 Id);
+    
+    // TODO Find Nodes near LatLng/Vector with given radius
+    
+    // Find Ways
+    // Returns nullptr if no Node with given Id exists in the Map
+    FOpenSTreetWay* FindWayById(int64 Id);
+    
+    // TODO Find Ways near LatLng/Vector with given radius
+    
+    // Generates a network of pink debug lines that draws the Nodes and Ways
+    void DrawDebugMap(bool bDrawNodes = false) const;
 
 private:
-    // The MapProjection used to convert GeoComponents' LatLng positions to 3D World coordinates
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+    // The MapProjection used to convert Nodes' LatLng positions to 3D World coordinates
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     UMapProjectionComponent* Projection;
+    
+    // A list of all the Nodes on the map, ordered by Id
+    UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
+    TMap<int64, FOpenStreetNode> Nodes;
+    
+    // A list of all the Ways on the map, ordered by Id
+    UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
+    TMap<int64, FOpenStreetWay> Ways;
+    
+    // TODO Have a Quadtree of Nodes
 };

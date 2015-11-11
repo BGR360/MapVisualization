@@ -11,7 +11,7 @@
 			"AdditionalDependencies": [
 				"Engine"
 			]
-		}
+		},
 		{
 			"Name": "GeographicLibModule",
             		"Type": "Runtime",

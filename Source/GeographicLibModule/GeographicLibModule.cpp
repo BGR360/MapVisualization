@@ -6,7 +6,7 @@ IMPLEMENT_GAME_MODULE( FGeographicLibModule, GeographicLibModule );
 
 DEFINE_LOG_CATEGORY(GeographicLibModule)
 
-#define LOCTEXT_NAMESPACE "MyGameEditor"
+#define LOCTEXT_NAMESPACE "GeographicLibModule"
 
 void FGeographicLibModule::StartupModule()
 {

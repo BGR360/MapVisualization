@@ -16,6 +16,11 @@
 			"Name": "GeographicLibModule",
             		"Type": "Runtime",
             		"LoadingPhase":  "PostEngineInit"	
+		},
+		{
+			"Name": "OpenStreetMapModule",
+            		"Type": "Runtime",
+            		"LoadingPhase":  "PostEngineInit"	
 		}
 	]
 }

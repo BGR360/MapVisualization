@@ -2,6 +2,7 @@
 
 #include "GeographicLibModule.h"
 #include "GeographicLibWrapper.h"
+#include "GeographicLibModule/Private/GeographicLib/TransverseMercator.hpp"
 
 // Sets the default values
 FGeographicLibWrapper::FGeographicLibWrapper()
@@ -11,13 +12,23 @@ FGeographicLibWrapper::FGeographicLibWrapper()
 // Converts a FLatLng EarthPos to a FVector WorldPos
 FVector FGeographicLibWrapper::TransverseMercatorProject(FLatLng EarthPos, FLatLng Center) const
 {
-    return FVector();
+    Math::real x, y;
+    TransverseMercator::UTM().Forward(ToReal(Center.Longitude),
+                                      ToReal(EarthPos.Latitude),
+                                      ToReal(EarthPos.Longitude),
+                                      x, y);
+    return FVector(ToFloat(x), ToFloat(y), 0.0);
 }
 
 // Converts a FVector WorldPos to a FLatLng EarthPos
 FLatLng FGeographicLibWrapper::TransverseMercatorProject(FVector WorldPos, FLatLng Center) const
 {
-    return FLatLng();
+    Math::real lat, lon;
+    TransverseMercator::UTM().Reverse(ToReal(Center.Longitude),
+                                      ToReal(WorldPos.X),
+                                      ToReal(WorldPos.Y),
+                                      lat, lon);
+    return FLatLng(ToFloat(lat), ToFloat(lon));
 }
 
 // Converts a float to the GeographicLib internal Math::real

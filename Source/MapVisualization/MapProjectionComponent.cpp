@@ -2,7 +2,7 @@
 
 #include "MapVisualization.h"
 #include "MapProjectionComponent.h"
-
+#include "GeographicLibModule/Public/GeographicLibWrapper.h"
 
 // Sets default values for this component's properties
 UMapProjectionComponent::UMapProjectionComponent()
@@ -53,48 +53,15 @@ void UMapProjectionComponent::SetBounds(FLatLngBounds Bounds)
 
 // Position Conversion Functions
 
-FLatLng UMapProjectionComponent::MapToEarth(FVector MapPos) const
-{
-    return FLatLng(MapPos.X, MapPos.Z);
-}
-
-FVector UMapProjectionComponent::EarthToMap(FLatLng EarthPos) const
-{
-    FVector MapPos;
-    FLatLng RelativeLatLng;
-    RelativeLatLng.Latitude = EarthPos.Latitude - Bounds.LowerLeft.Latitude;
-    RelativeLatLng.Longitude = EarthPos.Longitude - Bounds.LowerLeft.Longitude;
-    
-    MapPos.X = RelativeLatLng.Latitude / (Bounds.UpperRight.Latitude - Bounds.LowerLeft.Latitude);
-    MapPos.Y = RelativeLatLng.Longitude / (Bounds.UpperRight.Longitude - Bounds.LowerLeft.Longitude);
-
-    return MapPos;
-}
-
-FVector UMapProjectionComponent::WorldToMap(FVector WorldPos) const
-{
-    return WorldPos;
-}
-
-FVector UMapProjectionComponent::MapToWorld(FVector MapPos) const
-{
-    float Width = 1000.f;
-    float Length = 1000.f;
-
-    FVector WorldPos;
-    WorldPos.X = (Width / 2.0f) * MapPos.X;
-    WorldPos.Y = (Length / 2.0f) * MapPos.Y;
-
-    return WorldPos;
-}
-
 FLatLng UMapProjectionComponent::WorldToEarth(FVector WorldPos) const
 {
-    return MapToEarth(WorldToMap(WorldPos));
+    FGeographicLibWrapper GeoLibWrapper;
+    return GeoLibWrapper.TransverseMercatorProject(WorldPos);
 }
 
 FVector UMapProjectionComponent::EarthToWorld(FLatLng EarthPos) const
 {
-    return MapToWorld(EarthToMap(EarthPos));
+    FGeographicLibWrapper GeoLibWrapper;
+    return GeoLibWrapper.TransverseMercatorProject(EarthPos);
 }
 

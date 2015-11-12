@@ -6,7 +6,7 @@ public class MapVisualization : ModuleRules
 {
 	public MapVisualization(TargetInfo Target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "XmlParser", "DesktopPlatform" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "XmlParser", "DesktopPlatform", "GeographicLibModule" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

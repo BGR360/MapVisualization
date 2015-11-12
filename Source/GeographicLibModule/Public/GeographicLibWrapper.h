@@ -3,6 +3,9 @@
 #pragma once
 
 #include "MapVisualization/LatLng.h"
+#include "GeographicLibModule/Private/GeographicLib/Math.hpp"
+
+using namespace GeographicLib;
 
 /**
  * A Wrapper for the necessary functionalities found in the GeographicLib
@@ -23,6 +26,9 @@ public:
     FLatLng TransverseMercatorProject(FVector WorldPos, FLatLng Center = FLatLng(0.0, 0.0)) const;
     
 private:
-    // TODO Converts a double to the GeographicLib internal Math::real
+    // Converts a float to the GeographicLib internal Math::real
+    Math::real ToReal(float Value) const;
     
+    // Converts the GeographicLib internal Math::real to a float
+    float ToFloat(Math::real Value) const;
 };

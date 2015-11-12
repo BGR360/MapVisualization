@@ -10,7 +10,7 @@
 #if !defined(GEOGRAPHICLIB_TRANSVERSEMERCATOR_HPP)
 #define GEOGRAPHICLIB_TRANSVERSEMERCATOR_HPP 1
 
-#include "GeographicLib/Constants.hpp"
+#include "Constants.hpp"
 
 #if !defined(GEOGRAPHICLIB_TRANSVERSEMERCATOR_ORDER)
 /**

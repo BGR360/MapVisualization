@@ -19,3 +19,15 @@ FLatLng FGeographicLibWrapper::TransverseMercatorProject(FVector WorldPos, FLatL
 {
     return FLatLng();
 }
+
+// Converts a float to the GeographicLib internal Math::real
+Math::real FGeographicLibWrapper::ToReal(float Value) const
+{
+    return static_cast<Math::real>(Value);
+}
+
+// Converts the GeographicLib internal Math::real to a float
+float FGeographicLibWrapper::ToFloat(Math::real Value) const
+{
+    return static_cast<float>(Value);
+}

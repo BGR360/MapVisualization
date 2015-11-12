@@ -39,7 +39,8 @@
  *  - http://www.lantmateriet.se/upload/filer/kartor/geodesi_gps_och_detaljmatning/geodesi/Formelsamling/Gauss_Conformal_Projection.pdf
  **********************************************************************/
 
-#include "GeographicLib/TransverseMercator.hpp"
+#include "GeographicLibModule.h"
+#include "TransverseMercator.hpp"
 
 namespace GeographicLib {
 

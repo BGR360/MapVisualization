@@ -5,6 +5,8 @@
 #include "Runtime/XmlParser/Public/FastXml.h"
 #include "Runtime/Core/Public/Containers/Map.h"
 #include "LatLngBounds.h"
+#include "OpenStreetNode.h"
+#include "OpenStreetWay.h"
 #include "OpenStreetTag.h"
 
 /**
@@ -52,14 +54,11 @@ private:
     bool bReadingRelation;
     bool bReadingMember;
 
-    // Keep a pointer to the current object being created while reading an element
+    // Keep track of the current object being created while reading an element
     // When the element ends, the object has all required fields filled in
-    // So reset the pointer
-    class AOpenStreetNode* CurrentNode;
-    class AOpenStreetWay* CurrentWay;
+    // So reset the object
+    FOpenStreetNode CurrentNode;
+    FOpenStreetWay CurrentWay;
     FOpenStreetTag CurrentTag;
     FLatLngBounds CurrentBounds;
-
-    // We need to keep a TMap of <Id, Node*> so that we can add Nodes to Ways
-    TMap<int64, AOpenStreetNode*> NodeMap;
 };

@@ -46,7 +46,68 @@ void AOpenStreetMap::BeginPlay()
     }
 }
 
+// Get MapProjection
 UMapProjectionComponent* AOpenStreetMap::GetProjection()
 {
     return Projection;
+}
+
+// Add Node
+// Returns a pointer to the new Node in the list
+
+FOpenStreetNode* AOpenStreetMap::AddNode(FOpenStreetNode Node)
+{
+    return &(Nodes.Add(Node.Id, Node));
+}
+
+FOpenStreetNode* AOpenStreetMap::EmplaceNode(int64 Id, FLatLng Location)
+{
+    return &(Nodes.Add(Id, FOpenStreetNode(Id, Location)));
+}
+
+// Add Way
+// Returns a pointer to the new Way in the list
+
+FOpenStreetWay* AOpenStreetMap::AddWay(FOpenStreetWay Way)
+{
+    return &(Ways.Add(Way.Id, Way));
+}
+
+FOpenStreetWay* AOpenStreetMap::EmplaceWay(int64 Id)
+{
+    return &(Ways.Add(Id, FOpenStreetWay(Id)));
+}
+
+// Get Nodes/Ways
+
+TMap<int64, FOpenStreetNode>* AOpenStreetMap::GetNodes()
+{
+    return &Nodes;
+}
+
+TMap<int64, FOpenStreetWay>* AOpenStreetMap::GetWays()
+{
+    return &Ways;
+}
+
+// Find Nodes
+// Returns nullptr if no Node with given Id exists in the Map
+FOpenStreetNode* AOpenStreetMap::FindNodeById(int64 Id)
+{
+    FOpenStreetNode* Node = Nodes.Find(Id);
+    return Node;
+}
+
+// Find Ways
+// Returns nullptr if no Node with given Id exists in the Map
+FOpenStreetWay* AOpenStreetMap::FindWayById(int64 Id)
+{
+    FOpenStreetWay* Way = Ways.Find(Id);
+    return Way;
+}
+
+// Generates a network of pink debug lines that draws the Nodes and Ways
+void AOpenStreetMap::DrawDebugMap(bool bDrawNodes) const
+{
+    
 }

@@ -2,41 +2,20 @@
 
 #include "MapVisualization.h"
 #include "OpenStreetNode.h"
-#include "GeoComponent.h"
-
 
 // Sets default values
-AOpenStreetNode::AOpenStreetNode()
+FOpenStreetNode::FOpenStreetNode() : Id(0), Location()
 {
-    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-    PrimaryActorTick.bCanEverTick = false;
-
-    Id = 0;
-    GeoComponent = CreateDefaultSubobject<UGeoComponent>(TEXT("GeoComponent"));
-    BillboardComponent = CreateDefaultSubobject<UMaterialBillboardComponent>(TEXT("Texture"));
-    RootComponent = BillboardComponent;
 }
 
-// Called when the game starts or when spawned
-void AOpenStreetNode::BeginPlay()
+FOpenStreetNode::FOpenStreetNode(int64 Id) : Id(Id), Location()
 {
-    Super::BeginPlay();
-
 }
 
-// Get GeoComponent
-UGeoComponent* AOpenStreetNode::GetGeoComponent() const
+FOpenStreetNode::FOpenStreetNode(int64 Id, FLatLng Location) : Id(Id), Location(Location)
 {
-    return GeoComponent;
 }
 
-// Get Id
-int64 AOpenStreetNode::GetId() const
+FOpenStreetNode::~FOpenStreetNode()
 {
-    return Id;
-}
-
-void AOpenStreetNode::SetId(int64 Id)
-{
-    this->Id = Id;
 }

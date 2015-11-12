@@ -10,33 +10,22 @@
  * Represents a Way in an OpenStreetMap. A way is simply a list of Nodes and
  * could represent a road, a polygon, or a boundary.
  */
-UCLASS()
-class MAPVISUALIZATION_API AOpenStreetWay : public AOpenStreetElement
+USTRUCT()
+struct MAPVISUALIZATION_API FOpenStreetWay : public FOpenStreetElement
 {
-    GENERATED_BODY()
+    GENERATED_USTRUCT_BODY()
 
 public:
     // Sets default values for this actor's properties
-    AOpenStreetWay();
-
-    // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
-
-    // Add Node
-    // Automatically updates the Way's appearance in the world.
-    void AddNode(class AOpenStreetNode* Node);
-
-    // Remove Node
-    // Automatically updates the Way's appearance in the world.
-    // @return The number of nodes removed
-    int32 RemoveNode(AOpenStreetNode* Node);
-
-    // Get Nodes
-    TArray<AOpenStreetNode*>* GetNodes();
-
-private:
-    // The list of Nodes that are a part of this way
-    TArray<AOpenStreetNode*> Nodes;
+    FOpenStreetWay();
+    FOpenStreetWay(int64 Id);
+    ~FOpenStreetWay();
     
-    // TODO Add Id to AOpenStreetWay
+    // Every Way has an id (not unique from every Node's id)
+    UPROPERTY(VisibleAnywhere, Category = Map)
+    int64 Id;
+    
+    // The list of Nodes that are a part of this way
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
+    TArray<struct FOpenStreetNode*> Nodes;
 };

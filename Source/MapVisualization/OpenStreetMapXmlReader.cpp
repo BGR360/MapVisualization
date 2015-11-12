@@ -4,8 +4,6 @@
 #include "OpenStreetMapXmlReader.h"
 #include "MapProjectionComponent.h"
 #include "OpenStreetMap.h"
-#include "OpenStreetNode.h"
-#include "GeoComponent.h"
 #include "OpenStreetWay.h"
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
@@ -28,8 +26,8 @@ bReadingNode(false),
 bReadingWay(false),
 bReadingRelation(false),
 bReadingMember(false),
-CurrentNode(nullptr),
-CurrentWay(nullptr),
+CurrentNode(),
+CurrentWay(),
 CurrentTag()
 {
 }
@@ -73,29 +71,27 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
         }
 
         // Draw a debug point at each Node
+        // TODO Move to OpenStreetMap
         UWorld* World = MapActor->GetWorld();
         if (World)
         {
-            for (auto& Element : NodeMap)
+            for (auto& Element : *(MapActor->GetNodes()))
             {
-                AOpenStreetNode* Node = Element.Value;
+                FOpenStreetNode Node = Element.Value;
+                
+                FLatLng LatLng = Node.Location;
+                FVector Location = MapActor->GetProjection()->EarthToWorld(LatLng);
+                Location *= ::DEBUG_POINT_LINES_SCALE_FACTOR;
+                Location.Z = ::DEBUG_POINT_HEIGHT;
 
-                if (Node)
-                {
-                    FLatLng LatLng = Node->GetGeoComponent()->GetLocation();
-                    FVector Location = MapActor->GetProjection()->EarthToWorld(LatLng);
-                    Location *= ::DEBUG_POINT_LINES_SCALE_FACTOR;
-                    Location.Z = ::DEBUG_POINT_HEIGHT;
-
-                    DrawDebugPoint(
-                        World,
-                        Location,
-                        ::DEBUG_POINT_SIZE,
-                        FColor(255, 0, 255),
-                        true,
-                        -1.0f,
-                        ::DEBUG_SPHERE_DEPTH_PRIORITY);
-                }
+                DrawDebugPoint(
+                    World,
+                    Location,
+                    ::DEBUG_POINT_SIZE,
+                    FColor(255, 0, 255),
+                    true,
+                    -1.0f,
+                    ::DEBUG_SPHERE_DEPTH_PRIORITY);
             }
         }
     }
@@ -140,13 +136,15 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     UE_LOG(Xml, Log, TEXT("Line %d: Begin element <%s>"),
         XmlFileLineNumber, ElementName);
 
+    
     // Check which element is beginning
     
     // <bounds> element
     if (ElementNameString == TEXT("bounds"))
     {
         bReadingBounds = true;
-        // Reset CurrentBounds just in case
+        
+        // Construct a new FLatLngBounds
         CurrentBounds = FLatLngBounds();
     }
     
@@ -155,19 +153,8 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     {
         bReadingNode = true;
 
-        // Spawn new AOpenStreetNode and attach it to the AOpenStreetMap's RootComponent
-
-        UWorld* World = MapActor->GetWorld();
-        if (World)
-        {
-            FActorSpawnParameters Params;
-            CurrentNode = World->SpawnActor<AOpenStreetNode>();
-            if (CurrentNode)
-            {
-                // Attach to actor
-                CurrentNode->AttachRootComponentToActor(MapActor);
-            }
-        }
+        // Construct a new FOpenStreetNode
+        CurrentNode = FOpenStreetNode();
     }
     
     // <way>
@@ -175,7 +162,7 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     // </way>
     else if (ElementNameString == TEXT("nd"))
     {
-        // Still reading a node, but it's a reference to a node inside of a way. Do not spawn new node.
+        // Still reading a node, but it's a reference to a node inside of a way. Do not construct new node.
         bReadingNode = true;
     }
     
@@ -183,6 +170,9 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     else if (ElementNameString == TEXT("tag"))
     {
         bReadingTag = true;
+        
+        // Construct a new FOpenStreetTag
+        CurrentTag = FOpenStreetTag();
     }
     
     // <way> element
@@ -190,19 +180,8 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     {
         bReadingWay = true;
         
-        // Spawn new AOpenStreetNode and attach it to the AOpenStreetMap's RootComponent
-        
-        UWorld* World = MapActor->GetWorld();
-        if (World)
-        {
-            FActorSpawnParameters Params;
-            CurrentWay = World->SpawnActor<AOpenStreetWay>();
-            if (CurrentWay)
-            {
-                // Attach to actor
-                CurrentWay->AttachRootComponentToActor(MapActor);
-            }
-        }
+        // Construct a new FOpenStreetWay
+        CurrentWay = FOpenStreetWay();
     }
     
     // <relation> element
@@ -276,34 +255,32 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
                 {
                     // Add node to CurrentWay
                     int64 Id = FCString::Atoi64(AttributeValue);
-                    AOpenStreetNode* Node = NodeMap[Id];
+                    FOpenStreetNode* Node = MapActor->FindNodeById(Id);
                     if (Node)
                     {
-                        CurrentWay->AddNode(Node);
+                        CurrentWay.Nodes.Add(Node);
                     }
                 }
             }
 
             // Else reading <node> attributes
-            else if (CurrentNode != nullptr)
+            else
             {
                 if (AttributeNameString == TEXT("id"))
                 {
                     // Set the Id of the Node
                     int64 Id = FCString::Atoi64(AttributeValue);
-                    CurrentNode->SetId(Id);
-                    // Now that we have the Id, add the Node to the NodeMap
-                    NodeMap.Add(Id, CurrentNode);
+                    CurrentNode.Id = Id;
                 }
                 else if (AttributeNameString == TEXT("lat"))
                 {
                     float Latitude = FCString::Atof(AttributeValue);
-                    CurrentNode->GetGeoComponent()->GetLocation().Latitude = Latitude;
+                    CurrentNode.Location.Latitude = Latitude;
                 }
                 else if (AttributeNameString == TEXT("lon"))
                 {
                     float Longitude = FCString::Atof(AttributeValue);
-                    CurrentNode->GetGeoComponent()->GetLocation().Longitude = Longitude;
+                    CurrentNode.Location.Longitude = Longitude;
                 }
             }
         }
@@ -327,9 +304,15 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
         }
         
         // Else reading the <way> attributes
-        else if (CurrentWay != nullptr)
+        else
         {
-            // TODO Set the Id of the Way
+            // Set the Id of the Way
+            if (AttributeNameString == TEXT("id"))
+            {
+                // Set the Id of the Node
+                int64 Id = FCString::Atoi64(AttributeValue);
+                CurrentWay.Id = Id;
+            }
         }
     }
 
@@ -346,68 +329,68 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
     if (ElementNameString == TEXT("bounds"))
     {
         bReadingBounds = false;
+        
         // Set the bounds on the OpenStreetMap
         MapActor->GetProjection()->SetBounds(CurrentBounds);
-        CurrentBounds = FLatLngBounds();
     }
-    else if (ElementNameString == TEXT("node") || ElementNameString == TEXT("nd"))
+    else if (ElementNameString == TEXT("node"))
     {
         bReadingNode = false;
-
-   
-        CurrentNode = nullptr;
+        
+        // Add the Node to the map
+        MapActor->AddNode(CurrentNode);
+    }
+    else if (ElementNameString == TEXT("nd"))
+    {
+        bReadingNode = false;
     }
     else if (ElementNameString == TEXT("tag"))
     {
         bReadingTag = false;
         
         // Check which type of element we're supposed to add the Tag to
-        if (bReadingWay && CurrentWay != nullptr)
+        if (bReadingWay)
         {
-            CurrentWay->AddTag(CurrentTag);
+            CurrentWay.Tags.Add(CurrentTag);
         }
-        else if (bReadingNode && CurrentNode != nullptr)
+        else if (bReadingNode)
         {
-            CurrentNode->AddTag(CurrentTag);
+            CurrentNode.Tags.Add(CurrentTag);
         }
-        
-        CurrentTag = FOpenStreetTag();
     }
     else if (ElementNameString == TEXT("way"))
     {
         bReadingWay = false;
+        
+        // Add the Way to the Map
+        MapActor->AddWay(CurrentWay);
 
         // The Way is finished, draw lines connecting its nodes
-        if (CurrentWay)
+        // TODO Move to OpenStreetMap
+        for (int32 i = 1; i < CurrentWay.Nodes.Num(); ++i)
         {
-            TArray<AOpenStreetNode*>& Nodes = *(CurrentWay->GetNodes());
-            for (int32 i = 1; i < Nodes.Num(); ++i)
+            FLatLng StartLatLng = CurrentWay.Nodes[i]->Location;
+            FLatLng EndLatLng = CurrentWay.Nodes[i - 1]->Location;
+
+            FVector Start = MapActor->GetProjection()->EarthToWorld(StartLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
+            FVector End = MapActor->GetProjection()->EarthToWorld(EndLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
+            Start.Z = ::DEBUG_LINE_HEIGHT;
+            End.Z = ::DEBUG_LINE_HEIGHT;
+
+            UWorld* World = MapActor->GetWorld();
+            if (World)
             {
-                FLatLng StartLatLng = Nodes[i]->GetGeoComponent()->GetLocation();
-                FLatLng EndLatLng = Nodes[i - 1]->GetGeoComponent()->GetLocation();
-
-                FVector Start = MapActor->GetProjection()->EarthToWorld(StartLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
-                FVector End = MapActor->GetProjection()->EarthToWorld(EndLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
-                Start.Z = ::DEBUG_LINE_HEIGHT;
-                End.Z = ::DEBUG_LINE_HEIGHT;
-
-                UWorld* World = MapActor->GetWorld();
-                if (World)
-                {
-                    DrawDebugLine(
-                        World,
-                        Start,
-                        End,
-                        FColor(255, 0, 255),
-                        true,
-                        -1.0f,
-                        ::DEBUG_SPHERE_DEPTH_PRIORITY,
-                        ::DEBUG_LINE_THICKNESS);
-                }
+                DrawDebugLine(
+                    World,
+                    Start,
+                    End,
+                    FColor(255, 0, 255),
+                    true,
+                    -1.0f,
+                    ::DEBUG_SPHERE_DEPTH_PRIORITY,
+                    ::DEBUG_LINE_THICKNESS);
             }
         }
-        
-        CurrentWay = nullptr;
     }
     else if (ElementNameString == TEXT("relation"))
     {

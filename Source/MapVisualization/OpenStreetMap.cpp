@@ -46,6 +46,12 @@ void AOpenStreetMap::BeginPlay()
     }
 }
 
+// Get MapProjection
+UMapProjectionComponent* AOpenStreetMap::GetProjection()
+{
+    return Projection;
+}
+
 // Add Node
 // Returns a pointer to the new Node in the list
 
@@ -54,7 +60,7 @@ FOpenStreetNode* AOpenStreetMap::AddNode(FOpenStreetNode Node)
     return nullptr;
 }
 
-FOpenStreetNode* AOpenStreetMap::EmplaceNode(int64 Id = 0, FLatLng Location = FLatLng())
+FOpenStreetNode* AOpenStreetMap::EmplaceNode(int64 Id, FLatLng Location)
 {
     return nullptr;
 }
@@ -67,14 +73,14 @@ FOpenStreetWay* AOpenStreetMap::AddWay(FOpenStreetWay Way)
     return nullptr;
 }
 
-FOpenStreetWay* AOpenStreetMap::EmplaceWay(int64 Id = 0)
+FOpenStreetWay* AOpenStreetMap::EmplaceWay(int64 Id)
 {
     return nullptr;
 }
 
 // Get Nodes/Ways
 
-TMap<int64, FOpenStreetNode>* AOpenStreetMap::()
+TMap<int64, FOpenStreetNode>* AOpenStreetMap::GetNodes()
 {
     return nullptr;
 }
@@ -93,13 +99,13 @@ FOpenStreetNode* AOpenStreetMap::FindNodeById(int64 Id)
 
 // Find Ways
 // Returns nullptr if no Node with given Id exists in the Map
-FOpenSTreetWay* AOpenStreetMap::FindWayById(int64 Id)
+FOpenStreetWay* AOpenStreetMap::FindWayById(int64 Id)
 {
     return nullptr;
 }
 
 // Generates a network of pink debug lines that draws the Nodes and Ways
-void AOpenStreetMap::DrawDebugMap(bool bDrawNodes = false) const
+void AOpenStreetMap::DrawDebugMap(bool bDrawNodes) const
 {
     
 }

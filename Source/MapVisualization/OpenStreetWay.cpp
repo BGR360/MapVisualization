@@ -20,7 +20,7 @@ FOpenStreetWay::~FOpenStreetWay()
 
 // Add Node
 // Automatically updates the Way's appearance in the world.
-void FOpenStreetWay::AddNode(class FOpenStreetNode* Node)
+void FOpenStreetWay::AddNode(FOpenStreetNode* Node)
 {
     Nodes.Push(Node);
 }

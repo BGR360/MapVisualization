@@ -7,28 +7,10 @@
 // Sets default values
 FOpenStreetElement::FOpenStreetElement()
 {
-    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-    PrimaryActorTick.bCanEverTick = false;
-
 }
 
-// Called when the game starts or when spawned
-void FOpenStreetElement::BeginPlay()
+FOpenStreetElement::~FOpenStreetElement()
 {
-    Super::BeginPlay();
-
-}
-
-// Get Tags
-TArray<FOpenStreetTag>& FOpenStreetElement::GetTags()
-{
-    return Tags;
-}
-
-// Add Tag
-void FOpenStreetElement::AddTag(FOpenStreetTag Tag)
-{
-    Tags.Add(Tag);
 }
 
 void FOpenStreetElement::AddTag(const FString& Key, const FString& Value)

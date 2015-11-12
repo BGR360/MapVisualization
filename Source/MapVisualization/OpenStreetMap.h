@@ -4,9 +4,14 @@
 
 #include "GameFramework/Actor.h"
 #include "Runtime/Core/Public/Containers/Map.h"
+#include "OpenStreetNode.h"
+#include "OpenStreetWay.h"
+
 #include "OpenStreetMap.generated.h"
 
-class UMapProjectionComponent, FOpenStreetNode, FOpenStreetWay;
+class UMapProjectionComponent;
+struct FOpenStreetNode;
+struct FOpenStreetWay;
 
 /**
  * Place an OpenStreetMap Actor into the world to visualize a .osm XML file.
@@ -54,7 +59,7 @@ public:
     
     // Find Ways
     // Returns nullptr if no Node with given Id exists in the Map
-    FOpenSTreetWay* FindWayById(int64 Id);
+    FOpenStreetWay* FindWayById(int64 Id);
     
     // TODO Find Ways near LatLng/Vector with given radius
     

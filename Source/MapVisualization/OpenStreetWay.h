@@ -11,7 +11,7 @@
  * could represent a road, a polygon, or a boundary.
  */
 USTRUCT()
-class MAPVISUALIZATION_API FOpenStreetWay : public FOpenStreetElement
+struct MAPVISUALIZATION_API FOpenStreetWay : public FOpenStreetElement
 {
     GENERATED_USTRUCT_BODY()
 
@@ -27,14 +27,14 @@ public:
     
     // The list of Nodes that are a part of this way
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
-    TArray<FOpenStreetNode*> Nodes;
+    TArray<struct FOpenStreetNode*> Nodes;
 
     // Add Node
-    UFUNCTION(BlueprintCallable, Category = Map)
-    void AddNode(class FOpenStreetNode* Node);
+    //UFUNCTION(BlueprintCallable, Category = Map)
+    void AddNode(struct FOpenStreetNode* Node);
 
     // Remove Node
     // @return The number of nodes removed
-    UFUNCTION(BlueprintCallable, Category = Map)
+    //UFUNCTION(BlueprintCallable, Category = Map)
     int32 RemoveNode(FOpenStreetNode* Node);
 };

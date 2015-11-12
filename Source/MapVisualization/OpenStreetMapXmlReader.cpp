@@ -4,7 +4,6 @@
 #include "OpenStreetMapXmlReader.h"
 #include "MapProjectionComponent.h"
 #include "OpenStreetMap.h"
-#include "GeoComponent.h"
 #include "OpenStreetWay.h"
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
@@ -76,26 +75,23 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
         UWorld* World = MapActor->GetWorld();
         if (World)
         {
-            for (auto& Element : NodeMap)
+            for (auto& Element : *(MapActor->GetNodes()))
             {
-                FOpenStreetNode* Node = Element.Value;
+                FOpenStreetNode Node = Element.Value;
+                
+                FLatLng LatLng = Node.Location;
+                FVector Location = MapActor->GetProjection()->EarthToWorld(LatLng);
+                Location *= ::DEBUG_POINT_LINES_SCALE_FACTOR;
+                Location.Z = ::DEBUG_POINT_HEIGHT;
 
-                if (Node)
-                {
-                    FLatLng LatLng = Node->GetGeoComponent()->GetLocation();
-                    FVector Location = MapActor->GetProjection()->EarthToWorld(LatLng);
-                    Location *= ::DEBUG_POINT_LINES_SCALE_FACTOR;
-                    Location.Z = ::DEBUG_POINT_HEIGHT;
-
-                    DrawDebugPoint(
-                        World,
-                        Location,
-                        ::DEBUG_POINT_SIZE,
-                        FColor(255, 0, 255),
-                        true,
-                        -1.0f,
-                        ::DEBUG_SPHERE_DEPTH_PRIORITY);
-                }
+                DrawDebugPoint(
+                    World,
+                    Location,
+                    ::DEBUG_POINT_SIZE,
+                    FColor(255, 0, 255),
+                    true,
+                    -1.0f,
+                    ::DEBUG_SPHERE_DEPTH_PRIORITY);
             }
         }
     }
@@ -176,7 +172,7 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
         bReadingTag = true;
         
         // Construct a new FOpenStreetTag
-        CurrentTag = FOpenSTreetTag();
+        CurrentTag = FOpenStreetTag();
     }
     
     // <way> element
@@ -185,7 +181,7 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
         bReadingWay = true;
         
         // Construct a new FOpenStreetWay
-        CurrentWay = FOpenSTreetWay();
+        CurrentWay = FOpenStreetWay();
     }
     
     // <relation> element
@@ -353,13 +349,13 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
         bReadingTag = false;
         
         // Check which type of element we're supposed to add the Tag to
-        if (bReadingWay && CurrentWay != nullptr)
+        if (bReadingWay)
         {
-            CurrentWay.AddTag(CurrentTag);
+            CurrentWay.AddTag(CurrentTag.Key, CurrentTag.Value);
         }
-        else if (bReadingNode && CurrentNode != nullptr)
+        else if (bReadingNode)
         {
-            CurrentNode.AddTag(CurrentTag);
+            CurrentNode.AddTag(CurrentTag.Key, CurrentTag.Value);
         }
     }
     else if (ElementNameString == TEXT("way"))
@@ -371,32 +367,28 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
 
         // The Way is finished, draw lines connecting its nodes
         // TODO Move to OpenStreetMap
-        if (CurrentWay)
+        for (int32 i = 1; i < CurrentWay.Nodes.Num(); ++i)
         {
-            TArray<FOpenStreetNode*>& Nodes = *(CurrentWay->GetNodes());
-            for (int32 i = 1; i < Nodes.Num(); ++i)
+            FLatLng StartLatLng = CurrentWay.Nodes[i]->Location;
+            FLatLng EndLatLng = CurrentWay.Nodes[i - 1]->Location;
+
+            FVector Start = MapActor->GetProjection()->EarthToWorld(StartLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
+            FVector End = MapActor->GetProjection()->EarthToWorld(EndLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
+            Start.Z = ::DEBUG_LINE_HEIGHT;
+            End.Z = ::DEBUG_LINE_HEIGHT;
+
+            UWorld* World = MapActor->GetWorld();
+            if (World)
             {
-                FLatLng StartLatLng = Nodes[i]->GetGeoComponent()->GetLocation();
-                FLatLng EndLatLng = Nodes[i - 1]->GetGeoComponent()->GetLocation();
-
-                FVector Start = MapActor->GetProjection()->EarthToWorld(StartLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
-                FVector End = MapActor->GetProjection()->EarthToWorld(EndLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
-                Start.Z = ::DEBUG_LINE_HEIGHT;
-                End.Z = ::DEBUG_LINE_HEIGHT;
-
-                UWorld* World = MapActor->GetWorld();
-                if (World)
-                {
-                    DrawDebugLine(
-                        World,
-                        Start,
-                        End,
-                        FColor(255, 0, 255),
-                        true,
-                        -1.0f,
-                        ::DEBUG_SPHERE_DEPTH_PRIORITY,
-                        ::DEBUG_LINE_THICKNESS);
-                }
+                DrawDebugLine(
+                    World,
+                    Start,
+                    End,
+                    FColor(255, 0, 255),
+                    true,
+                    -1.0f,
+                    ::DEBUG_SPHERE_DEPTH_PRIORITY,
+                    ::DEBUG_LINE_THICKNESS);
             }
         }
     }

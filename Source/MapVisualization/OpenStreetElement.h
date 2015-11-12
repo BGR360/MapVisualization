@@ -15,7 +15,7 @@
  * a list of FOpenStreetTag.
  */
 USTRUCT()
-class MAPVISUALIZATION_API FOpenStreetElement
+struct MAPVISUALIZATION_API FOpenStreetElement
 {
     GENERATED_USTRUCT_BODY()
 
@@ -27,11 +27,11 @@ public:
     TArray<FOpenStreetTag> Tags;
 
     // Add Tag
-    UFUNCTION(BlueprintCallable, Category = Map)
+    //UFUNCTION(BlueprintCallable, Category = Map)
     void AddTag(const FString& Key, const FString& Value);
 
     // Has Tag
-    UFUNCTION(BlueprintPure, Category = Map)
+    //UFUNCTION(BlueprintPure, Category = Map)
     bool HasTag(const FString& Key) const;
 
     /**
@@ -40,7 +40,7 @@ public:
      * @param IndexOfTag Output parameter that gets the index of the found Tag (or -1 if not found)
      * @return The index of the first occurrence of such a Tag, or -1 if not found.
      */
-    UFUNCTION(BlueprintPure, Category = Map)
+    //UFUNCTION(BlueprintPure, Category = Map)
     int32 IndexOfTag(const FString& Key) const;
 
     /**
@@ -48,6 +48,6 @@ public:
      * @param Key The key string that we want the value for.
      * @return The key's value if a Tag exists with that particular key, otherwise nullptr.
      */
-    UFUNCTION(BlueprintCallable, Category = Map)
+    //UFUNCTION(BlueprintCallable, Category = Map)
     FString GetTagValue(const FString& Key) const;
 };

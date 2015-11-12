@@ -11,6 +11,11 @@
 			"AdditionalDependencies": [
 				"Engine"
 			]
+		},
+		{
+			"Name": "GeographicLibModule",
+            		"Type": "Runtime",
+            		"LoadingPhase":  "PostEngineInit"	
 		}
 	]
 }

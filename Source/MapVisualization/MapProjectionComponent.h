@@ -30,6 +30,10 @@ public:
 
     // Initializes the MapProjection with a bounding box
     UMapProjectionComponent(FLatLngBounds Bounds);
+    
+    // The default z-height for a point on the map (so they don't get hidden in the floor
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
+    float DefaultHeight;
 
     // Called when the game starts
     virtual void BeginPlay() override;
@@ -38,22 +42,18 @@ public:
     virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
     // Get/Set the Map's Bounds
-    UFUNCTION(BlueprintPure, Category = Map)
+    UFUNCTION(BlueprintPure, Category = Projection)
     FLatLngBounds GetBounds() const;
 
-    UFUNCTION(BlueprintCallable, Category = Map)
+    UFUNCTION(BlueprintCallable, Category = Projection)
     void SetBounds(FLatLngBounds Bounds);
 
 
     // Position Conversion Functions
-    // TODO: Implement Mercator Projection
-
-    FLatLng MapToEarth(FVector MapPos) const;
-    FVector EarthToMap(FLatLng EarthPos) const;
-    FVector WorldToMap(FVector WorldPos) const;
-    FVector MapToWorld(FVector MapPos) const;
-
+    UFUNCTION(BlueprintCallable, Category = Projection)
     FLatLng WorldToEarth(FVector WorldPos) const;
+    
+    UFUNCTION(BlueprintCallable, Category = Projection)
     FVector EarthToWorld(FLatLng EarthPos) const;
 
 private:

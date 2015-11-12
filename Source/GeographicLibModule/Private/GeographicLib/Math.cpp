@@ -7,7 +7,7 @@
  * http://geographiclib.sourceforge.net/
  **********************************************************************/
 
-#include <GeographicLib/Math.hpp>
+#include "GeographicLib/Math.hpp"
 
 #if defined(_MSC_VER)
 // Squelch warnings about constant conditional expressions

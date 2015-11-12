@@ -28,13 +28,4 @@ public:
     // The list of Nodes that are a part of this way
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
     TArray<struct FOpenStreetNode*> Nodes;
-
-    // Add Node
-    //UFUNCTION(BlueprintCallable, Category = Map)
-    void AddNode(struct FOpenStreetNode* Node);
-
-    // Remove Node
-    // @return The number of nodes removed
-    //UFUNCTION(BlueprintCallable, Category = Map)
-    int32 RemoveNode(FOpenStreetNode* Node);
 };

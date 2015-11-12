@@ -258,7 +258,7 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
                     FOpenStreetNode* Node = MapActor->FindNodeById(Id);
                     if (Node)
                     {
-                        CurrentWay.AddNode(Node);
+                        CurrentWay.Nodes.Add(Node);
                     }
                 }
             }
@@ -351,11 +351,11 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
         // Check which type of element we're supposed to add the Tag to
         if (bReadingWay)
         {
-            CurrentWay.AddTag(CurrentTag.Key, CurrentTag.Value);
+            CurrentWay.Tags.Add(CurrentTag);
         }
         else if (bReadingNode)
         {
-            CurrentNode.AddTag(CurrentTag.Key, CurrentTag.Value);
+            CurrentNode.Tags.Add(CurrentTag);
         }
     }
     else if (ElementNameString == TEXT("way"))

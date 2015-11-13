@@ -54,6 +54,7 @@ public:
     void SetBounds(FLatLngBounds Bounds);
     
     // Get center of Bounds
+    UFUNCTION(BlueprintPure, Category = Projection)
     FLatLng GetBoundsCenter() const;
 
 

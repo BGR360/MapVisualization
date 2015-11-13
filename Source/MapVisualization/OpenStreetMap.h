@@ -78,7 +78,8 @@ public:
     // TODO Find Ways near LatLng/Vector with given radius
     
     // Generates a network of pink debug lines that draws the Nodes and Ways
-    void DrawDebugMap(bool bDrawNodes = false) const;
+    UFUNCTION(BlueprintNativeEvent, Category = Drawing)
+    void DrawDebugMap() const;
     
     // Checks to see if there has been a change in values
     void CheckForChangedDrawValues();

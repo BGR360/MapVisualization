@@ -120,7 +120,7 @@ FOpenStreetWay* AOpenStreetMap::FindWayById(int64 Id)
 }
 
 // Generates a network of pink debug lines that draws the Nodes and Ways
-void AOpenStreetMap::DrawDebugMap(bool bDrawNodes) const
+void AOpenStreetMap::DrawDebugMap_Implementation() const
 {
     // First clear all lines
     UWorld* World = GetWorld();

@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "MapVisualization.h"
+#include "OpenStreetMapModule.h"
 #include "LatLng.h"
 
 FLatLng::FLatLng() : Latitude(0.0f), Longitude(0.0f)

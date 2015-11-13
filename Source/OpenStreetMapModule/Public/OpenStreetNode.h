@@ -11,7 +11,7 @@
  * it could be part of a road, the corner of square, or a stop sign.
  */
 USTRUCT()
-struct MAPVISUALIZATION_API FOpenStreetNode : public FOpenStreetElement
+struct OPENSTREETMAPMODULE_API FOpenStreetNode : public FOpenStreetElement
 {
     GENERATED_USTRUCT_BODY()
 

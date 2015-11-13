@@ -6,7 +6,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(GeographicLibModule, All, All)
 
-class FGeographicLibModule : public IModuleInterface
+class GEOGRAPHICLIBMODULE_API FGeographicLibModule : public IModuleInterface
 {
 public:
     virtual void StartupModule() override;

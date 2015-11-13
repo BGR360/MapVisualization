@@ -8,7 +8,7 @@
  * Represents a Latitude and Longitude position on the Earth
  */
 USTRUCT()
-struct MAPVISUALIZATION_API FLatLng
+struct OPENSTREETMAPMODULE_API FLatLng
 {
     GENERATED_USTRUCT_BODY()
 

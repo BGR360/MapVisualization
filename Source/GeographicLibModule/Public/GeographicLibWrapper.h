@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "MapVisualization/LatLng.h"
+#include "OpenStreetMapModule/Public/LatLng.h"
 #include "GeographicLibModule/Private/GeographicLib/Math.hpp"
 
 using namespace GeographicLib;

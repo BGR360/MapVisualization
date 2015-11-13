@@ -3,8 +3,8 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
-#include "LatLng.h"
-#include "LatLngBounds.h"
+#include "OpenStreetMapModule/Public/LatLng.h"
+#include "OpenStreetMapModule/Public/LatLngBounds.h"
 #include "Runtime/Core/Public/Math/Vector.h"
 
 #include "MapProjectionComponent.generated.h"

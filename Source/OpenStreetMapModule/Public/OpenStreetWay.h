@@ -4,6 +4,7 @@
 
 #include "OpenStreetElement.h"
 #include "Runtime/Core/Public/Containers/Array.h"
+#include "OpenStreetNode.h"
 #include "OpenStreetWay.generated.h"
 
 /**
@@ -11,7 +12,7 @@
  * could represent a road, a polygon, or a boundary.
  */
 USTRUCT()
-struct MAPVISUALIZATION_API FOpenStreetWay : public FOpenStreetElement
+struct OPENSTREETMAPMODULE_API FOpenStreetWay : public FOpenStreetElement
 {
     GENERATED_USTRUCT_BODY()
 
@@ -27,5 +28,5 @@ public:
     
     // The list of Nodes that are a part of this way
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
-    TArray<struct FOpenStreetNode*> Nodes;
+    TArray<FOpenStreetNode> Nodes;
 };

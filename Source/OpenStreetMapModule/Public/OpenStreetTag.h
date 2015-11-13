@@ -10,7 +10,7 @@
  * such as {"highway", "motorway"}
  */
 USTRUCT()
-struct MAPVISUALIZATION_API FOpenStreetTag
+struct OPENSTREETMAPMODULE_API FOpenStreetTag
 {
     GENERATED_USTRUCT_BODY()
 

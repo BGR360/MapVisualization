@@ -10,12 +10,12 @@ DEFINE_LOG_CATEGORY(OpenStreetMapModule)
 
 void FOpenStreetMapModule::StartupModule()
 {
-    UE_LOG(GeographicLibModule, Warning, TEXT("OpenStreetMapModule: Log Started"));
+    UE_LOG(OpenStreetMapModule, Warning, TEXT("OpenStreetMapModule: Log Started"));
 }
 
 void FOpenStreetMapModule::ShutdownModule()
 {
-    UE_LOG(GeographicLibModule, Warning, TEXT("OpenStreetMapModule: Log Ended"));
+    UE_LOG(OpenStreetMapModule, Warning, TEXT("OpenStreetMapModule: Log Ended"));
 }
 
 #undef LOCTEXT_NAMESPACE

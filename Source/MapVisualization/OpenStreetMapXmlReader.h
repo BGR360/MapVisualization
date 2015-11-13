@@ -4,10 +4,10 @@
 
 #include "Runtime/XmlParser/Public/FastXml.h"
 #include "Runtime/Core/Public/Containers/Map.h"
-#include "LatLngBounds.h"
-#include "OpenStreetNode.h"
-#include "OpenStreetWay.h"
-#include "OpenStreetTag.h"
+#include "OpenStreetMapModule/Public/LatLngBounds.h"
+#include "OpenStreetMapModule/Public/OpenStreetNode.h"
+#include "OpenStreetMapModule/Public/OpenStreetWay.h"
+#include "OpenStreetMapModule/Public/OpenStreetTag.h"
 
 /**
  * Reads an OSM XML file and populates an AOpenStreetMap actor with the proper

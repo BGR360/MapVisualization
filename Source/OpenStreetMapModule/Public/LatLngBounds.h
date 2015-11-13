@@ -10,7 +10,7 @@
  * and an upper-right hand LatLng position
  */
 USTRUCT()
-struct MAPVISUALIZATION_API FLatLngBounds
+struct OPENSTREETMAPMODULE_API FLatLngBounds
 {
     GENERATED_USTRUCT_BODY()
 

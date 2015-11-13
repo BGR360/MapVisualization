@@ -6,7 +6,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(OpenStreetMapModule, All, All)
 
-class FOpenStreetMapModule : public IModuleInterface
+class OPENSTREETMAPMODULE_API FOpenStreetMapModule : public IModuleInterface
 {
 public:
     virtual void StartupModule() override;

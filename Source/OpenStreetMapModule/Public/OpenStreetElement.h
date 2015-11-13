@@ -15,7 +15,7 @@
  * a list of FOpenStreetTag.
  */
 USTRUCT()
-struct MAPVISUALIZATION_API FOpenStreetElement
+struct OPENSTREETMAPMODULE_API FOpenStreetElement
 {
     GENERATED_USTRUCT_BODY()
 

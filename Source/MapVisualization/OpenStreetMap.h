@@ -4,8 +4,8 @@
 
 #include "GameFramework/Actor.h"
 #include "Runtime/Core/Public/Containers/Map.h"
-#include "OpenStreetNode.h"
-#include "OpenStreetWay.h"
+#include "OpenStreetMapModule/Public/OpenStreetNode.h"
+#include "OpenStreetMapModule/Public/OpenStreetWay.h"
 
 #include "OpenStreetMap.generated.h"
 

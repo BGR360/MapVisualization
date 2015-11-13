@@ -258,7 +258,7 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
                     FOpenStreetNode* Node = MapActor->FindNodeById(Id);
                     if (Node)
                     {
-                        CurrentWay.Nodes.Add(Node);
+                        CurrentWay.Nodes.Add(*Node);
                     }
                 }
             }
@@ -369,8 +369,8 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
         // TODO Move to OpenStreetMap
         for (int32 i = 1; i < CurrentWay.Nodes.Num(); ++i)
         {
-            FLatLng StartLatLng = CurrentWay.Nodes[i]->Location;
-            FLatLng EndLatLng = CurrentWay.Nodes[i - 1]->Location;
+            FLatLng StartLatLng = CurrentWay.Nodes[i].Location;
+            FLatLng EndLatLng = CurrentWay.Nodes[i - 1].Location;
 
             FVector Start = MapActor->GetProjection()->EarthToWorld(StartLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
             FVector End = MapActor->GetProjection()->EarthToWorld(EndLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;

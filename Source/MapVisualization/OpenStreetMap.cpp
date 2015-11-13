@@ -14,8 +14,12 @@ AOpenStreetMap::AOpenStreetMap()
     PrimaryActorTick.bCanEverTick = false;
 
     Projection = CreateDefaultSubobject<UMapProjectionComponent>(TEXT("MapProjection"));
-    RoadWidth = 1.0f;
-    RoadColor = FColor(255, 0, 255);
+    RoadWidth = PrevRoadWidth = 1.0f;
+    RoadColor = PrevRoadColor = FColor(255, 0, 255);
+    RefreshRate = PrevRefreshRate = 2.0f;
+    
+    PrevDefaultHeight = Projection->DefaultHeight;
+    PrevScaleFactor = Projection->ScaleFactor;
 }
 
 // Called when the game starts or when spawned
@@ -49,6 +53,10 @@ void AOpenStreetMap::BeginPlay()
         // Draw the map
         DrawDebugMap();
     }
+    
+    // Start the refresh timer that checks if something needs to be redrawn.
+    FTimerHandle TimerHandle;
+    GetWorldTimerManager().SetTimer(TimerHandle, this, &AOpenStreetMap::CheckForChangedDrawValues, RefreshRate, true);
 }
 
 // Get MapProjection
@@ -114,6 +122,13 @@ FOpenStreetWay* AOpenStreetMap::FindWayById(int64 Id)
 // Generates a network of pink debug lines that draws the Nodes and Ways
 void AOpenStreetMap::DrawDebugMap(bool bDrawNodes) const
 {
+    // First clear all lines
+    UWorld* World = GetWorld();
+    if (World)
+    {
+        FlushPersistentDebugLines(World);
+    }
+    
     // Draw lines connecting its nodes
     for (auto& Element : Ways)
     {
@@ -126,7 +141,6 @@ void AOpenStreetMap::DrawDebugMap(bool bDrawNodes) const
             FVector Start = Projection->EarthToWorld(StartLatLng);
             FVector End = Projection->EarthToWorld(EndLatLng);
             
-            UWorld* World = GetWorld();
             if (World)
             {
                 DrawDebugLine(
@@ -137,8 +151,41 @@ void AOpenStreetMap::DrawDebugMap(bool bDrawNodes) const
                               true,
                               -1.0f,
                               255,
-                              RoadWidth);
+                              RoadWidth * Projection->ScaleFactor);
             }
         }
     }
+}
+
+// Checks to see if there has been a change in values
+void AOpenStreetMap::CheckForChangedDrawValues()
+{
+    if (ValuesHaveChanged())
+    {
+        DrawDebugMap();
+        
+        // Reset the delay of the FTimer if need be
+        if (PrevRefreshRate != RefreshRate)
+        {
+            FTimerHandle TimerHandle;
+            GetWorldTimerManager().SetTimer(TimerHandle, this, &AOpenStreetMap::CheckForChangedDrawValues, RefreshRate, true);
+        }
+    }
+    
+    // Reset all the "previous" values
+    PrevRoadWidth = RoadWidth;
+    PrevRoadColor = RoadColor;
+    PrevRefreshRate = RefreshRate;
+    PrevDefaultHeight = Projection->DefaultHeight;
+    PrevScaleFactor = Projection->ScaleFactor;
+}
+
+// Checks if values have changed since last refresh check
+bool AOpenStreetMap::ValuesHaveChanged() const
+{
+    return (PrevRoadWidth != RoadWidth) ||
+    (PrevRoadColor != RoadColor) ||
+    (PrevRefreshRate != RefreshRate) ||
+    (PrevDefaultHeight != Projection->DefaultHeight) ||
+    (PrevScaleFactor != Projection->ScaleFactor);
 }

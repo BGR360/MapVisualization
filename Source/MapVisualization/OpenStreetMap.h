@@ -18,8 +18,9 @@ struct FOpenStreetWay;
  * Call LoadFromXml() to initialize the map from a file. This will read the file
  * and generate all of the necessary OpenStreetNodes and OpenStreetWays.
  *
- * AOpenStreetMap does NOT actually store a TArray of FOpenStreetNode; all of
- * the nodes will be Attached to the RootComponent of the AOpenStreetMap
+ * AOpenStreetMap stores a list of FOpenStreetNode and FOpenStreetWay. It also
+ * stores the Nodes in a QuadTree so that it is efficient to search for Nodes
+ * within a given area of space.
  */
 UCLASS()
 class MAPVISUALIZATION_API AOpenStreetMap : public AActor
@@ -37,6 +38,11 @@ public:
     // The color of the road lines
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
     FColor RoadColor;
+    
+    // How often the Map should check for a change in Drawing values and redraw if necessary
+    // The value given is in seconds
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
+    float RefreshRate;
 
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
@@ -73,6 +79,9 @@ public:
     
     // Generates a network of pink debug lines that draws the Nodes and Ways
     void DrawDebugMap(bool bDrawNodes = false) const;
+    
+    // Checks to see if there has been a change in values
+    void CheckForChangedDrawValues();
 
 private:
     // The MapProjection used to convert Nodes' LatLng positions to 3D World coordinates
@@ -88,4 +97,14 @@ private:
     TMap<int64, FOpenStreetWay> Ways;
     
     // TODO Have a Quadtree of Nodes
+    
+    // Keep track of the previous values of Drawing parameters so we can see if they've changed
+    float PrevRoadWidth;
+    FColor PrevRoadColor;
+    float PrevRefreshRate;
+    float PrevDefaultHeight;
+    float PrevScaleFactor;
+    
+    // Checks if values have changed since last refresh check
+    bool ValuesHaveChanged() const;
 };

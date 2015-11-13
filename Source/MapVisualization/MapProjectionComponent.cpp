@@ -14,6 +14,7 @@ UMapProjectionComponent::UMapProjectionComponent()
 
     Bounds = FLatLngBounds();
     DefaultHeight = 30.0f;
+    ScaleFactor = 1.0f;
 }
 
 UMapProjectionComponent::UMapProjectionComponent(FLatLngBounds Bounds) : UMapProjectionComponent()
@@ -78,6 +79,9 @@ FLatLng UMapProjectionComponent::WorldToEarth(FVector WorldPos) const
     FVector CenterWorldPos = GeoLibWrapper.TransverseMercatorProject(CenterLatLng, CenterLatLng);
     WorldPos.Y += CenterWorldPos.Y;
     
+    // Adjust by the ScaleFactor
+    WorldPos /= ScaleFactor;
+    
     // This will yield the proper x value, but the y value may be hundreds of kilometers north of the equator
     FLatLng EarthPos = GeoLibWrapper.TransverseMercatorProject(WorldPos, CenterLatLng);
     
@@ -94,12 +98,15 @@ FVector UMapProjectionComponent::EarthToWorld(FLatLng EarthPos) const
     // This will yield the proper x value, but the y value may be hundreds of kilometers north of the equator
     FVector WorldPos = GeoLibWrapper.TransverseMercatorProject(EarthPos, CenterLatLng);
     
-    // Increase the height by the default offset
-    WorldPos.Z += DefaultHeight;
-    
     // Adjust for the y position by subtracting the y position of the CenterLatLng
     FVector CenterWorldPos = GeoLibWrapper.TransverseMercatorProject(CenterLatLng, CenterLatLng);
     WorldPos.Y -= CenterWorldPos.Y;
+    
+    // Adjust by the ScaleFactor
+    WorldPos *= ScaleFactor;
+    
+    // Increase the height by the default offset
+    WorldPos.Z += DefaultHeight;
     
     return WorldPos;
 }

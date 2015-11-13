@@ -34,6 +34,11 @@ public:
     // The default z-height for a point on the map (so they don't get hidden in the floor
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
     float DefaultHeight;
+    
+    // A Scale Factor to use for positioning of points on the map
+    // e.g. 1.0 indicates a scale of 1uu : 1m, 2.0 indicates a scale of 2uu : 1m
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
+    float ScaleFactor;
 
     // Called when the game starts
     virtual void BeginPlay() override;

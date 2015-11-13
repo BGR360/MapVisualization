@@ -14,6 +14,8 @@ AOpenStreetMap::AOpenStreetMap()
     PrimaryActorTick.bCanEverTick = false;
 
     Projection = CreateDefaultSubobject<UMapProjectionComponent>(TEXT("MapProjection"));
+    RoadWidth = 1.0f;
+    RoadColor = FColor(255, 0, 255);
 }
 
 // Called when the game starts or when spawned
@@ -43,6 +45,9 @@ void AOpenStreetMap::BeginPlay()
     {
         FString& FilePath = OutFilenames[0];
         Reader.ReadFromFile(FilePath);
+        
+        // Draw the map
+        DrawDebugMap();
     }
 }
 
@@ -109,5 +114,31 @@ FOpenStreetWay* AOpenStreetMap::FindWayById(int64 Id)
 // Generates a network of pink debug lines that draws the Nodes and Ways
 void AOpenStreetMap::DrawDebugMap(bool bDrawNodes) const
 {
-    
+    // Draw lines connecting its nodes
+    for (auto& Element : Ways)
+    {
+        FOpenStreetWay CurrentWay = Element.Value;
+        for (int32 j = 1; j < CurrentWay.Nodes.Num(); ++j)
+        {
+            FLatLng StartLatLng = CurrentWay.Nodes[j].Location;
+            FLatLng EndLatLng = CurrentWay.Nodes[j - 1].Location;
+            
+            FVector Start = Projection->EarthToWorld(StartLatLng);
+            FVector End = Projection->EarthToWorld(EndLatLng);
+            
+            UWorld* World = GetWorld();
+            if (World)
+            {
+                DrawDebugLine(
+                              World,
+                              Start,
+                              End,
+                              RoadColor,
+                              true,
+                              -1.0f,
+                              255,
+                              RoadWidth);
+            }
+        }
+    }
 }

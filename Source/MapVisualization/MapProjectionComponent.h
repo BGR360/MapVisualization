@@ -47,6 +47,9 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = Projection)
     void SetBounds(FLatLngBounds Bounds);
+    
+    // Get center of Bounds
+    FLatLng GetBoundsCenter() const;
 
 
     // Position Conversion Functions

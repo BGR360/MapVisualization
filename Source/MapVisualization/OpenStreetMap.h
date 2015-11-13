@@ -29,6 +29,14 @@ class MAPVISUALIZATION_API AOpenStreetMap : public AActor
 public:
     // Sets default values for this actor's properties
     AOpenStreetMap();
+    
+    // The width of the road lines
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
+    float RoadWidth;
+    
+    // The color of the road lines
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
+    FColor RoadColor;
 
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;

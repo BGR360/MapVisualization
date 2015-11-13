@@ -8,14 +8,6 @@
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
 #define LOCTEXT_NAMESPACE "Xml"
-static const float DEBUG_POINT_SIZE = 3.5f;
-static const float DEBUG_SPHERE_RADIUS = 10.f;
-static const float DEBUG_LINE_THICKNESS = 1.5f;
-static const int DEBUG_SPHERE_NUM_LINES = 4;
-static const int DEBUG_SPHERE_DEPTH_PRIORITY = 255;
-static const float DEBUG_POINT_HEIGHT = 30.f;
-static const float DEBUG_LINE_HEIGHT = DEBUG_POINT_HEIGHT;
-static const float DEBUG_POINT_LINES_SCALE_FACTOR = 7.f;
 
 OpenStreetMapXmlReader::OpenStreetMapXmlReader() :
 MapActor(nullptr),
@@ -68,31 +60,6 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
         {
             FText DialogTitle = LOCTEXT("ErrorDialogTitle", "Error");
             FMessageDialog::Open(EAppMsgType::Ok, OutErrorMessage, &DialogTitle);
-        }
-
-        // Draw a debug point at each Node
-        // TODO Move to OpenStreetMap
-        UWorld* World = MapActor->GetWorld();
-        if (World)
-        {
-            for (auto& Element : *(MapActor->GetNodes()))
-            {
-                FOpenStreetNode Node = Element.Value;
-                
-                FLatLng LatLng = Node.Location;
-                FVector Location = MapActor->GetProjection()->EarthToWorld(LatLng);
-                Location *= ::DEBUG_POINT_LINES_SCALE_FACTOR;
-                Location.Z = ::DEBUG_POINT_HEIGHT;
-
-                DrawDebugPoint(
-                    World,
-                    Location,
-                    ::DEBUG_POINT_SIZE,
-                    FColor(255, 0, 255),
-                    true,
-                    -1.0f,
-                    ::DEBUG_SPHERE_DEPTH_PRIORITY);
-            }
         }
     }
 }
@@ -364,33 +331,6 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
         
         // Add the Way to the Map
         MapActor->AddWay(CurrentWay);
-
-        // The Way is finished, draw lines connecting its nodes
-        // TODO Move to OpenStreetMap
-        for (int32 i = 1; i < CurrentWay.Nodes.Num(); ++i)
-        {
-            FLatLng StartLatLng = CurrentWay.Nodes[i].Location;
-            FLatLng EndLatLng = CurrentWay.Nodes[i - 1].Location;
-
-            FVector Start = MapActor->GetProjection()->EarthToWorld(StartLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
-            FVector End = MapActor->GetProjection()->EarthToWorld(EndLatLng) * ::DEBUG_POINT_LINES_SCALE_FACTOR;
-            Start.Z = ::DEBUG_LINE_HEIGHT;
-            End.Z = ::DEBUG_LINE_HEIGHT;
-
-            UWorld* World = MapActor->GetWorld();
-            if (World)
-            {
-                DrawDebugLine(
-                    World,
-                    Start,
-                    End,
-                    FColor(255, 0, 255),
-                    true,
-                    -1.0f,
-                    ::DEBUG_SPHERE_DEPTH_PRIORITY,
-                    ::DEBUG_LINE_THICKNESS);
-            }
-        }
     }
     else if (ElementNameString == TEXT("relation"))
     {

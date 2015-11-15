@@ -62,6 +62,15 @@ FLatLng UMapProjectionComponent::GetBoundsCenter() const
     return FLatLng(CenterLat, CenterLon);
 }
 
+// Check if a LatLng point is inside the Map's bounds
+bool UMapProjectionComponent::IsInBounds(FLatLng Point) const
+{
+    return (Point.Latitude > Bounds.LowerLeft.Latitude) &&
+           (Point.Latitude < Bounds.UpperRight.Latitude) &&
+           (Point.Longitude > Bounds.LowerLeft.Longitude) &&
+           (Point.Longitude < Bounds.UpperRight.Longitude);
+}
+
 
 // Position Conversion Functions
 

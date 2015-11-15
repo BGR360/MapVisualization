@@ -56,7 +56,10 @@ public:
     // Get center of Bounds
     UFUNCTION(BlueprintPure, Category = Projection)
     FLatLng GetBoundsCenter() const;
-
+    
+    // Check if a LatLng point is inside the Map's bounds
+    UFUNCTION(BlueprintPure, Category = Projection)
+    bool IsInBounds(FLatLng Point) const;
 
     // Position Conversion Functions
     UFUNCTION(BlueprintCallable, Category = Projection)

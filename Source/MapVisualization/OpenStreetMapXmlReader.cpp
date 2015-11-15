@@ -304,8 +304,11 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
     {
         bReadingNode = false;
         
-        // Add the Node to the map
-        MapActor->AddNode(CurrentNode);
+        // Add the Node to the map if its within the LatLngBounds
+        if (MapActor->GetProjection()->IsInBounds(CurrentNode.Location))
+        {
+            MapActor->AddNode(CurrentNode);
+        }
     }
     else if (ElementNameString == TEXT("nd"))
     {

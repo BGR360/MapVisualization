@@ -142,10 +142,11 @@ void AOpenStreetMap::DrawDebugMap_Implementation() const
         if (CurrentWay.bIsHighway)
         {
             Color = RoadColor;
+            Width = RoadWidth * 2;
             
             if (CurrentWay.NumLanes > 0)
             {
-                Width = RoadWidth * CurrentWay.NumLanes;
+                Width *= CurrentWay.NumLanes;
             }
         }
         

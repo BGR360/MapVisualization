@@ -135,6 +135,20 @@ void AOpenStreetMap::DrawDebugMap_Implementation() const
     for (auto& Element : Ways)
     {
         FOpenStreetWay CurrentWay = Element.Value;
+        
+        FColor Color = DefaultWayColor;
+        float Width = RoadWidth;
+        
+        if (CurrentWay.bIsHighway)
+        {
+            Color = RoadColor;
+            
+            if (CurrentWay.NumLanes > 0)
+            {
+                Width = RoadWidth * CurrentWay.NumLanes;
+            }
+        }
+        
         for (int32 j = 1; j < CurrentWay.Nodes.Num(); ++j)
         {
             FLatLng StartLatLng = CurrentWay.Nodes[j].Location;
@@ -149,11 +163,11 @@ void AOpenStreetMap::DrawDebugMap_Implementation() const
                               World,
                               Start,
                               End,
-                              RoadColor,
+                              Color,
                               true,
                               -1.0f,
                               255,
-                              RoadWidth * Projection->ScaleFactor);
+                              Width * Projection->ScaleFactor);
             }
         }
     }

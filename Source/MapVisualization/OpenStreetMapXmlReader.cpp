@@ -201,11 +201,11 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
         if (bReadingTag)
         {
             // Check if "key" or "value"
-            if (AttributeNameString == TEXT("key"))
+            if (AttributeNameString == TEXT("k"))
             {
                 CurrentTag.Key = AttributeValue;
             }
-            else if (AttributeNameString == TEXT("value"))
+            else if (AttributeNameString == TEXT("v"))
             {
                 CurrentTag.Value = AttributeValue;
             }
@@ -260,11 +260,11 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
         if (bReadingTag)
         {
             // Check if "key" or "value"
-            if (AttributeNameString == TEXT("key"))
+            if (AttributeNameString == TEXT("k"))
             {
                 CurrentTag.Key = AttributeValue;
             }
-            else if (AttributeNameString == TEXT("value"))
+            else if (AttributeNameString == TEXT("v"))
             {
                 CurrentTag.Value = AttributeValue;
             }

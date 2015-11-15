@@ -35,6 +35,10 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
     float RoadWidth;
     
+    // The default color for all Ways, if they're not roads
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
+    FColor DefaultWayColor;
+    
     // The color of the road lines
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
     FColor RoadColor;

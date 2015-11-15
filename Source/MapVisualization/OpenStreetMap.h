@@ -59,7 +59,7 @@ public:
     // Add Way
     // Returns a pointer to the new Way in the list
     FOpenStreetWay* AddWay(FOpenStreetWay Way);
-    FOpenStreetWay* EmplaceWay(int64 Id = 0);
+    FOpenStreetWay* EmplaceWay(int64 Id);
     
     // Get Nodes/Ways
     TMap<int64, FOpenStreetNode>* GetNodes();

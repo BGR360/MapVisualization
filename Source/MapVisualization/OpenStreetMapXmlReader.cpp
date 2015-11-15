@@ -332,6 +332,36 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
     {
         bReadingWay = false;
         
+        // Check to see if it's a highway, and give it the proper values if so
+        for (auto& Tag : CurrentWay.Tags)
+        {
+            // Check if it contains a "highway" tag
+            if (Tag.Key == TEXT("highway"))
+            {
+                CurrentWay.bIsHighway = true;
+            }
+            
+            // Check if has a "name" tag
+            else if (Tag.Key == TEXT("name"))
+            {
+                
+                CurrentWay.HighwayName = Tag.Value;
+            }
+            
+            // Check if it has a "lanes" tag
+            else if (Tag.Key == TEXT("lanes"))
+            {
+                int32 NumLanes = FCString::Atoi(*(Tag.Value));
+                CurrentWay.NumLanes = NumLanes;
+            }
+        }
+        
+        // Get rid of the Way's HighwayName if it's not actually a highway
+        if (!CurrentWay.bIsHighway)
+        {
+            CurrentWay.HighwayName = TEXT("");
+        }
+        
         // Add the Way to the Map
         MapActor->AddWay(CurrentWay);
     }

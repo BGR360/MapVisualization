@@ -88,7 +88,9 @@ FOpenStreetWay* AOpenStreetMap::AddWay(FOpenStreetWay Way)
 
 FOpenStreetWay* AOpenStreetMap::EmplaceWay(int64 Id)
 {
-    return &(Ways.Add(Id, FOpenStreetWay(Id)));
+    FOpenStreetWay* NewWay = &(Ways.Add(Id, FOpenStreetWay()));
+    NewWay->Id = Id;
+    return NewWay;
 }
 
 // Get Nodes/Ways

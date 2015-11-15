@@ -19,7 +19,6 @@ struct OPENSTREETMAPMODULE_API FOpenStreetWay : public FOpenStreetElement
 public:
     // Sets default values for this actor's properties
     FOpenStreetWay();
-    FOpenStreetWay(int64 Id);
     ~FOpenStreetWay();
     
     // Every Way has an id (not unique from every Node's id)
@@ -29,4 +28,18 @@ public:
     // The list of Nodes that are a part of this way
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
     TArray<FOpenStreetNode> Nodes;
+    
+    // Denotes if the Way is a highway (a road)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
+    bool bIsHighway;
+    
+    // If the Way is a highway, it may have a name.
+    // It not a highway, string will be empty
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
+    FString HighwayName;
+    
+    // If the Way is a highway, it may have a number of lanes.
+    // If not a highway, NumLanes will be -1
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
+    int32 NumLanes;
 };

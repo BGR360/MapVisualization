@@ -6,11 +6,7 @@
 
 
 // Sets default values
-FOpenStreetWay::FOpenStreetWay() : Id(0), Nodes()
-{
-}
-
-FOpenStreetWay::FOpenStreetWay(int64 Id) : Id(Id), Nodes()
+FOpenStreetWay::FOpenStreetWay() : Id(0), Nodes(), bIsHighway(false), HighwayName(TEXT("")), NumLanes(-1)
 {
 }
 

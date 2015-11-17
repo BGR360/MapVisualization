@@ -83,7 +83,7 @@ public:
     
     // Generates a network of pink debug lines that draws the Nodes and Ways
     UFUNCTION(BlueprintNativeEvent, Category = Drawing)
-    void DrawDebugMap() const;
+    void DrawMap() const;
     
     // Checks to see if there has been a change in values
     void CheckForChangedDrawValues();

@@ -51,7 +51,7 @@ void AOpenStreetMap::BeginPlay()
         Reader.ReadFromFile(FilePath);
         
         // Draw the map
-        DrawDebugMap();
+        DrawMap();
     }
     
     // Start the refresh timer that checks if something needs to be redrawn.
@@ -122,7 +122,7 @@ FOpenStreetWay* AOpenStreetMap::FindWayById(int64 Id)
 }
 
 // Generates a network of pink debug lines that draws the Nodes and Ways
-void AOpenStreetMap::DrawDebugMap_Implementation() const
+void AOpenStreetMap::DrawMap_Implementation() const
 {
     // First clear all lines
     UWorld* World = GetWorld();
@@ -179,7 +179,7 @@ void AOpenStreetMap::CheckForChangedDrawValues()
 {
     if (ValuesHaveChanged())
     {
-        DrawDebugMap();
+        DrawMap();
         
         // Reset the delay of the FTimer if need be
         if (PrevRefreshRate != RefreshRate)

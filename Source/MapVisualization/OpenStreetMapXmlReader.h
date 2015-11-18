@@ -53,6 +53,9 @@ private:
     bool bReadingWay;
     bool bReadingRelation;
     bool bReadingMember;
+    // Whether or not we have shrunk the Ids to int32's yet
+    bool bHasReducedNodeIds;
+    bool bHasReducedWayIds;
 
     // Keep track of the current object being created while reading an element
     // When the element ends, the object has all required fields filled in
@@ -73,4 +76,14 @@ private:
     // We must keep track of the original int64 Ids ourselves before passing them on to AOpenStreetMap
     TMap<int64, FOpenStreetNode> Nodes;
     TMap<int64, FOpenStreetWay> Ways;
+    
+    // The functions that reduce the Ids to int32's
+    void ReduceNodeIds();
+    void ReduceWayIds();
+    
+    // Once Ids have been reduced, adds the Nodes to the AOpenStreetMap
+    void AddNodesToMap();
+    
+    // Once Ids have been reduced, adds the Ways to the AOpenStreetMap
+    void AddWaysToMap();
 };

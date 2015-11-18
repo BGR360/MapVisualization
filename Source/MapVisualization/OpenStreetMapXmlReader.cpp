@@ -462,7 +462,7 @@ void OpenStreetMapXmlReader::AddNodesToMap()
 }
 
 // Once Ids have been reduced, adds the Nodes to the AOpenStreetMap
-void OpenStreetMapXmlReader::AddNodesToMap()
+void OpenStreetMapXmlReader::AddWaysToMap()
 {
     for (auto& KeyPair : Ways)
     {

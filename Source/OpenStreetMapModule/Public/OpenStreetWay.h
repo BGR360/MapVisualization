@@ -22,24 +22,26 @@ public:
     ~FOpenStreetWay();
     
     // Every Way has an id (not unique from every Node's id)
-    UPROPERTY(VisibleAnywhere, Category = Map)
-    int64 Id;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Way")
+    int32 Id;
     
     // The list of Nodes that are a part of this way
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
+    // TODO Refactor to a list of int32 Node Ids
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Way")
     TArray<FOpenStreetNode> Nodes;
     
     // Denotes if the Way is a highway (a road)
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Way")
     bool bIsHighway;
     
     // If the Way is a highway, it may have a name.
     // It not a highway, string will be empty
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Way")
     FString HighwayName;
     
     // If the Way is a highway, it may have a number of lanes.
     // If not a highway, NumLanes will be -1
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map)
+    // TODO Refactor to RoadPriority
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Way")
     int32 NumLanes;
 };

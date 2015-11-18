@@ -20,7 +20,9 @@ bReadingRelation(false),
 bReadingMember(false),
 CurrentNode(),
 CurrentWay(),
-CurrentTag()
+CurrentTag(),
+MinNodeId(-1),
+MinWayId(-1)
 {
 }
 
@@ -122,6 +124,7 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
 
         // Construct a new FOpenStreetNode
         CurrentNode = FOpenStreetNode();
+        CurrentNodeId = -1;
     }
     
     // <way>
@@ -149,6 +152,7 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
         
         // Construct a new FOpenStreetWay
         CurrentWay = FOpenStreetWay();
+        CurrentWayId = -1;
     }
     
     // <relation> element

@@ -61,4 +61,16 @@ private:
     FOpenStreetWay CurrentWay;
     FOpenStreetTag CurrentTag;
     FLatLngBounds CurrentBounds;
+    
+    // The Ids for Nodes and ways can get really big, so lets minimize them
+    // As much as possible. Blueprints can only handle int32's.
+    // To do so, we'll keep track of the minimum.
+    int64 MinNodeId;
+    int64 MinWayId;
+    int64 CurrentNodeId;
+    int64 CurrentWayId;
+    
+    // We must keep track of the original int64 Ids ourselves before passing them on to AOpenStreetMap
+    TMap<int64, FOpenStreetNode> Nodes;
+    TMap<int64, FOpenStreetWay> Ways;
 };

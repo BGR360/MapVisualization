@@ -16,9 +16,9 @@ struct OPENSTREETMAPMODULE_API FLatLng
     FLatLng(float Latitude, float Longitude);
     ~FLatLng();
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|LatLng")
     float Latitude;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|LatLng")
     float Longitude;
 };

@@ -17,15 +17,15 @@ struct OPENSTREETMAPMODULE_API FOpenStreetNode : public FOpenStreetElement
 
 public:
     FOpenStreetNode();
-    FOpenStreetNode(int64 Id);
-    FOpenStreetNode(int64 Id, FLatLng Location);
+    FOpenStreetNode(int32 Id);
+    FOpenStreetNode(int32 Id, FLatLng Location);
     ~FOpenStreetNode();
     
     // Every Node has an id
-    UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
-    int64 Id;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Node")
+    int32 Id;
 
     // A Node has a Latitude-Longitude location
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Node")
     FLatLng Location;
 };

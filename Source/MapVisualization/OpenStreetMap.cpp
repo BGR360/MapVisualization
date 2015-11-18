@@ -73,7 +73,7 @@ FOpenStreetNode* AOpenStreetMap::AddNode(FOpenStreetNode Node)
     return &(Nodes.Add(Node.Id, Node));
 }
 
-FOpenStreetNode* AOpenStreetMap::EmplaceNode(int64 Id, FLatLng Location)
+FOpenStreetNode* AOpenStreetMap::EmplaceNode(int32 Id, FLatLng Location)
 {
     return &(Nodes.Add(Id, FOpenStreetNode(Id, Location)));
 }
@@ -86,7 +86,7 @@ FOpenStreetWay* AOpenStreetMap::AddWay(FOpenStreetWay Way)
     return &(Ways.Add(Way.Id, Way));
 }
 
-FOpenStreetWay* AOpenStreetMap::EmplaceWay(int64 Id)
+FOpenStreetWay* AOpenStreetMap::EmplaceWay(int32 Id)
 {
     FOpenStreetWay* NewWay = &(Ways.Add(Id, FOpenStreetWay()));
     NewWay->Id = Id;
@@ -95,19 +95,19 @@ FOpenStreetWay* AOpenStreetMap::EmplaceWay(int64 Id)
 
 // Get Nodes/Ways
 
-TMap<int64, FOpenStreetNode>* AOpenStreetMap::GetNodes()
+TMap<int32, FOpenStreetNode>* AOpenStreetMap::GetNodes()
 {
     return &Nodes;
 }
 
-TMap<int64, FOpenStreetWay>* AOpenStreetMap::GetWays()
+TMap<int32, FOpenStreetWay>* AOpenStreetMap::GetWays()
 {
     return &Ways;
 }
 
 // Find Nodes
 // Returns nullptr if no Node with given Id exists in the Map
-FOpenStreetNode* AOpenStreetMap::FindNodeById(int64 Id)
+FOpenStreetNode* AOpenStreetMap::FindNodeById(int32 Id)
 {
     FOpenStreetNode* Node = Nodes.Find(Id);
     return Node;
@@ -115,7 +115,7 @@ FOpenStreetNode* AOpenStreetMap::FindNodeById(int64 Id)
 
 // Find Ways
 // Returns nullptr if no Node with given Id exists in the Map
-FOpenStreetWay* AOpenStreetMap::FindWayById(int64 Id)
+FOpenStreetWay* AOpenStreetMap::FindWayById(int32 Id)
 {
     FOpenStreetWay* Way = Ways.Find(Id);
     return Way;

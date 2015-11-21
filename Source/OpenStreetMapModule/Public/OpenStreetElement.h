@@ -24,5 +24,6 @@ public:
     ~FOpenStreetElement();
     
     // The list of Tags that describe this Element
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Element")
     TArray<FOpenStreetTag> Tags;
 };

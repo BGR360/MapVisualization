@@ -58,26 +58,28 @@ public:
     // Add Node
     // Returns a pointer to the new Node in the list
     FOpenStreetNode* AddNode(FOpenStreetNode Node);
-    FOpenStreetNode* EmplaceNode(int64 Id = 0, FLatLng Location = FLatLng());
+    FOpenStreetNode* EmplaceNode(int32 Id = 0, FLatLng Location = FLatLng());
     
     // Add Way
     // Returns a pointer to the new Way in the list
     FOpenStreetWay* AddWay(FOpenStreetWay Way);
-    FOpenStreetWay* EmplaceWay(int64 Id);
+    FOpenStreetWay* EmplaceWay(int32 Id);
     
     // Get Nodes/Ways
-    TMap<int64, FOpenStreetNode>* GetNodes();
-    TMap<int64, FOpenStreetWay>* GetWays();
+    // TODO UFUNCTION
+    TMap<int32, FOpenStreetNode>* GetNodes();
+    TMap<int32, FOpenStreetWay>* GetWays();
     
     // Find Nodes
     // Returns nullptr if no Node with given Id exists in the Map
-    FOpenStreetNode* FindNodeById(int64 Id);
+    // TODO UFUNCTION
+    FOpenStreetNode* FindNodeById(int32 Id);
     
     // TODO Find Nodes near LatLng/Vector with given radius
     
     // Find Ways
     // Returns nullptr if no Node with given Id exists in the Map
-    FOpenStreetWay* FindWayById(int64 Id);
+    FOpenStreetWay* FindWayById(int32 Id);
     
     // TODO Find Ways near LatLng/Vector with given radius
     
@@ -95,11 +97,11 @@ private:
     
     // A list of all the Nodes on the map, ordered by Id
     UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
-    TMap<int64, FOpenStreetNode> Nodes;
+    TMap<int32, FOpenStreetNode> Nodes;
     
     // A list of all the Ways on the map, ordered by Id
     UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
-    TMap<int64, FOpenStreetWay> Ways;
+    TMap<int32, FOpenStreetWay> Ways;
     
     // TODO Have a Quadtree of Nodes
     

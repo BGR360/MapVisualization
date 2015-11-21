@@ -18,9 +18,9 @@ struct OPENSTREETMAPMODULE_API FLatLngBounds
     FLatLngBounds(FLatLng LowerLeft, FLatLng UpperRight);
     ~FLatLngBounds();
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|LatLng")
     FLatLng LowerLeft;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|LatLng")
     FLatLng UpperRight;
 };

@@ -18,9 +18,9 @@ struct OPENSTREETMAPMODULE_API FOpenStreetTag
     FOpenStreetTag(const FString& Key, const FString& Value);
     ~FOpenStreetTag();
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Map)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map|Tag")
     FString Key;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Map)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map|Tag")
     FString Value;
 };

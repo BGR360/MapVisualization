@@ -469,7 +469,7 @@ void OpenStreetMapXmlReader::AddWaysToMap()
         FOpenStreetWay& Way = KeyPair.Value;
         
         // Add the Way to the Map
-        MapActor->AddWay(CurrentWay);
+        MapActor->AddWay(Way);
     }
     
     // Flush our list of Nodes

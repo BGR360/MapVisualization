@@ -13,3 +13,9 @@ FOpenStreetWay::FOpenStreetWay() : Id(0), Nodes(), bIsHighway(false), HighwayNam
 FOpenStreetWay::~FOpenStreetWay()
 {
 }
+
+// Compares a Node to an int32 Id Key
+bool FOpenStreetWay::operator==(int32 const& other)
+{
+    return Id == other;
+}

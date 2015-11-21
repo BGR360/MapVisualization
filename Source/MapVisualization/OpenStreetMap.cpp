@@ -70,12 +70,14 @@ UMapProjectionComponent* AOpenStreetMap::GetProjection()
 
 FOpenStreetNode* AOpenStreetMap::AddNode(FOpenStreetNode Node)
 {
-    return &(Nodes.Add(Node.Id, Node));
+    int32 Index = Nodes.Add(Node);
+    return &Nodes[Index];
 }
 
 FOpenStreetNode* AOpenStreetMap::EmplaceNode(int32 Id, FLatLng Location)
 {
-    return &(Nodes.Add(Id, FOpenStreetNode(Id, Location)));
+    int32 Index = Nodes.Emplace(Id, Location);
+    return &Nodes[Index];
 }
 
 // Add Way
@@ -83,24 +85,26 @@ FOpenStreetNode* AOpenStreetMap::EmplaceNode(int32 Id, FLatLng Location)
 
 FOpenStreetWay* AOpenStreetMap::AddWay(FOpenStreetWay Way)
 {
-    return &(Ways.Add(Way.Id, Way));
+    int32 Index = Ways.Add(Way);
+    return &Ways[Index];
 }
 
 FOpenStreetWay* AOpenStreetMap::EmplaceWay(int32 Id)
 {
-    FOpenStreetWay* NewWay = &(Ways.Add(Id, FOpenStreetWay()));
-    NewWay->Id = Id;
-    return NewWay;
+    int32 Index = Ways.Emplace();
+    FOpenStreetWay* Way = &Ways[Index];
+    Way->Id = Id;
+    return Way;
 }
 
 // Get Nodes/Ways
 
-TMap<int32, FOpenStreetNode>* AOpenStreetMap::GetNodes()
+TArray<FOpenStreetNode>* AOpenStreetMap::GetNodes()
 {
     return &Nodes;
 }
 
-TMap<int32, FOpenStreetWay>* AOpenStreetMap::GetWays()
+TArray<FOpenStreetWay>* AOpenStreetMap::GetWays()
 {
     return &Ways;
 }
@@ -109,16 +113,14 @@ TMap<int32, FOpenStreetWay>* AOpenStreetMap::GetWays()
 // Returns nullptr if no Node with given Id exists in the Map
 FOpenStreetNode* AOpenStreetMap::FindNodeById(int32 Id)
 {
-    FOpenStreetNode* Node = Nodes.Find(Id);
-    return Node;
+    return Nodes.FindByKey(Id);
 }
 
 // Find Ways
 // Returns nullptr if no Node with given Id exists in the Map
 FOpenStreetWay* AOpenStreetMap::FindWayById(int32 Id)
 {
-    FOpenStreetWay* Way = Ways.Find(Id);
-    return Way;
+    return Ways.FindByKey(Id);
 }
 
 // Generates a network of pink debug lines that draws the Nodes and Ways
@@ -132,28 +134,26 @@ void AOpenStreetMap::DrawMap_Implementation() const
     }
     
     // Draw lines connecting its nodes
-    for (auto& Element : Ways)
+    for (auto& Way : Ways)
     {
-        FOpenStreetWay CurrentWay = Element.Value;
-        
         FColor Color = DefaultWayColor;
         float Width = RoadWidth;
         
-        if (CurrentWay.bIsHighway)
+        if (Way.bIsHighway)
         {
             Color = RoadColor;
             Width = RoadWidth * 2;
             
-            if (CurrentWay.NumLanes > 0)
+            if (Way.NumLanes > 0)
             {
-                Width *= CurrentWay.NumLanes;
+                Width *= Way.NumLanes;
             }
         }
         
-        for (int32 j = 1; j < CurrentWay.Nodes.Num(); ++j)
+        for (int32 j = 1; j < Way.Nodes.Num(); ++j)
         {
-            FLatLng StartLatLng = CurrentWay.Nodes[j].Location;
-            FLatLng EndLatLng = CurrentWay.Nodes[j - 1].Location;
+            FLatLng StartLatLng = Way.Nodes[j].Location;
+            FLatLng EndLatLng = Way.Nodes[j - 1].Location;
             
             FVector Start = Projection->EarthToWorld(StartLatLng);
             FVector End = Projection->EarthToWorld(EndLatLng);

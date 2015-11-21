@@ -67,8 +67,8 @@ public:
     
     // Get Nodes/Ways
     // TODO UFUNCTION
-    TMap<int32, FOpenStreetNode>* GetNodes();
-    TMap<int32, FOpenStreetWay>* GetWays();
+    TArray<FOpenStreetNode>* GetNodes();
+    TArray<FOpenStreetWay>* GetWays();
     
     // Find Nodes
     // Returns nullptr if no Node with given Id exists in the Map
@@ -96,12 +96,12 @@ private:
     UMapProjectionComponent* Projection;
     
     // A list of all the Nodes on the map, ordered by Id
-    UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
-    TMap<int32, FOpenStreetNode> Nodes;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+    TArray<FOpenStreetNode> Nodes;
     
     // A list of all the Ways on the map, ordered by Id
-    UPROPERTY(VisibleAnywhere, Category = Map, meta = (AllowPrivateAccess = "true"))
-    TMap<int32, FOpenStreetWay> Ways;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+    TArray<FOpenStreetWay> Ways;
     
     // TODO Have a Quadtree of Nodes
     

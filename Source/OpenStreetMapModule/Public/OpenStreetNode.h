@@ -28,4 +28,7 @@ public:
     // A Node has a Latitude-Longitude location
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Node")
     FLatLng Location;
+    
+    // Compares a Node to an int32 Id Key
+    bool operator==(int32 const& other);
 };

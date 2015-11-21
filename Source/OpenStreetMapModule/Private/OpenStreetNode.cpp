@@ -19,3 +19,9 @@ FOpenStreetNode::FOpenStreetNode(int32 Id, FLatLng Location) : Id(Id), Location(
 FOpenStreetNode::~FOpenStreetNode()
 {
 }
+
+// Compares a Node to an int32 Id Key
+bool FOpenStreetNode::operator==(int32 const& other)
+{
+    return Id == other;
+}

@@ -44,4 +44,7 @@ public:
     // TODO Refactor to RoadPriority
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Way")
     int32 NumLanes;
+
+    // Compares a Way to an int32 Id Key
+    bool operator==(int32 const& other);
 };

@@ -10,17 +10,9 @@
 #include "OpenStreetMap.generated.h"
 
 class UMapProjectionComponent;
-struct FOpenStreetNode;
-struct FOpenStreetWay;
 
 /**
- * Place an OpenStreetMap Actor into the world to visualize a .osm XML file.
- * Call LoadFromXml() to initialize the map from a file. This will read the file
- * and generate all of the necessary OpenStreetNodes and OpenStreetWays.
- *
- * AOpenStreetMap stores a list of FOpenStreetNode and FOpenStreetWay. It also
- * stores the Nodes in a QuadTree so that it is efficient to search for Nodes
- * within a given area of space.
+ * A Visualization of an OpenStreetMapFile Asset.
  */
 UCLASS()
 class MAPVISUALIZATION_API AOpenStreetMap : public AActor
@@ -58,19 +50,6 @@ public:
     // Generates a network of pink debug lines that draws the Nodes and Ways
     UFUNCTION(BlueprintNativeEvent, Category = Drawing)
     void DrawMap() const;
-
-    // Find Nodes
-    // Returns nullptr if no Node with given Id exists in the Map
-    // TODO Add HasNodeWithId() function (same for Ways)
-    const FOpenStreetNode* FindNodeById(int32 Id) const;
-
-    // TODO Find Nodes near LatLng/Vector with given radius
-
-    // Find Ways
-    // Returns nullptr if no Node with given Id exists in the Map
-    const FOpenStreetWay* FindWayById(int32 Id) const;
-
-    // TODO Find Ways near LatLng/Vector with given radius
     
     // Checks to see if there has been a change in values
     // TODO Remove when we move DrawMap to the construction script

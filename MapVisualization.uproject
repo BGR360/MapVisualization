@@ -14,16 +14,18 @@
 		},
 		{
 			"Name": "GeographicLibModule",
-            		"Type": "Runtime",
-            		"LoadingPhase":  "PostEngineInit"	
+			"Type": "Runtime",
+			"LoadingPhase": "PostEngineInit"
 		},
 		{
 			"Name": "OpenStreetMapModule",
-            		"Type": "Runtime",
-            		"LoadingPhase":  "PostEngineInit",
-                    "AdditionalDependencies": [
-                        "Engine"
-                    ]
+			"Type": "Runtime",
+			"LoadingPhase": "PostEngineInit",
+			"AdditionalDependencies": [
+				"Engine",
+				"CoreUObject",
+				"UnrealEd"
+			]
 		}
 	]
 }

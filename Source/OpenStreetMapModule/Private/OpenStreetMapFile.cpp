@@ -3,6 +3,17 @@
 #include "OpenStreetMapModule.h"
 #include "OpenStreetMapFile.h"
 
+// Sets the default values
+UOpenStreetMapFile()
+{
+    NextNodeId = 0;
+    NextWayId = 0;
+}
+
+~UOpenStreetMapFile()
+{
+}
+
 // Get Nodes/Ways
 
 TArray<FOpenStreetNode>* UOpenStreetMapFile::GetNodes()

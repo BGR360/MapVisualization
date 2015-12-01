@@ -4,6 +4,7 @@
 #include "OpenStreetMap.h"
 #include "OpenStreetMapXmlReader.h"
 #include "MapProjectionComponent.h"
+#include "OpenStreetMapModule/Public/OpenStreetMapComponent.h"
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
 
@@ -14,15 +15,14 @@ AOpenStreetMap::AOpenStreetMap()
     PrimaryActorTick.bCanEverTick = false;
 
     Projection = CreateDefaultSubobject<UMapProjectionComponent>(TEXT("MapProjection"));
+    Map = CreateDefaultSubobject<UOpenStreetMapComponent>(TEXT("Map"));
+
     RoadWidth = PrevRoadWidth = 1.0f;
     RoadColor = PrevRoadColor = FColor(255, 0, 255);
     RefreshRate = PrevRefreshRate = 2.0f;
     
     PrevDefaultHeight = Projection->DefaultHeight;
     PrevScaleFactor = Projection->ScaleFactor;
-
-    NextNodeId = 0;
-    NextWayId = 0;
 }
 
 // Called when the game starts or when spawned
@@ -79,7 +79,7 @@ void AOpenStreetMap::DrawMap_Implementation() const
     }
     
     // Draw lines connecting its nodes
-    for (auto& Way : Ways)
+    for (auto& Way : Map->MapFile->Ways)
     {
         FColor Color = DefaultWayColor;
         float Width = RoadWidth;

@@ -4,12 +4,11 @@
 
 #include "GameFramework/Actor.h"
 #include "Runtime/Core/Public/Containers/Map.h"
-#include "OpenStreetMapModule/Public/OpenStreetNode.h"
-#include "OpenStreetMapModule/Public/OpenStreetWay.h"
 
 #include "OpenStreetMap.generated.h"
 
 class UMapProjectionComponent;
+class UOpenStreetMapComponent;
 
 /**
  * A Visualization of an OpenStreetMapFile Asset.
@@ -59,6 +58,10 @@ private:
     // The MapProjection used to convert Nodes' LatLng positions to 3D World coordinates
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     UMapProjectionComponent* Projection;
+
+    // The .osm xml file Asset
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
+    UOpenStreetMapComponent* Map;
 
     // TODO Have a Quadtree of Nodes
     

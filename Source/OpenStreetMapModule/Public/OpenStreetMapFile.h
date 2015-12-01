@@ -20,6 +20,10 @@ class OPENSTREETMAPMODULE_API UOpenStreetMapFile : public UObject
 	GENERATED_BODY()
 	
 public:
+    // Sets the default values
+    UOpenStreetMapFile();
+    virtual ~UOpenStreetMapFile();
+
     // Get Nodes/Ways
     TArray<FOpenStreetNode>* GetNodes();
     TArray<FOpenStreetWay>* GetWays();

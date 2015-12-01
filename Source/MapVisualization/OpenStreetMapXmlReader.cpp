@@ -20,11 +20,7 @@ bReadingRelation(false),
 bReadingMember(false),
 CurrentNode(),
 CurrentWay(),
-CurrentTag(),
-MinNodeId(-1),
-MinWayId(-1),
-bHasReducedNodeIds(false),
-bHasReducedWayIds(false)
+CurrentTag()
 {
 }
 
@@ -152,14 +148,6 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     {
         bReadingWay = true;
         
-        // If this is the first Way, then all the Nodes have been read.
-        // We must now reduce the Node Ids to int32's and add the Nodes to the Map
-        if (!bHasReducedNodeIds)
-        {
-            ReduceNodeIds();
-            AddNodesToMap();
-        }
-        
         // Construct a new FOpenStreetWay
         CurrentWay = FOpenStreetWay();
         CurrentWayId = -1;
@@ -169,14 +157,6 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
     else if (ElementNameString == TEXT("relation"))
     {
         bReadingRelation = true;
-        
-        // If this is the first Relation, then all the Ways have been read.
-        // We must now reduce the Way Ids to int32's and add the Ways to the Map
-        if (!bHasReducedWayIds)
-        {
-            ReduceWayIds();
-            AddWaysToMap();
-        }
     }
     
     // <relation>
@@ -244,9 +224,9 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
                 {
                     // Add node to CurrentWay
                     // Node Ids should have been reduced by this point
-                    int64 BigId = FCString::Atoi64(AttributeValue);
-                    int32 SmallId = BigId - MinNodeId;
-                    FOpenStreetNode* Node = MapActor->FindNodeById(SmallId);
+                    int64 BigNodeId = FCString::Atoi64(AttributeValue);
+                    int32 SmallNodeId = MapActor->ToSmallerNodeId(BigNodeId);
+                    const FOpenStreetNode* Node = MapActor->FindNodeById(SmallNodeId);
                     if (Node)
                     {
                         CurrentWay.Nodes.Add(*Node);
@@ -262,12 +242,6 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
                     // Remember the Id of the Way so we can assign it later
                     int64 Id = FCString::Atoi64(AttributeValue);
                     CurrentNodeId = Id;
-                    
-                    // Compare to the current minimum Node Id
-                    if (MinNodeId == -1 || CurrentNodeId < MinNodeId)
-                    {
-                        MinNodeId = CurrentNodeId;
-                    }
                 }
                 else if (AttributeNameString == TEXT("lat"))
                 {
@@ -309,12 +283,6 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
                 // Remember the Id of the Way so we can assign it later
                 int64 Id = FCString::Atoi64(AttributeValue);
                 CurrentWayId = Id;
-                
-                // Compare to the current minimum Node Id
-                if (MinWayId == -1 || CurrentWayId < MinWayId)
-                {
-                    MinWayId = CurrentWayId;
-                }
             }
         }
     }
@@ -340,8 +308,11 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
     {
         bReadingNode = false;
         
-        // Store the Node to our int64 Node-map until Ids are reduced
-        Nodes.Add(CurrentNodeId, CurrentNode);
+        // Add the Node to the map if its within the LatLngBounds
+        if (MapActor->GetProjection()->IsInBounds(CurrentNode.Location))
+        {
+            MapActor->AddNode(CurrentNodeId, CurrentNode);
+        }
     }
     else if (ElementNameString == TEXT("nd"))
     {
@@ -396,7 +367,7 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
         }
         
         // Store the Way in our int64 map until Ids have been reduced
-        Ways.Add(CurrentWayId, CurrentWay);
+        MapActor->AddWay(CurrentWayId, CurrentWay);
     }
     else if (ElementNameString == TEXT("relation"))
     {
@@ -418,62 +389,6 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
 bool OpenStreetMapXmlReader::ProcessComment(const TCHAR* Comment)
 {
     return true;
-}
-
-// The functions that reduce the Ids to int32's
-void OpenStreetMapXmlReader::ReduceNodeIds()
-{
-    for (auto& KeyPair : Nodes)
-    {
-        // Node.Id = BigId - MinNodeId
-        KeyPair.Value.Id = KeyPair.Key - MinNodeId;
-    }
-    
-    bHasReducedNodeIds = true;
-}
-
-void OpenStreetMapXmlReader::ReduceWayIds()
-{
-    for (auto& KeyPair : Ways)
-    {
-        // Way.Id = BigId - MinWayId
-        KeyPair.Value.Id = KeyPair.Key - MinWayId;
-    }
-    
-    bHasReducedWayIds = true;
-}
-
-// Once Ids have been reduced, adds the Nodes to the AOpenStreetMap
-void OpenStreetMapXmlReader::AddNodesToMap()
-{
-    for (auto& KeyPair : Nodes)
-    {
-        FOpenStreetNode& Node = KeyPair.Value;
-        
-        // Add the Node to the map if its within the LatLngBounds
-        if (MapActor->GetProjection()->IsInBounds(Node.Location))
-        {
-            MapActor->AddNode(Node);
-        }
-    }
-    
-    // Flush our list of Nodes
-    Nodes.Empty();
-}
-
-// Once Ids have been reduced, adds the Nodes to the AOpenStreetMap
-void OpenStreetMapXmlReader::AddWaysToMap()
-{
-    for (auto& KeyPair : Ways)
-    {
-        FOpenStreetWay& Way = KeyPair.Value;
-        
-        // Add the Way to the Map
-        MapActor->AddWay(Way);
-    }
-    
-    // Flush our list of Nodes
-    Ways.Empty();
 }
 
 #undef LOCTEXT_NAMESPACE

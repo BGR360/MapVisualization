@@ -20,6 +20,9 @@ AOpenStreetMap::AOpenStreetMap()
     
     PrevDefaultHeight = Projection->DefaultHeight;
     PrevScaleFactor = Projection->ScaleFactor;
+
+    NextNodeId = 0;
+    NextWayId = 0;
 }
 
 // Called when the game starts or when spawned
@@ -68,33 +71,27 @@ UMapProjectionComponent* AOpenStreetMap::GetProjection()
 // Add Node
 // Returns a pointer to the new Node in the list
 
-FOpenStreetNode* AOpenStreetMap::AddNode(FOpenStreetNode Node)
+FOpenStreetNode* AOpenStreetMap::AddNode(int64 LargeId, FOpenStreetNode Node)
 {
-    int32 Index = Nodes.Add(Node);
-    return &Nodes[Index];
-}
+    Node.Id = NextNodeId;
+    LargeToSmallNodeIds.Add(LargeId, NextNodeId);
+    NextNodeId++;
 
-FOpenStreetNode* AOpenStreetMap::EmplaceNode(int32 Id, FLatLng Location)
-{
-    int32 Index = Nodes.Emplace(Id, Location);
+    int32 Index = Nodes.Add(Node);
     return &Nodes[Index];
 }
 
 // Add Way
 // Returns a pointer to the new Way in the list
 
-FOpenStreetWay* AOpenStreetMap::AddWay(FOpenStreetWay Way)
+FOpenStreetWay* AOpenStreetMap::AddWay(int64 LargeId, FOpenStreetWay Way)
 {
+    Way.Id = NextWayId;
+    LargeToSmallWayIds.Add(LargeId, NextWayId);
+    NextWayId++;
+
     int32 Index = Ways.Add(Way);
     return &Ways[Index];
-}
-
-FOpenStreetWay* AOpenStreetMap::EmplaceWay(int32 Id)
-{
-    int32 Index = Ways.Emplace();
-    FOpenStreetWay* Way = &Ways[Index];
-    Way->Id = Id;
-    return Way;
 }
 
 // Get Nodes/Ways
@@ -109,18 +106,89 @@ TArray<FOpenStreetWay>* AOpenStreetMap::GetWays()
     return &Ways;
 }
 
+// Returns the smaller int32 Id equivalent to the given int64 Id from the .osm file
+int32 AOpenStreetMap::ToSmallerNodeId(int64 LargeNodeId) const
+{
+    const int32* SmallNodeId = LargeToSmallNodeIds.Find(LargeNodeId);
+    if (SmallNodeId)
+    {
+        return *SmallNodeId;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+int32 AOpenStreetMap::ToSmallerWayId(int64 LargeWayId) const
+{
+    const int32* SmallWayId = LargeToSmallWayIds.Find(LargeWayId);
+    if (SmallWayId)
+    {
+        return *SmallWayId;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
 // Find Nodes
 // Returns nullptr if no Node with given Id exists in the Map
-FOpenStreetNode* AOpenStreetMap::FindNodeById(int32 Id)
+const FOpenStreetNode* AOpenStreetMap::FindNodeById(int32 Id) const
 {
-    return Nodes.FindByKey(Id);
+    // Since we are numbering the Ids like 0, 1, 2, etc...
+    // The Nodes array should already be sorted. So we can do a binary search
+    int32 Begin = 0;
+    int32 End = Nodes.Num() - 1;
+    while (End - Begin > 0)
+    {
+        int32 Guess = Begin + (End - Begin) / 2;
+        int32 GuessId = Nodes[Guess].Id;
+        if (Id < GuessId)
+        {
+            End = Guess;
+        }
+        else if (Id > GuessId)
+        {
+            Begin = Guess + 1;
+        }
+        else
+        {
+            return &Nodes[Guess];
+        }
+    }
+
+    return nullptr;
 }
 
 // Find Ways
 // Returns nullptr if no Node with given Id exists in the Map
-FOpenStreetWay* AOpenStreetMap::FindWayById(int32 Id)
+const FOpenStreetWay* AOpenStreetMap::FindWayById(int32 Id) const
 {
-    return Ways.FindByKey(Id);
+    // Since we are numbering the Ids like 0, 1, 2, etc...
+    // The Ways array should already be sorted. So we can do a binary search
+    int32 Begin = 0;
+    int32 End = Ways.Num() - 1;
+    while (End - Begin > 0)
+    {
+        int32 Guess = Begin + (End - Begin) / 2;
+        int32 GuessId = Ways[Guess].Id;
+        if (Id < GuessId)
+        {
+            End = Guess;
+        }
+        else if (Id > GuessId)
+        {
+            Begin = Guess;
+        }
+        else
+        {
+            return &Ways[Guess];
+        }
+    }
+
+    return nullptr;
 }
 
 // Generates a network of pink debug lines that draws the Nodes and Ways

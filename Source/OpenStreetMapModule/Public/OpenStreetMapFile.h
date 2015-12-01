@@ -40,6 +40,19 @@ public:
     int32 ToSmallerNodeId(int64 LargeNodeId) const;
     int32 ToSmallerWayId(int64 LargeWayId) const;
 
+    // Find Nodes
+    // Returns nullptr if no Node with given Id exists in the Map
+    // TODO Add HasNodeWithId() function (same for Ways)
+    const FOpenStreetNode* FindNodeById(int32 Id) const;
+
+    // TODO Find Nodes near LatLng/Vector with given radius
+
+    // Find Ways
+    // Returns nullptr if no Node with given Id exists in the Map
+    const FOpenStreetWay* FindWayById(int32 Id) const;
+
+    // TODO Find Ways near LatLng/Vector with given radius
+
 private:
     // A list of all the Nodes on the map, ordered by Id
     UPROPERTY()

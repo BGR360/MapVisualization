@@ -51,7 +51,7 @@ FOpenStreetWay* UOpenStreetMapFile::AddWay(int64 LargeId, FOpenStreetWay Way)
 }
 
 // Returns the smaller int32 Id equivalent to the given int64 Id from the .osm file
-int32 AOpenStreetMap::ToSmallerNodeId(int64 LargeNodeId) const
+int32 UOpenStreetMapFile::ToSmallerNodeId(int64 LargeNodeId) const
 {
     const int32* SmallNodeId = LargeToSmallNodeIds.Find(LargeNodeId);
     if (SmallNodeId)
@@ -65,7 +65,7 @@ int32 AOpenStreetMap::ToSmallerNodeId(int64 LargeNodeId) const
 }
 
 // Returns the smaller int32 Id equivalent to the given int64 Id from the .osm file
-int32 AOpenStreetMap::ToSmallerWayId(int64 LargeWayId) const
+int32 UOpenStreetMapFile::ToSmallerWayId(int64 LargeWayId) const
 {
     const int32* SmallWayId = LargeToSmallWayIds.Find(LargeWayId);
     if (SmallWayId)
@@ -76,4 +76,62 @@ int32 AOpenStreetMap::ToSmallerWayId(int64 LargeWayId) const
     {
         return -1;
     }
+}
+
+// Find Nodes
+// Returns nullptr if no Node with given Id exists in the Map
+const FOpenStreetNode* UOpenStreetMapFile::FindNodeById(int32 Id) const
+{
+    // Since we are numbering the Ids like 0, 1, 2, etc...
+    // The Nodes array should already be sorted. So we can do a binary search
+    int32 Begin = 0;
+    int32 End = Nodes.Num() - 1;
+    while (End - Begin > 0)
+    {
+        int32 Guess = Begin + (End - Begin) / 2;
+        int32 GuessId = Nodes[Guess].Id;
+        if (Id < GuessId)
+        {
+            End = Guess;
+        }
+        else if (Id > GuessId)
+        {
+            Begin = Guess + 1;
+        }
+        else
+        {
+            return &Nodes[Guess];
+        }
+    }
+
+    return nullptr;
+}
+
+// Find Ways
+// Returns nullptr if no Node with given Id exists in the Map
+const FOpenStreetWay* UOpenStreetMapFile::FindWayById(int32 Id) const
+{
+    // Since we are numbering the Ids like 0, 1, 2, etc...
+    // The Ways array should already be sorted. So we can do a binary search
+    int32 Begin = 0;
+    int32 End = Ways.Num() - 1;
+    while (End - Begin > 0)
+    {
+        int32 Guess = Begin + (End - Begin) / 2;
+        int32 GuessId = Ways[Guess].Id;
+        if (Id < GuessId)
+        {
+            End = Guess;
+        }
+        else if (Id > GuessId)
+        {
+            Begin = Guess;
+        }
+        else
+        {
+            return &Ways[Guess];
+        }
+    }
+
+    return nullptr;
 }

@@ -100,8 +100,9 @@ bool OpenStreetMapXmlReader::ProcessElement(const TCHAR* ElementName, const TCHA
 
     // Convert TCHAR* to FString
     FString ElementNameString(ElementName);
-    UE_LOG(Xml, Log, TEXT("Line %d: Begin element <%s>"),
-        XmlFileLineNumber, ElementName);
+
+    /* UE_LOG(Xml, Log, TEXT("Line %d: Begin element <%s>"),
+        XmlFileLineNumber, ElementName); */
 
     
     // Check which element is beginning
@@ -293,7 +294,8 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
 bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
 {
     FString ElementNameString(Element);
-    UE_LOG(Xml, Log, TEXT("End element <%s>"), Element);
+
+    // UE_LOG(Xml, Log, TEXT("End element <%s>"), Element);
 
     // Check which element is ending
     

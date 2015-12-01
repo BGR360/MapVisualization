@@ -1,16 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "MapVisualization.h"
+#include "OpenStreetMapModule.h"
 #include "OpenStreetMapXmlReader.h"
 #include "MapProjectionComponent.h"
-#include "OpenStreetMap.h"
-#include "OpenStreetWay.h"
+#include "OpenStreetMapFile.h"
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
 #define LOCTEXT_NAMESPACE "Xml"
 
 OpenStreetMapXmlReader::OpenStreetMapXmlReader() :
-MapActor(nullptr),
+MapAsset(nullptr),
 bReadingBounds(false),
 bReadingTag(false),
 bReadingFile(false),
@@ -30,24 +29,24 @@ OpenStreetMapXmlReader::~OpenStreetMapXmlReader()
 
 // Get/Set Map
 
-void OpenStreetMapXmlReader::SetMapActor(class AOpenStreetMap* Map)
+void OpenStreetMapXmlReader::SetMapAsset(class AOpenStreetMap* Map)
 {
-    MapActor = Map;
+    MapAsset = Map;
 }
 
-const AOpenStreetMap* OpenStreetMapXmlReader::GetMapActor() const
+const AOpenStreetMap* OpenStreetMapXmlReader::GetMapAsset() const
 {
-    return MapActor;
+    return MapAsset;
 }
 
 // Read from file
-// Do nothing if MapActor is null
+// Do nothing if MapAsset is null
 void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
 {
     bReadingFile = true;
 
-    // Check to make sure MapActor is not null
-    if (MapActor)
+    // Check to make sure MapAsset is not null
+    if (MapAsset)
     {
         // Pass the file to FFastXml
         FText OutErrorMessage;
@@ -226,8 +225,8 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
                     // Add node to CurrentWay
                     // Node Ids should have been reduced by this point
                     int64 BigNodeId = FCString::Atoi64(AttributeValue);
-                    int32 SmallNodeId = MapActor->ToSmallerNodeId(BigNodeId);
-                    const FOpenStreetNode* Node = MapActor->FindNodeById(SmallNodeId);
+                    int32 SmallNodeId = MapAsset->Map->MapFile->ToSmallerNodeId(BigNodeId);
+                    const FOpenStreetNode* Node = MapAsset->Map->FindNodeById(SmallNodeId);
                     if (Node)
                     {
                         CurrentWay.Nodes.Add(*Node);
@@ -304,16 +303,16 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
         bReadingBounds = false;
         
         // Set the bounds on the OpenStreetMap
-        MapActor->GetProjection()->SetBounds(CurrentBounds);
+        MapAsset->GetProjection()->SetBounds(CurrentBounds);
     }
     else if (ElementNameString == TEXT("node"))
     {
         bReadingNode = false;
         
         // Add the Node to the map if its within the LatLngBounds
-        if (MapActor->GetProjection()->IsInBounds(CurrentNode.Location))
+        if (MapAsset->GetProjection()->IsInBounds(CurrentNode.Location))
         {
-            MapActor->AddNode(CurrentNodeId, CurrentNode);
+            MapAsset->AddNode(CurrentNodeId, CurrentNode);
         }
     }
     else if (ElementNameString == TEXT("nd"))
@@ -369,7 +368,7 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
         }
         
         // Store the Way in our int64 map until Ids have been reduced
-        MapActor->AddWay(CurrentWayId, CurrentWay);
+        MapAsset->AddWay(CurrentWayId, CurrentWay);
     }
     else if (ElementNameString == TEXT("relation"))
     {

@@ -4,10 +4,10 @@
 
 #include "Runtime/XmlParser/Public/FastXml.h"
 #include "Runtime/Core/Public/Containers/Map.h"
-#include "OpenStreetMapModule/Public/LatLngBounds.h"
-#include "OpenStreetMapModule/Public/OpenStreetNode.h"
-#include "OpenStreetMapModule/Public/OpenStreetWay.h"
-#include "OpenStreetMapModule/Public/OpenStreetTag.h"
+#include "LatLngBounds.h"
+#include "OpenStreetNode.h"
+#include "OpenStreetWay.h"
+#include "OpenStreetTag.h"
 
 /**
  * Reads an OSM XML file and populates an AOpenStreetMap actor with the proper
@@ -20,8 +20,8 @@ public:
     ~OpenStreetMapXmlReader();
 
     // Get/Set Map
-    void SetMapActor(class AOpenStreetMap* Map);
-    const AOpenStreetMap* GetMapActor() const;
+    void SetMapAsset(class UOpenStreetMapFile* Map);
+    const UOpenStreetMapFile* GetMapAsset() const;
 
     // Read from file
     // Does nothing if MapActor is null
@@ -43,7 +43,7 @@ public:
 
 private:
     // The OpenStreetMap that this reader is going to populate
-    AOpenStreetMap* MapActor;
+    UOpenStreetMapFile* MapAsset;
 
     // Variables relating to the current state of the reader
     bool bReadingFile;

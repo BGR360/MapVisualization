@@ -62,6 +62,30 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
     }
 }
 
+// Read from text
+void OpenStreetMapXmlReader::ReadFromText(const FString& Text)
+{
+    bReadingFile = true;
+
+    // Check to make sure MapAsset is not null
+    if (MapAsset)
+    {
+        // Pass the file to FFastXml
+        FText OutErrorMessage;
+        int32 OutErrorLineNumber;
+        FFeedbackContext* FeedbackContext = FDesktopPlatformModule::Get()->GetNativeFeedbackContext();
+        TCHAR* XmlFileContents = const_cast<TCHAR*>(*Text);
+        FFastXml::ParseXmlFile(this, nullptr, XmlFileContents, FeedbackContext, true, true, OutErrorMessage, OutErrorLineNumber);
+
+        // Check for errors opening the file
+        if (!OutErrorMessage.IsEmpty())
+        {
+            FText DialogTitle = LOCTEXT("ErrorDialogTitle", "Error");
+            FMessageDialog::Open(EAppMsgType::Ok, OutErrorMessage, &DialogTitle);
+        }
+    }
+}
+
 // Checks if in the process of reading
 bool OpenStreetMapXmlReader::IsReading() const
 {

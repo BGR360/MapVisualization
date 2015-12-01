@@ -2,11 +2,21 @@
 
 #include "OpenStreetMapModule.h"
 #include "OpenStreetMapFactory.h"
+#include "OpenStreetMapFile.h"
+#include "Runtime/Core/Public/Misc/Paths.h"
+#include "Editor/UnrealEd/Public/Editor.h"
+#include "OpenStreetMapXmlReader.h"
+
+#define LOCTEXT_NAMESPACE "OpenStreetMapFactory"
 
 UOpenStreetMapFactory::UOpenStreetMapFactory()
 {
     // We don't anybody to create an empty OSM Asset. That's just weird
-    bCreateNew = false;
+    bCreateNew = true;
+    bText = true;
+    SupportedClass = UOpenStreetMapFile::StaticClass();
+
+    Formats.Add(TEXT("osm;OSM xml file"));
 }
 
 UOpenStreetMapFactory::~UOpenStreetMapFactory()
@@ -28,25 +38,59 @@ UObject* UOpenStreetMapFactory::FactoryCreateText(
     const TCHAR* BufferEnd,
     FFeedbackContext* Warn)
 {
+    FEditorDelegates::OnAssetPreImport.Broadcast(this, InClass, InParent, InName, Type);
+
+    UObject* NewAsset = nullptr;
+
+    // Attempt to load the xml file
+    OpenStreetMapXmlReader Reader;
+    UOpenStreetMapFile* MapAsset = NewObject<UOpenStreetMapFile>(InParent, InName, Flags);
+    if (MapAsset)
+    {
+        Reader.SetMapAsset(MapAsset);
+
+        // Convert buffer to an FString
+        FString String;
+        //const int32 BufferSize = BufferEnd - Buffer;
+        //appBufferToString( String, Buffer, BufferSize );
+        int32 NumChars = (BufferEnd - Buffer);
+        TArray<TCHAR>& StringChars = String.GetCharArray();
+        StringChars.AddUninitialized(NumChars + 1);
+        FMemory::Memcpy(StringChars.GetData(), Buffer, NumChars*sizeof(TCHAR));
+        StringChars.Last() = 0;
+
+        Reader.ReadFromText(String);
+        NewAsset = MapAsset;
+    }
+
+    FEditorDelegates::OnAssetPostImport.Broadcast(this, NewAsset);
+    
+    return NewAsset;
+}
+
+UObject* UOpenStreetMapFactory::FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn)
+{
     return nullptr;
 }
 
 /** Returns whether or not the given class is supported by this factory. */
 bool UOpenStreetMapFactory::DoesSupportClass(UClass* Class)
 {
-    return false;
+    return Class == UOpenStreetMapFile::StaticClass();
 }
 
 /** Returns true if this factory can deal with the file sent in. */
 bool UOpenStreetMapFactory::FactoryCanImport(const FString& Filename)
 {
-    return false;
+    return FPaths::GetExtension(Filename, true) == TEXT(".osm");
 }
 
 /** Returns the name of the factory for menus */
 FText UOpenStreetMapFactory::GetDisplayName() const
 {
-    return FText();
+    return LOCTEXT("OpenStreetMapFactoryDescription", "OSM xml file");
 }
 
 // End UFactory Interface
+
+#undef LOCTEXT_NAMESPACE

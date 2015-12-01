@@ -27,6 +27,9 @@ public:
     // Does nothing if MapActor is null
     void ReadFromFile(const FString& FilePath);
 
+    // Read from text
+    void ReadFromText(const FString& Text);
+
     // Checks if in the process of reading
     bool IsReading() const;
 

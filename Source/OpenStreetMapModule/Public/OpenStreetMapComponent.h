@@ -21,6 +21,6 @@ public:
 	virtual void BeginPlay() override;
 
     // The .osm file Asset
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Map)
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Map)
     class UOpenStreetMapFile* MapFile;
 };

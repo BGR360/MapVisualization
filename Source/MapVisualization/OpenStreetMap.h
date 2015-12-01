@@ -37,6 +37,9 @@ public:
     // Called whenever the Construction Script is called (UPROPERTY changes, etc.)
     virtual void OnConstruction(const FTransform& Transform) override;
 
+    // Called when the Actor is destroyed
+    virtual void Destroyed() override;
+
     // Get MapProjection
     UFUNCTION(BlueprintPure, Category = Map)
     UMapProjectionComponent* GetProjection();

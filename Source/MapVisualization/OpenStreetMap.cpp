@@ -34,6 +34,19 @@ void AOpenStreetMap::OnConstruction(const FTransform& Transform)
     }
 }
 
+// Called when the Actor is destroyed
+void AOpenStreetMap::Destroyed()
+{
+    Super::Destroyed();
+
+    // Clear all lines
+    UWorld* World = GetWorld();
+    if (World)
+    {
+        FlushPersistentDebugLines(World);
+    }
+}
+
 // Get MapProjection
 UMapProjectionComponent* AOpenStreetMap::GetProjection()
 {

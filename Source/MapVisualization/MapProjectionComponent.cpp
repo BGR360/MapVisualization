@@ -90,6 +90,9 @@ FLatLng UMapProjectionComponent::WorldToEarth(FVector WorldPos) const
     
     // Adjust by the ScaleFactor
     WorldPos /= ScaleFactor;
+
+    // Apparently, if you don't do this, East is left and West is right
+    WorldPos.X *= -1.0f;
     
     // This will yield the proper x value, but the y value may be hundreds of kilometers north of the equator
     FLatLng EarthPos = GeoLibWrapper.TransverseMercatorProject(WorldPos, CenterLatLng);
@@ -113,6 +116,9 @@ FVector UMapProjectionComponent::EarthToWorld(FLatLng EarthPos) const
     
     // Adjust by the ScaleFactor
     WorldPos *= ScaleFactor;
+
+    // Apparently, if you don't do this, East is left and West is right
+    WorldPos.X *= -1.0f;
     
     // Increase the height by the default offset
     WorldPos.Z += DefaultHeight;

@@ -33,8 +33,6 @@ public:
         const TCHAR* BufferEnd,
         FFeedbackContext* Warn) override;
 
-    //virtual UObject* FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn) override;
-
     /** Returns whether or not the given class is supported by this factory. */
     virtual bool DoesSupportClass(UClass* Class) override;
 

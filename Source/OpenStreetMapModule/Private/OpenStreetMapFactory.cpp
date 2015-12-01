@@ -12,8 +12,9 @@
 UOpenStreetMapFactory::UOpenStreetMapFactory()
 {
     // We don't anybody to create an empty OSM Asset. That's just weird
-    bCreateNew = true;
+    bCreateNew = false;
     bText = true;
+    bEditorImport = true;
     SupportedClass = UOpenStreetMapFile::StaticClass();
 
     Formats.Add(TEXT("osm;OSM xml file"));
@@ -68,10 +69,10 @@ UObject* UOpenStreetMapFactory::FactoryCreateText(
     return NewAsset;
 }
 
-UObject* UOpenStreetMapFactory::FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn)
-{
-    return nullptr;
-}
+//UObject* UOpenStreetMapFactory::FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn)
+//{
+//    return nullptr;
+//}
 
 /** Returns whether or not the given class is supported by this factory. */
 bool UOpenStreetMapFactory::DoesSupportClass(UClass* Class)

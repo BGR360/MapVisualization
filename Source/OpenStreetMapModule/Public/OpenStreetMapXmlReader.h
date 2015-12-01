@@ -13,7 +13,7 @@
  * Reads an OSM XML file and populates an AOpenStreetMap actor with the proper
  * Nodes and Ways.
  */
-class MAPVISUALIZATION_API OpenStreetMapXmlReader : public IFastXmlCallback
+class OPENSTREETMAPMODULE_API OpenStreetMapXmlReader : public IFastXmlCallback
 {
 public:
     OpenStreetMapXmlReader();

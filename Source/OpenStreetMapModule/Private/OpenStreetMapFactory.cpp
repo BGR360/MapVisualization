@@ -26,25 +26,25 @@ UObject* UOpenStreetMapFactory::FactoryCreateText(
     const TCHAR* Type,
     const TCHAR*& Buffer,
     const TCHAR* BufferEnd,
-    FFeedbackContext* Warn) override
+    FFeedbackContext* Warn)
 {
     return nullptr;
 }
 
 /** Returns whether or not the given class is supported by this factory. */
-bool UOpenStreetMapFactory::DoesSupportClass(UClass* Class) override
+bool UOpenStreetMapFactory::DoesSupportClass(UClass* Class)
 {
     return false;
 }
 
 /** Returns true if this factory can deal with the file sent in. */
-bool UOpenStreetMapFactory::FactoryCanImport(const FString& Filename) override
+bool UOpenStreetMapFactory::FactoryCanImport(const FString& Filename)
 {
     return false;
 }
 
 /** Returns the name of the factory for menus */
-FText UOpenStreetMapFactory::GetDisplayName() const override
+FText UOpenStreetMapFactory::GetDisplayName() const
 {
     return FText();
 }

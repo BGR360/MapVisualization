@@ -5,6 +5,9 @@
 #include "OpenStreetMapXmlReader.h"
 #include "MapProjectionComponent.h"
 #include "OpenStreetMapModule/Public/OpenStreetMapComponent.h"
+#include "OpenStreetMapModule/Public/OpenStreetMapFile.h"
+#include "OpenStreetMapModule/Public/OpenStreetNode.h"
+#include "OpenStreetMapModule/Public/OpenStreetWay.h"
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
 
@@ -79,7 +82,7 @@ void AOpenStreetMap::DrawMap_Implementation() const
     }
     
     // Draw lines connecting its nodes
-    for (auto& Way : Map->MapFile->Ways)
+    for (auto& Way : Map->MapFile->GetWays())
     {
         FColor Color = DefaultWayColor;
         float Width = RoadWidth;

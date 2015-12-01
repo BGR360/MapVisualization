@@ -4,13 +4,13 @@
 #include "OpenStreetMapFile.h"
 
 // Sets the default values
-UOpenStreetMapFile()
+UOpenStreetMapFile::UOpenStreetMapFile()
 {
     NextNodeId = 0;
     NextWayId = 0;
 }
 
-~UOpenStreetMapFile()
+UOpenStreetMapFile::~UOpenStreetMapFile()
 {
 }
 

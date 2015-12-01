@@ -2,7 +2,6 @@
 
 #include "OpenStreetMapModule.h"
 #include "OpenStreetMapXmlReader.h"
-#include "MapProjectionComponent.h"
 #include "OpenStreetMapFile.h"
 #include "Developer/DesktopPlatform/Public/DesktopPlatformModule.h"
 
@@ -29,12 +28,12 @@ OpenStreetMapXmlReader::~OpenStreetMapXmlReader()
 
 // Get/Set Map
 
-void OpenStreetMapXmlReader::SetMapAsset(class AOpenStreetMap* Map)
+void OpenStreetMapXmlReader::SetMapAsset(UOpenStreetMapFile* Map)
 {
     MapAsset = Map;
 }
 
-const AOpenStreetMap* OpenStreetMapXmlReader::GetMapAsset() const
+const UOpenStreetMapFile* OpenStreetMapXmlReader::GetMapAsset() const
 {
     return MapAsset;
 }
@@ -303,7 +302,7 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
         bReadingBounds = false;
         
         // Set the bounds on the OpenStreetMap
-        MapAsset->GetProjection()->SetBounds(CurrentBounds);
+        MapAsset->SetBounds(CurrentBounds);
     }
     else if (ElementNameString == TEXT("node"))
     {

@@ -25,10 +25,10 @@ public:
 
     // Read from file
     // Does nothing if MapActor is null
-    void ReadFromFile(const FString& FilePath);
+    void ReadFromFile(const FString& FilePath, FFeedbackContext* FeedbackContext = nullptr);
 
     // Read from text
-    void ReadFromText(const FString& Text);
+    void ReadFromText(TCHAR* Text, FFeedbackContext* FeedbackContext = nullptr);
 
     // Checks if in the process of reading
     bool IsReading() const;

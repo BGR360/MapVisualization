@@ -33,21 +33,16 @@ public:
     // The color of the road lines
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
     FColor RoadColor;
-    
-    // How often the Map should check for a change in Drawing values and redraw if necessary
-    // The value given is in seconds
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Drawing)
-    float RefreshRate;
 
-    // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
+    // Called whenever the Construction Script is called (UPROPERTY changes, etc.)
+    virtual void OnConstruction(const FTransform& Transform) override;
 
     // Get MapProjection
     UFUNCTION(BlueprintPure, Category = Map)
     UMapProjectionComponent* GetProjection();
     
     // Generates a network of pink debug lines that draws the Nodes and Ways
-    UFUNCTION(BlueprintNativeEvent, Category = Drawing)
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Drawing)
     void DrawMap() const;
     
     // Checks to see if there has been a change in values
@@ -64,14 +59,4 @@ private:
     UOpenStreetMapComponent* Map;
 
     // TODO Have a Quadtree of Nodes
-    
-    // Keep track of the previous values of Drawing parameters so we can see if they've changed
-    float PrevRoadWidth;
-    FColor PrevRoadColor;
-    float PrevRefreshRate;
-    float PrevDefaultHeight;
-    float PrevScaleFactor;
-    
-    // Checks if values have changed since last refresh check
-    bool ValuesHaveChanged() const;
 };

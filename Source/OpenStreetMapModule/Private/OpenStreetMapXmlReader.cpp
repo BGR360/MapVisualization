@@ -40,7 +40,7 @@ const UOpenStreetMapFile* OpenStreetMapXmlReader::GetMapAsset() const
 
 // Read from file
 // Do nothing if MapAsset is null
-void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
+void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath, FFeedbackContext* FeedbackContext)
 {
     bReadingFile = true;
 
@@ -50,7 +50,11 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
         // Pass the file to FFastXml
         FText OutErrorMessage;
         int32 OutErrorLineNumber;
-        FFeedbackContext* FeedbackContext = FDesktopPlatformModule::Get()->GetNativeFeedbackContext();
+        if (!FeedbackContext)
+        {
+            FeedbackContext = GWarn;
+        }
+
         FFastXml::ParseXmlFile(this, *FilePath, nullptr, FeedbackContext, true, true, OutErrorMessage, OutErrorLineNumber);
 
         // Check for errors opening the file
@@ -63,7 +67,7 @@ void OpenStreetMapXmlReader::ReadFromFile(const FString& FilePath)
 }
 
 // Read from text
-void OpenStreetMapXmlReader::ReadFromText(const FString& Text)
+void OpenStreetMapXmlReader::ReadFromText(TCHAR* Text, FFeedbackContext* FeedbackContext)
 {
     bReadingFile = true;
 
@@ -73,9 +77,13 @@ void OpenStreetMapXmlReader::ReadFromText(const FString& Text)
         // Pass the file to FFastXml
         FText OutErrorMessage;
         int32 OutErrorLineNumber;
-        FFeedbackContext* FeedbackContext = FDesktopPlatformModule::Get()->GetNativeFeedbackContext();
-        TCHAR* XmlFileContents = const_cast<TCHAR*>(*Text);
-        FFastXml::ParseXmlFile(this, nullptr, XmlFileContents, FeedbackContext, true, true, OutErrorMessage, OutErrorLineNumber);
+
+        if (!FeedbackContext)
+        {
+            FeedbackContext = GWarn;
+        }
+
+        FFastXml::ParseXmlFile(this, nullptr, Text, FeedbackContext, true, true, OutErrorMessage, OutErrorLineNumber);
 
         // Check for errors opening the file
         if (!OutErrorMessage.IsEmpty())

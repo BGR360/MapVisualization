@@ -20,53 +20,18 @@ AOpenStreetMap::AOpenStreetMap()
     Projection = CreateDefaultSubobject<UMapProjectionComponent>(TEXT("MapProjection"));
     Map = CreateDefaultSubobject<UOpenStreetMapComponent>(TEXT("Map"));
 
-    RoadWidth = PrevRoadWidth = 1.0f;
-    RoadColor = PrevRoadColor = FColor(255, 0, 255);
-    RefreshRate = PrevRefreshRate = 2.0f;
-    
-    PrevDefaultHeight = Projection->DefaultHeight;
-    PrevScaleFactor = Projection->ScaleFactor;
+    RoadWidth = 1.0f;
+    RoadColor = FColor(255, 0, 255);
+}
 
+// Called whenever the Construction Script is called (UPROPERTY changes, etc.)
+void AOpenStreetMap::OnConstruction(const FTransform& Transform)
+{
     if (Map && Map->MapFile)
     {
         Projection->SetBounds(Map->MapFile->GetBounds());
+        DrawMap();
     }
-}
-
-// Called when the game starts or when spawned
-void AOpenStreetMap::BeginPlay()
-{
-    Super::BeginPlay();
-
-    //// Read the XML file.
-    //OpenStreetMapXmlReader Reader;
-
-    //// Prompt user for a file location using a native "Open File" dialog
-    //TArray<FString> OutFilenames;
-    //int32 OutFilterIndex;
-    //void* WindowHandle = GEngine->GameViewport->GetWindow()->GetNativeWindow()->GetOSWindowHandle();
-    //FDesktopPlatformModule::Get()->OpenFileDialog(
-    //    WindowHandle,
-    //    TEXT("Choose an OSM XML File"),
-    //    FPaths::GameDir(),
-    //    TEXT(""),
-    //    TEXT("XML Files|*.xml;*.osm"),
-    //    EFileDialogFlags::None,
-    //    OutFilenames,
-    //    OutFilterIndex);
-
-    //if (OutFilenames.Num() > 0)
-    //{
-    //    FString& FilePath = OutFilenames[0];
-    //    Reader.ReadFromFile(FilePath);
-    //    
-    //    // Draw the map
-    //    DrawMap();
-    //}
-    //
-    //// Start the refresh timer that checks if something needs to be redrawn.
-    //FTimerHandle TimerHandle;
-    //GetWorldTimerManager().SetTimer(TimerHandle, this, &AOpenStreetMap::CheckForChangedDrawValues, RefreshRate, true);
 }
 
 // Get MapProjection
@@ -124,37 +89,4 @@ void AOpenStreetMap::DrawMap_Implementation() const
             }
         }
     }
-}
-
-// Checks to see if there has been a change in values
-void AOpenStreetMap::CheckForChangedDrawValues()
-{
-    if (ValuesHaveChanged())
-    {
-        DrawMap();
-        
-        // Reset the delay of the FTimer if need be
-        if (PrevRefreshRate != RefreshRate)
-        {
-            FTimerHandle TimerHandle;
-            GetWorldTimerManager().SetTimer(TimerHandle, this, &AOpenStreetMap::CheckForChangedDrawValues, RefreshRate, true);
-        }
-    }
-    
-    // Reset all the "previous" values
-    PrevRoadWidth = RoadWidth;
-    PrevRoadColor = RoadColor;
-    PrevRefreshRate = RefreshRate;
-    PrevDefaultHeight = Projection->DefaultHeight;
-    PrevScaleFactor = Projection->ScaleFactor;
-}
-
-// Checks if values have changed since last refresh check
-bool AOpenStreetMap::ValuesHaveChanged() const
-{
-    return (PrevRoadWidth != RoadWidth) ||
-    (PrevRoadColor != RoadColor) ||
-    (PrevRefreshRate != RefreshRate) ||
-    (PrevDefaultHeight != Projection->DefaultHeight) ||
-    (PrevScaleFactor != Projection->ScaleFactor);
 }

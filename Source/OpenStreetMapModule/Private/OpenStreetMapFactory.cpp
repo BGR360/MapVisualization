@@ -52,17 +52,8 @@ UObject* UOpenStreetMapFactory::FactoryCreateText(
     {
         Reader.SetMapAsset(MapAsset);
 
-        // Convert buffer to an FString
-        FString String;
-        //const int32 BufferSize = BufferEnd - Buffer;
-        //appBufferToString( String, Buffer, BufferSize );
-        int32 NumChars = (BufferEnd - Buffer);
-        TArray<TCHAR>& StringChars = String.GetCharArray();
-        StringChars.AddUninitialized(NumChars + 1);
-        FMemory::Memcpy(StringChars.GetData(), Buffer, NumChars*sizeof(TCHAR));
-        StringChars.Last() = 0;
-
-        Reader.ReadFromText(String);
+        TCHAR* Text = const_cast<TCHAR*>(Buffer);
+        Reader.ReadFromText(Text, Warn);
         NewAsset = MapAsset;
     }
 

@@ -5,6 +5,8 @@
 #include "Object.h"
 #include "OpenStreetNode.h"
 #include "OpenStreetWay.h"
+#include "LatLng.h"
+#include "LatLngBounds.h"
 #include "OpenStreetMapFile.generated.h"
 
 /**
@@ -23,6 +25,10 @@ public:
     // Sets the default values
     UOpenStreetMapFile();
     virtual ~UOpenStreetMapFile();
+
+    // Get/Set Bounds
+    FLatLngBounds GetBounds() const;
+    void SetBounds(FLatLngBounds Bounds);
 
     // Get Nodes/Ways
     TArray<FOpenStreetNode>* GetNodes();
@@ -53,7 +59,17 @@ public:
 
     // TODO Find Ways near LatLng/Vector with given radius
 
+    // Get center of Bounds
+    FLatLng GetBoundsCenter() const;
+
+    // Check if a LatLng point is inside the Map's bounds
+    bool IsInBounds(FLatLng Point) const;
+
 private:
+    // The bounding box of the map onto/from which we shall project
+    UPROPERTY()
+    FLatLngBounds Bounds;
+
     // A list of all the Nodes on the map, ordered by Id
     UPROPERTY()
     TArray<FOpenStreetNode> Nodes;

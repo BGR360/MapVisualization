@@ -309,7 +309,7 @@ bool OpenStreetMapXmlReader::ProcessClose(const TCHAR* Element)
         bReadingNode = false;
         
         // Add the Node to the map if its within the LatLngBounds
-        if (MapAsset->GetProjection()->IsInBounds(CurrentNode.Location))
+        if (MapAsset->IsInBounds(CurrentNode.Location))
         {
             MapAsset->AddNode(CurrentNodeId, CurrentNode);
         }

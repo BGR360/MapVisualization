@@ -14,6 +14,18 @@ UOpenStreetMapFile::~UOpenStreetMapFile()
 {
 }
 
+// Get/Set Bounds
+
+FLatLngBounds UOpenStreetMapFile::GetBounds() const
+{
+    return Bounds;
+}
+
+void UOpenStreetMapFile::SetBounds(FLatLngBounds Bounds)
+{
+    this->Bounds = Bounds;
+}
+
 // Get Nodes/Ways
 
 TArray<FOpenStreetNode>* UOpenStreetMapFile::GetNodes()
@@ -134,4 +146,23 @@ const FOpenStreetWay* UOpenStreetMapFile::FindWayById(int32 Id) const
     }
 
     return nullptr;
+}
+
+// Get center of Bounds
+FLatLng UOpenStreetMapFile::GetBoundsCenter() const
+{
+    float LatDiff = Bounds.UpperRight.Latitude - Bounds.LowerLeft.Latitude;
+    float LonDiff = Bounds.UpperRight.Longitude - Bounds.LowerLeft.Longitude;
+    float CenterLat = Bounds.LowerLeft.Latitude + (LatDiff / 2.0);
+    float CenterLon = Bounds.LowerLeft.Longitude + (LonDiff / 2.0);
+    return FLatLng(CenterLat, CenterLon);
+}
+
+// Check if a LatLng point is inside the Map's bounds
+bool UOpenStreetMapFile::IsInBounds(FLatLng Point) const
+{
+    return (Point.Latitude > Bounds.LowerLeft.Latitude) &&
+        (Point.Latitude < Bounds.UpperRight.Latitude) &&
+        (Point.Longitude > Bounds.LowerLeft.Longitude) &&
+        (Point.Longitude < Bounds.UpperRight.Longitude);
 }

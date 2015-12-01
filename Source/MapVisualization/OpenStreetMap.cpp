@@ -26,6 +26,11 @@ AOpenStreetMap::AOpenStreetMap()
     
     PrevDefaultHeight = Projection->DefaultHeight;
     PrevScaleFactor = Projection->ScaleFactor;
+
+    if (Map && Map->MapFile)
+    {
+        Projection->SetBounds(Map->MapFile->GetBounds());
+    }
 }
 
 // Called when the game starts or when spawned
@@ -33,36 +38,35 @@ void AOpenStreetMap::BeginPlay()
 {
     Super::BeginPlay();
 
-    // Read the XML file.
-    OpenStreetMapXmlReader Reader;
-    Reader.SetMapActor(this);
+    //// Read the XML file.
+    //OpenStreetMapXmlReader Reader;
 
-    // Prompt user for a file location using a native "Open File" dialog
-    TArray<FString> OutFilenames;
-    int32 OutFilterIndex;
-    void* WindowHandle = GEngine->GameViewport->GetWindow()->GetNativeWindow()->GetOSWindowHandle();
-    FDesktopPlatformModule::Get()->OpenFileDialog(
-        WindowHandle,
-        TEXT("Choose an OSM XML File"),
-        FPaths::GameDir(),
-        TEXT(""),
-        TEXT("XML Files|*.xml;*.osm"),
-        EFileDialogFlags::None,
-        OutFilenames,
-        OutFilterIndex);
+    //// Prompt user for a file location using a native "Open File" dialog
+    //TArray<FString> OutFilenames;
+    //int32 OutFilterIndex;
+    //void* WindowHandle = GEngine->GameViewport->GetWindow()->GetNativeWindow()->GetOSWindowHandle();
+    //FDesktopPlatformModule::Get()->OpenFileDialog(
+    //    WindowHandle,
+    //    TEXT("Choose an OSM XML File"),
+    //    FPaths::GameDir(),
+    //    TEXT(""),
+    //    TEXT("XML Files|*.xml;*.osm"),
+    //    EFileDialogFlags::None,
+    //    OutFilenames,
+    //    OutFilterIndex);
 
-    if (OutFilenames.Num() > 0)
-    {
-        FString& FilePath = OutFilenames[0];
-        Reader.ReadFromFile(FilePath);
-        
-        // Draw the map
-        DrawMap();
-    }
-    
-    // Start the refresh timer that checks if something needs to be redrawn.
-    FTimerHandle TimerHandle;
-    GetWorldTimerManager().SetTimer(TimerHandle, this, &AOpenStreetMap::CheckForChangedDrawValues, RefreshRate, true);
+    //if (OutFilenames.Num() > 0)
+    //{
+    //    FString& FilePath = OutFilenames[0];
+    //    Reader.ReadFromFile(FilePath);
+    //    
+    //    // Draw the map
+    //    DrawMap();
+    //}
+    //
+    //// Start the refresh timer that checks if something needs to be redrawn.
+    //FTimerHandle TimerHandle;
+    //GetWorldTimerManager().SetTimer(TimerHandle, this, &AOpenStreetMap::CheckForChangedDrawValues, RefreshRate, true);
 }
 
 // Get MapProjection
@@ -82,7 +86,7 @@ void AOpenStreetMap::DrawMap_Implementation() const
     }
     
     // Draw lines connecting its nodes
-    for (auto& Way : Map->MapFile->GetWays())
+    for (auto& Way : *(Map->MapFile->GetWays()))
     {
         FColor Color = DefaultWayColor;
         float Width = RoadWidth;

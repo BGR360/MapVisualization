@@ -9,6 +9,7 @@
 
 class UMapProjectionComponent;
 class UOpenStreetMapComponent;
+class UOpenStreetMapFile;
 
 /**
  * A Visualization of an OpenStreetMapFile Asset.
@@ -43,6 +44,10 @@ public:
     // Get MapProjection
     UFUNCTION(BlueprintPure, Category = Map)
     UMapProjectionComponent* GetProjection();
+
+    // Get the Map Component
+    UFUNCTION(BlueprintPure, Category = Map)
+    UOpenStreetMapComponent* GetMap();
     
     // Generates a network of pink debug lines that draws the Nodes and Ways
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Drawing)
@@ -61,5 +66,12 @@ private:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     UOpenStreetMapComponent* Map;
 
+    // For the purposes of drawing/erasing the map at the proper times in the editor,
+    // We keep track of the last Map we had
+    UOpenStreetMapFile* LastMap;
+
     // TODO Have a Quadtree of Nodes
+
+    // Utility function for erasing all debug lines
+    void EraseDebugLines() const;
 };

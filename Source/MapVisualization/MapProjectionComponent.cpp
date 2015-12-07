@@ -13,8 +13,8 @@ UMapProjectionComponent::UMapProjectionComponent()
     PrimaryComponentTick.bCanEverTick = true;
 
     Bounds = FLatLngBounds();
-    DefaultHeight = 30.0f;
-    ScaleFactor = 1.0f;
+    DefaultHeight = 100.0f;
+    ScaleFactor = 100.0f;
 }
 
 UMapProjectionComponent::UMapProjectionComponent(FLatLngBounds Bounds) : UMapProjectionComponent()

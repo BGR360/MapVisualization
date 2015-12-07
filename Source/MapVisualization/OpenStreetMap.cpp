@@ -21,16 +21,26 @@ AOpenStreetMap::AOpenStreetMap()
     Map = CreateDefaultSubobject<UOpenStreetMapComponent>(TEXT("Map"));
 
     RoadWidth = 1.0f;
-    RoadColor = FColor(255, 0, 255);
+    DefaultWayColor = FColor(255, 0, 255);
+    RoadColor = FColor(128, 255, 32);
 }
 
 // Called whenever the Construction Script is called (UPROPERTY changes, etc.)
 void AOpenStreetMap::OnConstruction(const FTransform& Transform)
 {
-    if (Map && Map->MapFile)
+    if (Map)
     {
-        Projection->SetBounds(Map->MapFile->GetBounds());
-        DrawMap();
+        if (Map->MapFile)
+        {
+            Projection->SetBounds(Map->MapFile->GetBounds());
+            DrawMap();
+        }
+        else
+        {
+            // If we have deassigned the Map, erase all the debug lines and resize
+            EraseDebugLines();
+            this->GetTransform().SetScale3D(FVector(1.f, 1.f, 1.f));
+        }
     }
 }
 
@@ -40,11 +50,7 @@ void AOpenStreetMap::Destroyed()
     Super::Destroyed();
 
     // Clear all lines
-    UWorld* World = GetWorld();
-    if (World)
-    {
-        FlushPersistentDebugLines(World);
-    }
+    EraseDebugLines();
 }
 
 // Get MapProjection
@@ -53,15 +59,19 @@ UMapProjectionComponent* AOpenStreetMap::GetProjection()
     return Projection;
 }
 
+// Get MapComponent
+UOpenStreetMapComponent* AOpenStreetMap::GetMap()
+{
+    return Map;
+}
+
 // Generates a network of pink debug lines that draws the Nodes and Ways
 void AOpenStreetMap::DrawMap_Implementation() const
 {
-    // First clear all lines
     UWorld* World = GetWorld();
-    if (World)
-    {
-        FlushPersistentDebugLines(World);
-    }
+
+    // First clear all lines
+    EraseDebugLines();
     
     // Draw lines connecting its nodes
     for (auto& Way : *(Map->MapFile->GetWays()))
@@ -101,5 +111,14 @@ void AOpenStreetMap::DrawMap_Implementation() const
                               Width * Projection->ScaleFactor);
             }
         }
+    }
+}
+
+void AOpenStreetMap::EraseDebugLines() const
+{
+    UWorld* World = GetWorld();
+    if (World)
+    {
+        FlushPersistentDebugLines(World);
     }
 }

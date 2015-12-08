@@ -30,7 +30,10 @@
 		{
 			"Name": "RoadGraphModule",
 			"Type": "Runtime",
-			"LoadingPhase": "PostEngineInit"
+			"LoadingPhase": "PostEngineInit",
+			"AdditionalDependencies": [
+				"Engine"
+			]
 		}
 	]
 }

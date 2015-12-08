@@ -2,6 +2,7 @@
 
 #include "RoadGraphModule.h"
 #include "RoadGraphComponent.h"
+#include "RoadGraph.h"
 
 
 // Sets default values for this component's properties
@@ -13,5 +14,22 @@ URoadGraphComponent::URoadGraphComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
+}
+
+// Get/Set Osm Asset
+UOpenStreetMapFile* URoadGraphComponent::GetOsmAsset()
+{
+    return OsmAsset;
+}
+
+void URoadGraphComponent::SetOsmAsset(UOpenStreetMapFile* NewOsmAsset)
+{
+    OsmAsset = NewOsmAsset;
+}
+
+// Generates the RoadGraph if a valid Osm Asset is present
+void URoadGraphComponent::GenerateRoadGraph()
+{
+    // TODO Implement
 }
 

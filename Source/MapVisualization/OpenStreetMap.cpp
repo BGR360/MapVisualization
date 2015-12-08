@@ -37,9 +37,8 @@ void AOpenStreetMap::OnConstruction(const FTransform& Transform)
         }
         else
         {
-            // If we have deassigned the Map, erase all the debug lines and resize
+            // If we have deassigned the Map, erase all the debug lines
             EraseDebugLines();
-            this->GetTransform().SetScale3D(FVector(1.f, 1.f, 1.f));
         }
     }
 }

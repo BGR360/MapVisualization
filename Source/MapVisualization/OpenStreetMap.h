@@ -52,10 +52,6 @@ public:
     // Generates a network of pink debug lines that draws the Nodes and Ways
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Drawing)
     void DrawMap() const;
-    
-    // Checks to see if there has been a change in values
-    // TODO Remove when we move DrawMap to the construction script
-    void CheckForChangedDrawValues();
 
 private:
     // The MapProjection used to convert Nodes' LatLng positions to 3D World coordinates

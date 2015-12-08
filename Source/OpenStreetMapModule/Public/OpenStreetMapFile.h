@@ -67,15 +67,15 @@ public:
 
 private:
     // The bounding box of the map onto/from which we shall project
-    UPROPERTY()
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     FLatLngBounds Bounds;
 
     // A list of all the Nodes on the map, ordered by Id
-    UPROPERTY()
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     TArray<FOpenStreetNode> Nodes;
 
     // A list of all the Ways on the map, ordered by Id
-    UPROPERTY()
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     TArray<FOpenStreetWay> Ways;
 
     // The Ids of the Nodes/Ways in the .osm file require int64 storage due to their size, but Blueprints only support int32s

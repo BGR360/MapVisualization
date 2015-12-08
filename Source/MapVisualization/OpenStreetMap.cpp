@@ -91,23 +91,29 @@ void AOpenStreetMap::DrawMap_Implementation() const
         
         for (int32 j = 1; j < Way.Nodes.Num(); ++j)
         {
-            FLatLng StartLatLng = Way.Nodes[j].Location;
-            FLatLng EndLatLng = Way.Nodes[j - 1].Location;
-            
-            FVector Start = Projection->EarthToWorld(StartLatLng);
-            FVector End = Projection->EarthToWorld(EndLatLng);
-            
-            if (World)
+            const FOpenStreetNode* StartNode = Map->MapFile->FindNodeById(Way.Nodes[j - 1]);
+            const FOpenStreetNode* EndNode = Map->MapFile->FindNodeById(Way.Nodes[j]);
+
+            if (StartNode && EndNode)
             {
-                DrawDebugLine(
-                              World,
-                              Start,
-                              End,
-                              Color,
-                              true,
-                              -1.0f,
-                              255,
-                              Width * Projection->ScaleFactor);
+                FLatLng StartLatLng = StartNode->Location;
+                FLatLng EndLatLng = EndNode->Location;
+
+                FVector Start = Projection->EarthToWorld(StartLatLng);
+                FVector End = Projection->EarthToWorld(EndLatLng);
+
+                if (World)
+                {
+                    DrawDebugLine(
+                        World,
+                        Start,
+                        End,
+                        Color,
+                        true,
+                        -1.0f,
+                        255,
+                        Width * Projection->ScaleFactor);
+                }
             }
         }
     }

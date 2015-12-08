@@ -25,10 +25,9 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Way")
     int32 Id;
     
-    // The list of Nodes that are a part of this way
-    // TODO Refactor to a list of int32 Node Ids
+    // The list of Nodes that are a part of this way (referenced by id)
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Way")
-    TArray<FOpenStreetNode> Nodes;
+    TArray<int32> Nodes;
     
     // Denotes if the Way is a highway (a road)
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Way")

@@ -20,6 +20,9 @@ public:
     TArray<Intersection>* GetIntersections();
     TArray<RoadSegment>* GetRoadSegments();
 
+    void AddIntersection(const Intersection& NewIntersection);
+    void AddRoadSegment(const RoadSegment& NewRoadSegment);
+
 private:
     // All of the Intersections in the RoadGraph
     TArray<Intersection> Intersections;

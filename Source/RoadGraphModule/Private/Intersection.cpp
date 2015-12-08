@@ -3,7 +3,7 @@
 #include "RoadGraphModule.h"
 #include "Intersection.h"
 
-Intersection::Intersection()
+Intersection::Intersection() : OsmNode(nullptr)
 {
 }
 

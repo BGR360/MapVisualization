@@ -4,6 +4,7 @@
 
 #include "Runtime/Core/Public/Containers/Array.h"
 
+struct FOpenStreetNode;
 struct RoadSegment;
 
 /**
@@ -12,8 +13,11 @@ struct RoadSegment;
  */
 struct ROADGRAPHMODULE_API Intersection
 {
-	Intersection();
+    Intersection();
 	~Intersection();
+
+    // One Intersection should be located at a single OpenStreetNode
+    FOpenStreetNode* OsmNode;
 
     // The RoadSegments that enter the Intersection
     TArray<RoadSegment*> Incoming;

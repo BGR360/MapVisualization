@@ -20,3 +20,13 @@ TArray<RoadSegment>* RoadGraph::GetRoadSegments()
 {
     return &RoadSegments;
 }
+
+void RoadGraph::AddIntersection(const Intersection& NewIntersection)
+{
+    Intersections.Add(NewIntersection);
+}
+
+void RoadGraph::AddRoadSegment(const RoadSegment& NewRoadSegment)
+{
+    RoadSegments.Add(NewRoadSegment);
+}

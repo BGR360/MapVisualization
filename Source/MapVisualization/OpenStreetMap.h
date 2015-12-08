@@ -9,6 +9,7 @@
 
 class UMapProjectionComponent;
 class UOpenStreetMapComponent;
+class URoadGraphComponent;
 class UOpenStreetMapFile;
 
 /**
@@ -58,9 +59,13 @@ private:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     UMapProjectionComponent* Projection;
 
-    // The .osm xml file Asset
+    // The component that holds all of the OSM file's data
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Map, meta = (AllowPrivateAccess = "true"))
     UOpenStreetMapComponent* Map;
+
+    // The Road Graph that represents all the Intersections and RoadSegments on the Map
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = RoadGraph, meta = (AllowPrivateAccess = "true"))
+    URoadGraphComponent* RoadGraph;
 
     // For the purposes of drawing/erasing the map at the proper times in the editor,
     // We keep track of the last Map we had

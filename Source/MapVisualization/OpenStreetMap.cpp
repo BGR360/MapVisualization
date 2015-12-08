@@ -5,6 +5,7 @@
 #include "OpenStreetMapXmlReader.h"
 #include "MapProjectionComponent.h"
 #include "OpenStreetMapModule/Public/OpenStreetMapComponent.h"
+#include "RoadGraphModule/Public/RoadGraphComponent.h"
 #include "OpenStreetMapModule/Public/OpenStreetMapFile.h"
 #include "OpenStreetMapModule/Public/OpenStreetNode.h"
 #include "OpenStreetMapModule/Public/OpenStreetWay.h"
@@ -19,6 +20,7 @@ AOpenStreetMap::AOpenStreetMap()
 
     Projection = CreateDefaultSubobject<UMapProjectionComponent>(TEXT("MapProjection"));
     Map = CreateDefaultSubobject<UOpenStreetMapComponent>(TEXT("Map"));
+    RoadGraph = CreateDefaultSubobject<URoadGraphComponent>(TEXT("RoadGraph"));
 
     RoadWidth = 1.0f;
     DefaultWayColor = FColor(255, 0, 255);
@@ -32,8 +34,13 @@ void AOpenStreetMap::OnConstruction(const FTransform& Transform)
     {
         if (Map->MapFile)
         {
+            // First, draw the map
             Projection->SetBounds(Map->MapFile->GetBounds());
             DrawMap();
+
+            // Next, generate the RoadGraph
+            RoadGraph->SetOsmAsset(Map->MapFile);
+            RoadGraph->GenerateRoadGraph();
         }
         else
         {

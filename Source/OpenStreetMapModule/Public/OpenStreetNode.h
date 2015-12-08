@@ -28,6 +28,13 @@ public:
     // A Node has a Latitude-Longitude location
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Map|Node")
     FLatLng Location;
+
+    // We keep track of which Ways each Node is a part of.
+    // That way we can more easily detect where Intersections are.
+    TArray<int32> OwnerWays;
+
+    // True if the Node is located at the extremity of a Way
+    bool bIsEndOfWay;
     
     // Compares a Node to an int32 Id Key
     bool operator==(int32 const& other);

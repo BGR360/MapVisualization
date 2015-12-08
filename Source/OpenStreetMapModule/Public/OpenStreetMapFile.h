@@ -59,6 +59,10 @@ public:
 
     // TODO Find Ways near LatLng/Vector with given radius
 
+    // Finds where exactly the given Node is inside the given Way (its index in the Way)
+    // Returns INDEX_NONE if given Node is not in the given Way
+    int32 IndexOfNodeInWay(int32 NodeId, int32 WayId) const;
+
     // Get center of Bounds
     FLatLng GetBoundsCenter() const;
 

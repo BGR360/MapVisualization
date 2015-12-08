@@ -148,6 +148,14 @@ const FOpenStreetWay* UOpenStreetMapFile::FindWayById(int32 Id) const
     return nullptr;
 }
 
+// Finds where exactly the given Node is inside the given Way (its index in the Way)
+// Returns INDEX_NONE if given Node is not in the given Way
+int32 UOpenStreetMapFile::IndexOfNodeInWay(int32 NodeId, int32 WayId) const
+{
+    const FOpenStreetWay* Way = FindWayById(WayId);
+    return Way->Nodes.Find(NodeId);
+}
+
 // Get center of Bounds
 FLatLng UOpenStreetMapFile::GetBoundsCenter() const
 {

@@ -4,15 +4,15 @@
 #include "OpenStreetNode.h"
 
 // Sets default values
-FOpenStreetNode::FOpenStreetNode() : Id(0), Location()
+FOpenStreetNode::FOpenStreetNode() : Id(0), Location(), bIsEndOfWay(false)
 {
 }
 
-FOpenStreetNode::FOpenStreetNode(int32 Id) : Id(Id), Location()
+FOpenStreetNode::FOpenStreetNode(int32 Id) : Id(Id), Location(), bIsEndOfWay(false)
 {
 }
 
-FOpenStreetNode::FOpenStreetNode(int32 Id, FLatLng Location) : Id(Id), Location(Location)
+FOpenStreetNode::FOpenStreetNode(int32 Id, FLatLng Location) : Id(Id), Location(Location), bIsEndOfWay(false)
 {
 }
 

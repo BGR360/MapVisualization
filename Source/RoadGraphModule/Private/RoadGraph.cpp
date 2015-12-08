@@ -3,30 +3,30 @@
 #include "RoadGraphModule.h"
 #include "RoadGraph.h"
 
-RoadGraph::RoadGraph()
+URoadGraph::URoadGraph()
 {
 }
 
-RoadGraph::~RoadGraph()
+URoadGraph::~URoadGraph()
 {
 }
 
-TArray<Intersection>* RoadGraph::GetIntersections()
+TArray<FIntersection>* URoadGraph::GetIntersections()
 {
     return &Intersections;
 }
 
-TArray<RoadSegment>* RoadGraph::GetRoadSegments()
+TArray<FRoadSegment>* URoadGraph::GetRoadSegments()
 {
     return &RoadSegments;
 }
 
-void RoadGraph::AddIntersection(const Intersection& NewIntersection)
+void URoadGraph::AddIntersection(const FIntersection& NewIntersection)
 {
     Intersections.Add(NewIntersection);
 }
 
-void RoadGraph::AddRoadSegment(const RoadSegment& NewRoadSegment)
+void URoadGraph::AddRoadSegment(const FRoadSegment& NewRoadSegment)
 {
     RoadSegments.Add(NewRoadSegment);
 }

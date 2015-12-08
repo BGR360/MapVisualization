@@ -5,28 +5,34 @@
 #include "Intersection.h"
 #include "RoadSegment.h"
 #include "Runtime/Core/Public/Containers/Array.h"
+#include "RoadGraph.generated.h"
 
 /**
  * The RoadGraph stores a collection of Intersections and Roads.
  * As opposed to OpenStreetMap's Nodes and Ways, the RoadGraph is less
  * detailed and more suited for algorithms dealing with graphs.
  */
-class ROADGRAPHMODULE_API RoadGraph
+UCLASS()
+class ROADGRAPHMODULE_API URoadGraph : public UObject
 {
+    GENERATED_BODY()
+
 public:
-	RoadGraph();
-	~RoadGraph();
+    URoadGraph();
+    virtual ~URoadGraph();
 
-    TArray<Intersection>* GetIntersections();
-    TArray<RoadSegment>* GetRoadSegments();
+    TArray<FIntersection>* GetIntersections();
+    TArray<FRoadSegment>* GetRoadSegments();
 
-    void AddIntersection(const Intersection& NewIntersection);
-    void AddRoadSegment(const RoadSegment& NewRoadSegment);
+    void AddIntersection(const FIntersection& NewIntersection);
+    void AddRoadSegment(const FRoadSegment& NewRoadSegment);
 
 private:
     // All of the Intersections in the RoadGraph
-    TArray<Intersection> Intersections;
+    UPROPERTY()
+    TArray<FIntersection> Intersections;
 
     // All of the RoadSegments in the RoadGraph
-    TArray<RoadSegment> RoadSegments;
+    UPROPERTY()
+    TArray<FRoadSegment> RoadSegments;
 };

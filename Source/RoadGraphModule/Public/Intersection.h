@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Runtime/Core/Public/Containers/Array.h"
+#include "Intersection.generated.h"
 
 struct FOpenStreetNode;
 struct RoadSegment;
@@ -11,10 +12,13 @@ struct RoadSegment;
  * An Intersection is where multiple RoadSegments meet.
  * Intersections have incoming and outgoing RoadSegments.
  */
-struct ROADGRAPHMODULE_API Intersection
+USTRUCT()
+struct ROADGRAPHMODULE_API FIntersection
 {
-    Intersection();
-	~Intersection();
+    GENERATED_USTRUCT_BODY()
+
+    FIntersection();
+    ~FIntersection();
 
     // One Intersection should be located at a single OpenStreetNode
     FOpenStreetNode* OsmNode;

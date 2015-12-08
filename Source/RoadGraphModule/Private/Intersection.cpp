@@ -3,10 +3,10 @@
 #include "RoadGraphModule.h"
 #include "Intersection.h"
 
-Intersection::Intersection() : OsmNode(nullptr)
+FIntersection::FIntersection() : OsmNode(nullptr)
 {
 }
 
-Intersection::~Intersection()
+FIntersection::~FIntersection()
 {
 }

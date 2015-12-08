@@ -2,17 +2,22 @@
 
 #pragma once
 
-struct Intersection;
+#include "RoadSegment.generated.h"
+
+struct FIntersection;
 
 /**
  * A RoadSegment is a path between two intersections.
  * A RoadSegment is strictly one-way.
  */
-struct ROADGRAPHMODULE_API RoadSegment
+USTRUCT()
+struct ROADGRAPHMODULE_API FRoadSegment
 {
-	RoadSegment();
-	~RoadSegment();
+    GENERATED_USTRUCT_BODY()
 
-    Intersection* Begin;
-    Intersection* End;
+    FRoadSegment();
+    ~FRoadSegment();
+
+    FIntersection* Begin;
+    FIntersection* End;
 };

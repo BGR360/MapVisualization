@@ -4,10 +4,10 @@
 #include "RoadSegment.h"
 #include "Intersection.h"
 
-RoadSegment::RoadSegment() : Begin(nullptr), End(nullptr)
+FRoadSegment::FRoadSegment() : Begin(nullptr), End(nullptr)
 {
 }
 
-RoadSegment::~RoadSegment()
+FRoadSegment::~FRoadSegment()
 {
 }

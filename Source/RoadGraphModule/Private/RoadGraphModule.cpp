@@ -8,14 +8,14 @@ DEFINE_LOG_CATEGORY(RoadGraphModule)
 
 #define LOCTEXT_NAMESPACE "RoadGraphModule"
 
-void FOpenStreetMapModule::StartupModule()
+void FRoadGraphModule::StartupModule()
 {
-    UE_LOG(OpenStreetMapModule, Warning, TEXT("RoadGraphModule: Log Started"));
+    UE_LOG(RoadGraphModule, Warning, TEXT("RoadGraphModule: Log Started"));
 }
 
-void FOpenStreetMapModule::ShutdownModule()
+void FRoadGraphModule::ShutdownModule()
 {
-    UE_LOG(OpenStreetMapModule, Warning, TEXT("RoadGraphModule: Log Ended"));
+    UE_LOG(RoadGraphModule, Warning, TEXT("RoadGraphModule: Log Ended"));
 }
 
 #undef LOCTEXT_NAMESPACE

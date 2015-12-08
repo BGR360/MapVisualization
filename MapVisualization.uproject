@@ -26,6 +26,11 @@
 				"CoreUObject",
 				"UnrealEd"
 			]
+		},
+		{
+			"Name": "RoadGraphModule",
+			"Type": "Runtime",
+			"LoadingPhase": "PostEngineInit"
 		}
 	]
 }

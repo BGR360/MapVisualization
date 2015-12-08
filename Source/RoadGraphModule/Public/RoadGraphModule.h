@@ -6,7 +6,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(RoadGraphModule, All, All)
 
-class OPENSTREETMAPMODULE_API FRoadGraphModule : public IModuleInterface
+class ROADGRAPHMODULE_API FRoadGraphModule : public IModuleInterface
 {
 public:
     virtual void StartupModule() override;

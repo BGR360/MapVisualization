@@ -20,6 +20,6 @@ public class MapVisualizationEditorTarget : TargetRules
 		ref List<string> OutExtraModuleNames
 		)
 	{
-		OutExtraModuleNames.AddRange( new string[] { "MapVisualization", "GeographicLibModule", "OpenStreetMapModule" } );
+        OutExtraModuleNames.AddRange(new string[] { "MapVisualization", "GeographicLibModule", "OpenStreetMapModule", "RoadGraphModule" });
 	}
 }

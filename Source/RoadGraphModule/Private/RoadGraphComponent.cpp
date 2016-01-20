@@ -19,10 +19,6 @@ URoadGraphComponent::URoadGraphComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 
     RoadGraph = CreateDefaultSubobject<URoadGraph>(TEXT("URoadGraph"));
-    if (!RoadGraph)
-    {
-        UE_LOG(RoadGraphModule, Warning, TEXT("NewObject<URoadGraph> returned nullptr!"));
-    }
 }
 
 // Get/Set Osm Asset
@@ -54,25 +50,36 @@ void URoadGraphComponent::GenerateRoadGraph()
         // Iterate through all Ways in the OsmAsset
         for (FOpenStreetWay Way : *(OsmAsset->GetWays()))
         {
-            // Iterate through all of its Nodes and take note that they occur in this Way
-            for (int32 NodeId : Way.Nodes)
+            // Intersections only occur on highways (not other Ways)
+            if (Way.bIsHighway)
             {
-                if (NodeOccurrences.Contains(NodeId))
+                // Iterate through all of its Nodes and take note that they occur in this Way
+                for (int32 NodeId : Way.Nodes)
                 {
-                    // Mark another occurrence of this Node
-                    NodeOccurrences[NodeId].Add(Way.Id);
-                }
-                else
-                {
-                    // Mark the first occurrence of this Node
-                    TArray<int32> NewArray;
-                    NewArray.Add(Way.Id);
-                    NodeOccurrences.Add(NodeId, NewArray);
+                    if (NodeOccurrences.Contains(NodeId))
+                    {
+                        // Mark another occurrence of this Node
+                        // Only if we haven't already marked an occurrence at this current Way
+                        auto& ThisNodeOccurrences = NodeOccurrences[NodeId];
+                        if (ThisNodeOccurrences.Num() < 2 || !ThisNodeOccurrences.Contains(Way.Id))
+                        {
+                            NodeOccurrences[NodeId].Add(Way.Id);
+                        }
+                    }
+                    else
+                    {
+                        // Mark the first occurrence of this Node
+                        TArray<int32> NewArray;
+                        NewArray.Add(Way.Id);
+                        NodeOccurrences.Add(NodeId, NewArray);
+                    }
                 }
             }
         }
 
         // Iterate through the Map we just created to identify Intersections
+        //TMap<int32, FIntersection*> NodesThatAreIntersections;
+
         for (auto& Pair : NodeOccurrences)
         {
             int32 NodeId = Pair.Key;
@@ -83,7 +90,8 @@ void URoadGraphComponent::GenerateRoadGraph()
                 if (RoadGraph)
                 {
                     FOpenStreetNode* Node = OsmAsset->FindNodeById(NodeId);
-                    RoadGraph->AddIntersection(FIntersection(Node));
+                    FIntersection NewIntersection(Node);
+                    RoadGraph->AddIntersection(NewIntersection);
                 }
                 else
                 {

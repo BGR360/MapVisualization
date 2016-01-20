@@ -4,20 +4,41 @@
 
 #include "RoadSegment.generated.h"
 
-struct FIntersection;
+class UIntersection;
 
 /**
  * A RoadSegment is a path between two intersections.
  * A RoadSegment is strictly one-way.
  */
-USTRUCT()
-struct ROADGRAPHMODULE_API FRoadSegment
+UCLASS()
+class ROADGRAPHMODULE_API URoadSegment : public UObject
 {
-    GENERATED_USTRUCT_BODY()
+    GENERATED_UCLASS_BODY()
 
-    FRoadSegment();
-    ~FRoadSegment();
+    URoadSegment();
+    ~URoadSegment();
 
-    FIntersection* Begin;
-    FIntersection* End;
+    UFUNCTION(BlueprintPure)
+    bool IsValid() const;
+
+    UFUNCTION(BlueprintPure)
+    UIntersection* GetBegin() const;
+
+    UFUNCTION(BlueprintPure)
+    UIntersection* GetEnd() const;
+
+    // When you set Begin/End, it updates the Outgoing/Incoming of the Intersections it belonged to and newly belongs to
+
+    UFUNCTION(BlueprintCallable)
+    void SetBegin(UIntersection* NewBegin);
+
+    UFUNCTION(BlueprintCallable)
+    void SetEnd(UIntersection* NewEnd);
+
+private:
+    UPROPERTY(VisibleAnywhere)
+    UIntersection* Begin;
+
+    UPROPERTY(VisibleAnywhere)
+    UIntersection* End;
 };

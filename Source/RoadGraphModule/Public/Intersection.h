@@ -6,27 +6,56 @@
 #include "Intersection.generated.h"
 
 struct FOpenStreetNode;
-struct RoadSegment;
+class URoadSegment;
 
 /**
  * An Intersection is where multiple RoadSegments meet.
  * Intersections have incoming and outgoing RoadSegments.
  */
-USTRUCT()
-struct ROADGRAPHMODULE_API FIntersection
+UCLASS()
+class ROADGRAPHMODULE_API UIntersection : public UObject
 {
     GENERATED_USTRUCT_BODY()
 
-    FIntersection();
-    FIntersection(FOpenStreetNode* Node);
-    ~FIntersection();
+    UIntersection();
+    ~UIntersection();
 
+    UFUNCTION(BlueprintPure)
+    bool IsValid() const;
+
+    UFUNCTION(BlueprintPure)
+    FOpenStreetNode GetOsmNode() const;
+
+    UFUNCTION(BlueprintPure)
+    int32 NumIncoming() const;
+
+    UFUNCTION(BlueprintPure)
+    int32 NumOutgoing() const;
+
+    UFUNCTION(BlueprintCallable)
+    void AddIncoming(URoadSegment* NewIncoming);
+
+    UFUNCTION(BlueprintCallable)
+    void AddOutgoing(URoadSegment* NewOutgoing);
+
+    UFUNCTION(BlueprintCallable)
+    bool RemoveIncoming(URoadSegment* ToRemove);
+
+    UFUNCTION(BlueprintCallable)
+    bool RemoveOutgoing(URoadSegment* ToRemove);
+
+    TArray<URoadSegment*>& GetIncoming();
+    TArray<URoadSegment*>& GetOutgoing();
+
+private:
     // One Intersection should be located at a single OpenStreetNode
     FOpenStreetNode* OsmNode;
 
     // The RoadSegments that enter the Intersection
-    TArray<RoadSegment*> Incoming;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ("AllowPrivateAccess = true"))
+    TArray<URoadSegment*> Incoming;
 
     // The RoadSegments that leave the Intersection
-    TArray<RoadSegment*> Outgoing;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ("AllowPrivateAccess = true"))
+    TArray<URoadSegment*> Outgoing;
 };

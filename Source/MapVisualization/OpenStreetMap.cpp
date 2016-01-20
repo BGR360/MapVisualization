@@ -34,13 +34,13 @@ void AOpenStreetMap::OnConstruction(const FTransform& Transform)
     {
         if (Map->MapFile)
         {
-            // First, draw the map
-            Projection->SetBounds(Map->MapFile->GetBounds());
-            DrawMap();
-
-            // Next, generate the RoadGraph
+            // First, generate the RoadGraph
             RoadGraph->SetOsmAsset(Map->MapFile);
             RoadGraph->GenerateRoadGraph();
+
+            // Next, Draw the Map
+            Projection->SetBounds(Map->MapFile->GetBounds());
+            DrawMap();
         }
         else
         {

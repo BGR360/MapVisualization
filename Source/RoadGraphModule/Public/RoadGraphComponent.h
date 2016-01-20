@@ -30,10 +30,10 @@ public:
 	
 private:
     // The RoadGraph represented by this component. Will be generated when assigned an OSM Asset
-    UPROPERTY()
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
     URoadGraph* RoadGraph;
 
-    // The OSM Asset that will supply the data necessary to generate
+    // The OSM Asset that will supply the data necessary to generate the RoadGraph
     UPROPERTY()
     UOpenStreetMapFile* OsmAsset;
 };

@@ -2,10 +2,12 @@
 
 #pragma once
 
-#include "Intersection.h"
-#include "RoadSegment.h"
 #include "Runtime/Core/Public/Containers/Array.h"
 #include "RoadGraph.generated.h"
+
+class UIntersection;
+class URoadSegment;
+struct FOpenStreetNode;
 
 /**
  * The RoadGraph stores a collection of Intersections and Roads.
@@ -21,18 +23,26 @@ public:
     URoadGraph();
     virtual ~URoadGraph();
 
-    TArray<FIntersection>* GetIntersections();
-    TArray<FRoadSegment>* GetRoadSegments();
+    /** Deletes all data so that a new RoadGraph can be generated */
+    void Reset();
 
-    void AddIntersection(const FIntersection& NewIntersection);
-    void AddRoadSegment(const FRoadSegment& NewRoadSegment);
+    /** Instantiates a new UIntersection, adds it to this RoadGraph, and returns it */
+    UIntersection* AddNewIntersection();
+    UIntersection* AddNewIntersection(FOpenStreetNode* OsmNode);
+
+    /** Instantiates a new URoadSegment, adds it to this RoadGraph, and returns it */
+    URoadSegment* AddNewRoadSegment();
+    URoadSegment* AddNewRoadSegment(UIntersection* Begin, UIntersection* End);
+
+    TArray<UIntersection*>& GetIntersections();
+    TArray<URoadSegment*>& GetRoadSegments();
 
 private:
     // All of the Intersections in the RoadGraph
-    UPROPERTY()
-    TArray<FIntersection> Intersections;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+    TArray<UIntersection*> Intersections;
 
     // All of the RoadSegments in the RoadGraph
-    UPROPERTY()
-    TArray<FRoadSegment> RoadSegments;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+    TArray<URoadSegment*> RoadSegments;
 };

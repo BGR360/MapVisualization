@@ -13,32 +13,33 @@ class UIntersection;
 UCLASS()
 class ROADGRAPHMODULE_API URoadSegment : public UObject
 {
-    GENERATED_UCLASS_BODY()
+    GENERATED_BODY()
 
+public:
     URoadSegment();
     ~URoadSegment();
 
-    UFUNCTION(BlueprintPure)
+    UFUNCTION(BlueprintPure, Category = RoadGraph)
     bool IsValid() const;
 
-    UFUNCTION(BlueprintPure)
+    UFUNCTION(BlueprintPure, Category = RoadGraph)
     UIntersection* GetBegin() const;
 
-    UFUNCTION(BlueprintPure)
+    UFUNCTION(BlueprintPure, Category = RoadGraph)
     UIntersection* GetEnd() const;
 
     // When you set Begin/End, it updates the Outgoing/Incoming of the Intersections it belonged to and newly belongs to
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = RoadGraph)
     void SetBegin(UIntersection* NewBegin);
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = RoadGraph)
     void SetEnd(UIntersection* NewEnd);
 
 private:
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category = RoadGraph)
     UIntersection* Begin;
 
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(VisibleAnywhere, Category = RoadGraph)
     UIntersection* End;
 };

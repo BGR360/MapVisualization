@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Runtime/Core/Public/Containers/Array.h"
+#include "OpenStreetNode.h"
 #include "Intersection.generated.h"
 
 struct FOpenStreetNode;
@@ -15,34 +16,37 @@ class URoadSegment;
 UCLASS()
 class ROADGRAPHMODULE_API UIntersection : public UObject
 {
-    GENERATED_USTRUCT_BODY()
+    GENERATED_BODY()
 
+public:
     UIntersection();
     ~UIntersection();
 
-    UFUNCTION(BlueprintPure)
+    UFUNCTION(BlueprintPure, Category = RoadGraph)
     bool IsValid() const;
 
-    UFUNCTION(BlueprintPure)
+    UFUNCTION(BlueprintPure, Category = RoadGraph)
     FOpenStreetNode GetOsmNode() const;
 
-    UFUNCTION(BlueprintPure)
+    UFUNCTION(BlueprintPure, Category = RoadGraph)
     int32 NumIncoming() const;
 
-    UFUNCTION(BlueprintPure)
+    UFUNCTION(BlueprintPure, Category = RoadGraph)
     int32 NumOutgoing() const;
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = RoadGraph)
     void AddIncoming(URoadSegment* NewIncoming);
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = RoadGraph)
     void AddOutgoing(URoadSegment* NewOutgoing);
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = RoadGraph)
     bool RemoveIncoming(URoadSegment* ToRemove);
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = RoadGraph)
     bool RemoveOutgoing(URoadSegment* ToRemove);
+
+    void SetOsmNode(FOpenStreetNode* NewNode);
 
     TArray<URoadSegment*>& GetIncoming();
     TArray<URoadSegment*>& GetOutgoing();
@@ -52,10 +56,10 @@ private:
     FOpenStreetNode* OsmNode;
 
     // The RoadSegments that enter the Intersection
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ("AllowPrivateAccess = true"))
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = RoadGraph, meta = (AllowPrivateAccess = "true"))
     TArray<URoadSegment*> Incoming;
 
     // The RoadSegments that leave the Intersection
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = ("AllowPrivateAccess = true"))
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = RoadGraph, meta = (AllowPrivateAccess = "true"))
     TArray<URoadSegment*> Outgoing;
 };

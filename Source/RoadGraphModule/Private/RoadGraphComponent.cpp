@@ -37,6 +37,11 @@ void URoadGraphComponent::GenerateRoadGraph()
 {
     if (OsmAsset)
     {
+        if (RoadGraph)
+        {
+            RoadGraph->Reset();
+        }
+
         /**
          * To generate a RoadGraph, this function traverses through the OsmAsset's Ways
          * and keeps track of which Nodes occur in which Ways. If a Node with a
@@ -90,8 +95,7 @@ void URoadGraphComponent::GenerateRoadGraph()
                 if (RoadGraph)
                 {
                     FOpenStreetNode* Node = OsmAsset->FindNodeById(NodeId);
-                    FIntersection NewIntersection(Node);
-                    RoadGraph->AddIntersection(NewIntersection);
+                    RoadGraph->AddNewIntersection(Node);
                 }
                 else
                 {

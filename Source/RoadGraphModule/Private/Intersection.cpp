@@ -7,6 +7,10 @@ FIntersection::FIntersection() : OsmNode(nullptr)
 {
 }
 
+FIntersection::FIntersection(FOpenStreetNode* Node) : OsmNode(Node)
+{
+}
+
 FIntersection::~FIntersection()
 {
 }

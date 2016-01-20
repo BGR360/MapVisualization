@@ -92,7 +92,7 @@ int32 UOpenStreetMapFile::ToSmallerWayId(int64 LargeWayId) const
 
 // Find Nodes
 // Returns nullptr if no Node with given Id exists in the Map
-const FOpenStreetNode* UOpenStreetMapFile::FindNodeById(int32 Id) const
+FOpenStreetNode* UOpenStreetMapFile::FindNodeById(int32 Id) const
 {
     // Since we are numbering the Ids like 0, 1, 2, etc...
     // The Nodes array should already be sorted. So we can do a binary search
@@ -112,7 +112,8 @@ const FOpenStreetNode* UOpenStreetMapFile::FindNodeById(int32 Id) const
         }
         else
         {
-            return &Nodes[Guess];
+            const FOpenStreetNode* Node = &Nodes[Guess];
+            return const_cast<FOpenStreetNode*>(Node);
         }
     }
 
@@ -121,7 +122,7 @@ const FOpenStreetNode* UOpenStreetMapFile::FindNodeById(int32 Id) const
 
 // Find Ways
 // Returns nullptr if no Node with given Id exists in the Map
-const FOpenStreetWay* UOpenStreetMapFile::FindWayById(int32 Id) const
+FOpenStreetWay* UOpenStreetMapFile::FindWayById(int32 Id) const
 {
     // Since we are numbering the Ids like 0, 1, 2, etc...
     // The Ways array should already be sorted. So we can do a binary search
@@ -141,7 +142,8 @@ const FOpenStreetWay* UOpenStreetMapFile::FindWayById(int32 Id) const
         }
         else
         {
-            return &Ways[Guess];
+            const FOpenStreetWay* Way = &Ways[Guess];
+            return const_cast<FOpenStreetWay*>(Way);
         }
     }
 

@@ -18,6 +18,7 @@ struct ROADGRAPHMODULE_API FIntersection
     GENERATED_USTRUCT_BODY()
 
     FIntersection();
+    FIntersection(FOpenStreetNode* Node);
     ~FIntersection();
 
     // One Intersection should be located at a single OpenStreetNode

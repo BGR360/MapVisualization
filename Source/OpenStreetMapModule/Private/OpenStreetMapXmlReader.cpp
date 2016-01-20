@@ -257,7 +257,10 @@ bool OpenStreetMapXmlReader::ProcessAttribute(const TCHAR* AttributeName, const 
                     // Node Ids should have been reduced by this point
                     int64 BigNodeId = FCString::Atoi64(AttributeValue);
                     int32 SmallNodeId = MapAsset->ToSmallerNodeId(BigNodeId);
-                    CurrentWay.Nodes.Add(SmallNodeId);
+                    if (SmallNodeId != -1)
+                    {
+                        CurrentWay.Nodes.Add(SmallNodeId);
+                    }
                 }
             }
 
